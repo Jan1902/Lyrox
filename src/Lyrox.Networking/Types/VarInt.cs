@@ -5,7 +5,7 @@
         public const int MIN_SIZE = 1;
         public const int MAX_SIZE = 5;
 
-        public static int ReadFromStream(Stream stream)
+        public static int ReadVarIntFromStream(Stream stream)
         {
             int numRead = 0;
             int result = 0;
@@ -26,7 +26,7 @@
             return result;
         }
 
-        public static void WriteVarInt(this Stream stream, int value)
+        public static void WriteVarIntToStream(Stream stream, int value)
         {
             do
             {
@@ -59,5 +59,11 @@
 
         public static byte[] ToBytesAsVarInt(this int value)
             => VarIntToBytes(value);
+
+        public static int ReadVarInt(this Stream stream)
+            => ReadVarIntFromStream(stream);
+
+        public static void WriteVarInt(this Stream stream, int value)
+            => WriteVarIntToStream(stream, value);
     }
 }

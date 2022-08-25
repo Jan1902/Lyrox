@@ -1,186 +1,137 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BitConverter;
+using Lyrox.Networking.Types;
 
-//namespace Lyrox.Networking.Packets
-//{
-//    public class NetworkPacketBase
-//    {
-//        private List<byte> _bytes = new();
+namespace Lyrox.Networking.Packets
+{
+    internal abstract class NetworkPacketBase
+    {
+        private readonly Stream _stream;
+        private readonly EndianBitConverter _bitConverter;
 
-//        public NetworkPacketBase(OPHandshaking op)
-//        {
-//            AddVarInt((byte)op);
-//        }
+        protected NetworkPacketBase()
+        {
+            _bitConverter = EndianBitConverter.BigEndian;
+            _stream = new MemoryStream();
+        }
 
-//        public NetworkPacketBase(OPLogin op)
-//        {
-//            AddVarInt((byte)op);
-//        }
+        protected NetworkPacketBase(int opCode) : this()
+            => _stream.WriteVarInt(opCode);
 
-//        public NetworkPacketBase(OPPlay op)
-//        {
-//            AddVarInt((byte)op);
-//        }
+        protected void AddVarInt(int value)
+            => _stream.WriteVarInt(value);
 
-//        public NetworkPacketBase(byte[] data)
-//        {
-//            _bytes = data.ToList();
-//        }
+        protected int GetVarInt()
+            => _stream.ReadVarInt();
 
-//        public void AddVarInt(int value)
-//        {
-//            _bytes.AddRange(VarInt.VarIntToBytes(value));
-//        }
+        public void AddBytes(byte[] bytes)
+            => _stream.Write(bytes);
 
-//        public int GetVarInt()
-//        {
-//            var value = VarInt.ReadVarInt(new MemoryStream(_bytes.ToArray()));
-//            _bytes.RemoveRange(0, VarInt.VarIntToBytes(value).Length);
-//            return value;
-//        }
+        protected byte[] GetBytes(int count)
+        {
+            var buffer = new byte[count];
+            _stream.Read(buffer, 0, count);
+            return buffer;
+        }
 
-//        public void AddBytes(byte[] value)
-//        {
-//            _bytes.AddRange(value);
-//        }
+        protected byte[] GetBytes()
+        {
+            _stream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[_stream.Length];
+            _stream.Read(data, 0, (int)_stream.Length);
+            return data;
+        }
 
-//        public byte[] GetBytes(int count)
-//        {
-//            var value = _bytes.GetRange(0, count).ToArray();
-//            _bytes.RemoveRange(0, count);
-//            return value;
-//        }
+        protected void AddUShort(ushort value)
+            => AddBytes(_bitConverter.GetBytes(value));
 
-//        public void AddUShort(ushort value)
-//        {
-//            _bytes.AddRange(EndianBitConverter.Big.GetBytes(value));
-//        }
+        protected ushort GetUShort()
+            => _bitConverter.ToUInt16(GetBytes(sizeof(ushort)), 0);
 
-//        public ushort GetUShort()
-//        {
-//            var value = EndianBitConverter.Big.ToUInt16(_bytes.ToArray(), 0);
-//            _bytes.RemoveRange(0, sizeof(ushort));
-//            return value;
-//        }
+        protected void AddShort(short value)
+            => AddBytes(_bitConverter.GetBytes(value));
 
-//        public void AddShort(short value)
-//        {
-//            _bytes.AddRange(EndianBitConverter.Big.GetBytes(value));
-//        }
+        protected short GetShort()
+            => _bitConverter.ToInt16(GetBytes(sizeof(short)), 0);
 
-//        public short GetShort()
-//        {
-//            var value = EndianBitConverter.Big.ToInt16(_bytes.ToArray(), 0);
-//            _bytes.RemoveRange(0, sizeof(short));
-//            return value;
-//        }
+        protected void AddString(string value)
+        {
+            AddVarInt(Encoding.UTF8.GetBytes(value).Length);
+            AddBytes(Encoding.UTF8.GetBytes(value));
+        }
 
-//        public void AddString(string value)
-//        {
-//            AddVarInt(Encoding.UTF8.GetBytes(value).Length);
-//            _bytes.AddRange(Encoding.UTF8.GetBytes(value));
-//        }
+        protected string GetString()
+            => Encoding.UTF8.GetString(GetBytes(GetVarInt()));
 
-//        public string GetString()
-//        {
-//            var length = GetVarInt();
-//            var value = Encoding.UTF8.GetString(_bytes.GetRange(0, length).ToArray());
-//            _bytes.RemoveRange(0, length);
-//            return value;
-//        }
+        protected string GetString(int length)
+            => Encoding.UTF8.GetString(GetBytes(length));
 
-//        public string GetString(int length)
-//        {
-//            var value = Encoding.UTF8.GetString(_bytes.GetRange(0, length).ToArray());
-//            _bytes.RemoveRange(0, length);
-//            return value;
-//        }
+        protected void AddByte(byte value)
+            => _stream.WriteByte(value);
 
-//        public void AddByte(byte value)
-//        {
-//            _bytes.Add(value);
-//        }
+        protected byte GetByte()
+            => (byte)_stream.ReadByte();
 
-//        public byte GetByte()
-//        {
-//            var value = _bytes[0];
-//            _bytes.RemoveRange(0, 1);
-//            return value;
-//        }
+        protected void AddBool(bool value)
+            => AddBytes(_bitConverter.GetBytes(value));
 
-//        public bool GetBool()
-//        {
-//            var value = _bytes[0] == 1 ? true : false;
-//            _bytes.RemoveRange(0, 1);
-//            return value;
-//        }
+        protected bool GetBool()
+            => _bitConverter.ToBoolean(GetBytes(sizeof(bool)), 0);
 
-//        public void AddBool(bool value)
-//        {
-//            _bytes.Add(value ? (byte)1 : (byte)0);
-//        }
+        protected void AddDouble(double value)
+            => AddBytes(_bitConverter.GetBytes(value));
 
-//        public void AddDouble(double value)
-//        {
-//            _bytes.AddRange(EndianBitConverter.Big.GetBytes(value));
-//        }
+        protected double GetDouble()
+            => _bitConverter.ToDouble(GetBytes(sizeof(double)), 0);
 
-//        public double GetDouble()
-//        {
-//            var value = EndianBitConverter.Big.ToDouble(_bytes.ToArray(), 0);
-//            _bytes.RemoveRange(0, sizeof(double));
-//            return value;
-//        }
+        protected void AddFloat(float value)
+            => AddBytes(_bitConverter.GetBytes(value));
 
-//        public float GetFloat()
-//        {
-//            var value = EndianBitConverter.Big.ToSingle(_bytes.ToArray(), 0);
-//            _bytes.RemoveRange(0, sizeof(float));
-//            return value;
-//        }
+        protected float GetFloat()
+            => _bitConverter.ToSingle(GetBytes(sizeof(float)), 0);
 
-//        public void AddFloat(float value)
-//        {
-//            _bytes.AddRange(EndianBitConverter.Big.GetBytes(value));
-//        }
+        protected void AddLong(long value)
+            => AddBytes(_bitConverter.GetBytes(value));
 
-//        public void AddLong(long value)
-//        {
-//            _bytes.AddRange(EndianBitConverter.Big.GetBytes(value));
-//        }
+        protected long GetLong()
+            => _bitConverter.ToInt64(GetBytes(sizeof(long)), 0);
 
-//        public long GetLong()
-//        {
-//            var value = EndianBitConverter.Big.ToInt64(_bytes.ToArray(), 0);
-//            _bytes.RemoveRange(0, sizeof(long));
-//            return value;
-//        }
+        protected void AddULong(ulong value)
+            => AddBytes(_bitConverter.GetBytes(value));
 
-//        public ulong GetULong()
-//        {
-//            var value = EndianBitConverter.Big.ToUInt64(_bytes.ToArray(), 0);
-//            _bytes.RemoveRange(0, sizeof(ulong));
-//            return value;
-//        }
+        protected ulong GetULong()
+            => _bitConverter.ToUInt64(GetBytes(sizeof(ulong)), 0);
 
-//        public int GetInt()
-//        {
-//            var value = EndianBitConverter.Big.ToInt32(_bytes.ToArray(), 0);
-//            _bytes.RemoveRange(0, sizeof(int));
-//            return value;
-//        }
+        protected void AddInt(int value)
+            => AddBytes(_bitConverter.GetBytes(value));
 
-//        public void AddInt(int value)
-//        {
-//            _bytes.AddRange(EndianBitConverter.Big.GetBytes(value));
-//        }
+        protected int GetInt()
+            => _bitConverter.ToInt32(GetBytes(sizeof(int)), 0);
 
-//        public byte[] GetLengthLessBytes()
-//        {
-//            return _bytes.ToArray();
-//        }
-//    }
-//}
+        protected void AddUUID(Guid uuid)
+        {
+            var data = uuid.ToByteArray();
+
+            _bitConverter.ToUInt64(data, 8);
+            _bitConverter.ToUInt64(data, 0);
+
+            AddBytes(data);
+        }
+
+        protected Guid GetUUID()
+        {
+            var longB = GetULong();
+            var longA = GetULong();
+            var data = new byte[16];
+
+            Array.Copy(_bitConverter.GetBytes(longA), data, 8);
+            Array.Copy(_bitConverter.GetBytes(longB), 0, data, 8, 8);
+
+            return new Guid(data);
+        }
+    }
+}

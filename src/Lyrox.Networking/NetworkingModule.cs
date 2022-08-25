@@ -5,7 +5,7 @@ using Lyrox.Core.Events.Implementations;
 using Lyrox.Core.Modules;
 using Lyrox.Networking.Connection;
 using Lyrox.Networking.EventHandlers;
-using Lyrox.Networking.Parsing;
+using Lyrox.Networking.Packets;
 
 namespace Lyrox.Networking
 {
@@ -15,7 +15,7 @@ namespace Lyrox.Networking
         {
             builder.RegisterType<NetworkingManager>().As<INetworkingManager>();
             builder.RegisterType<NetworkConnection>().As<INetworkConnection>();
-            builder.RegisterType<NetworkPacketParser>().As<INetworkPacketParser>();
+            builder.RegisterType<PacketHandler>().As<IPacketHandler>();
         }
 
         public void RegisterEventHandlers(IEventManager eventManager)

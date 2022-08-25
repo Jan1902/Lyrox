@@ -1,5 +1,7 @@
 ﻿using Lyrox.Core.Abstraction;
 using Lyrox.Networking.Connection;
+using Lyrox.Networking.Packets.ServerBound;
+using Lyrox.Networking.Types;
 
 namespace Lyrox.Networking
 {
@@ -15,7 +17,8 @@ namespace Lyrox.Networking
 
         public async Task SendStartPackets()
         {
-            
+            await _networkConnection.SendPacket((int)OPHandshaking.Handshake, new Handshake(760, "localhost", 25565, 2).Build());
+            await _networkConnection.SendPacket((int)OPLogin.LoginStart, new LoginStart("Botfried").Build());
         }
     }
 }
