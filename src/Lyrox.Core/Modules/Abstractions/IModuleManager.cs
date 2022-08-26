@@ -1,4 +1,4 @@
-﻿namespace Lyrox.Core.Modules
+﻿namespace Lyrox.Core.Modules.Abstractions
 {
     public interface IModuleManager
     {

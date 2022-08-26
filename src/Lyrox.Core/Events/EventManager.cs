@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Lyrox.Core.Events.Abstraction;
 
 namespace Lyrox.Core.Events
 {
@@ -21,7 +22,8 @@ namespace Lyrox.Core.Events
             where TEvent : Event
             where THandler : IEventHandler<TEvent>
         {
-            _containerBuilder.RegisterType<THandler>();
+            if (!_handlerMapping.ContainsValue(typeof(THandler)))
+                _containerBuilder.RegisterType<THandler>().InstancePerLifetimeScope();
             _handlerMapping[typeof(TEvent)] = typeof(THandler);
         }
 
@@ -66,8 +68,7 @@ namespace Lyrox.Core.Events
             if (_handlers.ContainsKey(typeof(T)))
             {
                 foreach (var handler in _handlers[typeof(T)]
-                    .Select(h => h as IEventHandler<T>))
-                    handler?.HandleEvent(evt);
+                    .Select(h => h as IEventHandler<T>)) handler?.HandleEvent(evt);
             }
         }
     }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using BitConverter;
 using Lyrox.Networking.Types;
 
 namespace Lyrox.Networking.Packets
 {
-    internal abstract class NetworkPacketBase
+    public abstract class NetworkPacketBase
     {
         private readonly Stream _stream;
         private readonly EndianBitConverter _bitConverter;
@@ -27,6 +23,12 @@ namespace Lyrox.Networking.Packets
 
         protected int GetVarInt()
             => _stream.ReadVarInt();
+
+        public void AddInitialBytes(byte[] bytes)
+        {
+            _stream.Write(bytes);
+            _stream.Seek(0, SeekOrigin.Begin);
+        }
 
         public void AddBytes(byte[] bytes)
             => _stream.Write(bytes);
@@ -60,8 +62,9 @@ namespace Lyrox.Networking.Packets
 
         protected void AddString(string value)
         {
-            AddVarInt(Encoding.UTF8.GetBytes(value).Length);
-            AddBytes(Encoding.UTF8.GetBytes(value));
+            var bytes = Encoding.UTF8.GetBytes(value);
+            AddVarInt(bytes.Length);
+            AddBytes(bytes);
         }
 
         protected string GetString()
@@ -124,12 +127,15 @@ namespace Lyrox.Networking.Packets
 
         protected Guid GetUUID()
         {
-            var longB = GetULong();
-            var longA = GetULong();
+            //var longB = GetULong();
+            //var longA = GetULong();
             var data = new byte[16];
-
-            Array.Copy(_bitConverter.GetBytes(longA), data, 8);
-            Array.Copy(_bitConverter.GetBytes(longB), 0, data, 8, 8);
+            var dataA = GetBytes(8);
+            var dataB = GetBytes(8);
+            Array.Copy(dataA, 0, data, 0, 8);
+            Array.Copy(dataB, 0, data, 8, 8);
+            //Array.Copy(_bitConverter.GetBytes(longA), data, 8);
+            //Array.Copy(_bitConverter.GetBytes(longB), 0, data, 8, 8);
 
             return new Guid(data);
         }

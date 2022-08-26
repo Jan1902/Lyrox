@@ -1,8 +1,10 @@
-﻿namespace Lyrox.Networking.Connection
+﻿using Lyrox.Networking.Packets.ServerBound;
+
+namespace Lyrox.Networking.Connection
 {
     public interface INetworkConnection
     {
         Task Connect();
-        Task SendPacket(int opCode, byte[] data);
+        Task SendPacket(ServerBoundPacket packet);
     }
 }

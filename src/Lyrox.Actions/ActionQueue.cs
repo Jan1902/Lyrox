@@ -14,7 +14,7 @@
 
         private void Run()
         {
-            while(_queue.Any())
+            while (_queue.Any())
             {
                 var action = _queue.Dequeue();
                 _currentAction = action;
@@ -29,7 +29,7 @@
 
             _queue.Enqueue(action);
 
-            if(!_runThread.IsAlive)
+            if (!_runThread.IsAlive)
                 _runThread.Start();
         }
 

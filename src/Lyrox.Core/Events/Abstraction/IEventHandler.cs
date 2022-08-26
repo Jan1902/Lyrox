@@ -1,4 +1,4 @@
-﻿namespace Lyrox.Core.Events
+﻿namespace Lyrox.Core.Events.Abstraction
 {
     public interface IEventHandler<T> where T : Event
     {

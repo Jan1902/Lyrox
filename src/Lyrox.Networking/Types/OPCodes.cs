@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lyrox.Networking.Types
+﻿namespace Lyrox.Networking.Types
 {
     public enum OPHandshaking : byte
     {
@@ -13,6 +7,7 @@ namespace Lyrox.Networking.Types
 
     public enum OPLogin : byte
     {
+        Disconnect = 0x00, //CB
         LoginStart = 0x00, //SB
         LoginSuccess = 0x02, //CB
         SetCompression = 0x03 //CB
@@ -28,7 +23,7 @@ namespace Lyrox.Networking.Types
         TeleportConfirm = 0x00, //SB
         PlayerPositionAndLookSB = 0x13, //SB
         ClientStatus = 0x04, //SB
-        KeepAliveCB = 0x1F, //CB
+        KeepAliveCB = 0x1E, //CB
         KeepAliveSB = 0x10, //SB
         ChatMessageCB = 0x0E, //CB
         ChatMessageSB = 0x03, //SB

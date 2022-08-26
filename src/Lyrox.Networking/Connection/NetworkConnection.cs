@@ -1,9 +1,8 @@
 ﻿using System.Net.Sockets;
 using Lyrox.Core.Configuration;
-using Lyrox.Core.Events;
+using Lyrox.Core.Events.Abstraction;
 using Lyrox.Core.Events.Implementations;
 using Lyrox.Networking.Packets;
-using Lyrox.Networking.Packets.ClientBound;
 using Lyrox.Networking.Packets.ServerBound;
 using Lyrox.Networking.Types;
 using Microsoft.Extensions.Logging;
@@ -26,12 +25,14 @@ namespace Lyrox.Networking.Connection
         private readonly byte[] _buffer;
         private readonly byte[] _dataQueue;
 
+        private bool _compressionEnabled;
+
         public NetworkConnection(LyroxConfiguration lyroxConfiguration, ILogger<NetworkConnection> logger, IEventManager eventManager, IPacketHandler packetHandler)
         {
             _streamManager = new();
             _socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _buffer = new byte[4096];
-            _dataQueue = new byte[24576];
+            _buffer = new byte[16384];
+            _dataQueue = new byte[262144];
 
             _lyroxConfiguration = lyroxConfiguration;
             _logger = logger;
@@ -41,41 +42,39 @@ namespace Lyrox.Networking.Connection
 
         public async Task Connect()
         {
-            if (_lyroxConfiguration.IPAdress == null
-                || _lyroxConfiguration.Port == null)
+            if (_lyroxConfiguration.IPAdress == default
+                || _lyroxConfiguration.Port == default)
                 throw new ArgumentException("Invalid Connection Information specified in Lyrox Configuration!");
 
             try
             {
-                await _socket.ConnectAsync(_lyroxConfiguration.IPAdress ?? string.Empty, _lyroxConfiguration.Port ?? 0);
-                _socket.BeginReceive(_buffer, 0, _buffer.Length, 0, new AsyncCallback(ReceiveCallback), null);
+                await _socket.ConnectAsync(_lyroxConfiguration.IPAdress, _lyroxConfiguration.Port);
                 _logger.LogInformation("Connected to Server at {host}: {port}", _lyroxConfiguration.IPAdress, _lyroxConfiguration.Port);
-                new Thread(() => _eventManager.PublishEvent(new ConnectionEstablishedEvent())).Start();
-                while (true)
-                    Thread.Sleep(10);
+                _eventManager.PublishEvent(new ConnectionEstablishedEvent());
+                _socket.BeginReceive(_buffer, 0, _buffer.Length, 0, new AsyncCallback(ReceiveCallback), null);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e, "Error connecting to Host {host} at Port {port}", _lyroxConfiguration.IPAdress, _lyroxConfiguration.Port);
                 throw;
             }
         }
 
-        public async Task SendPacket(int opCode, byte[] data)
+        public async Task SendPacket(ServerBoundPacket packet)
         {
-            _socket.NoDelay = true;
             using var stream = _streamManager.GetStream();
-            stream.WriteVarInt(opCode.ToBytesAsVarInt().Length + data.Length);
-            stream.WriteVarInt(opCode);
+            var data = packet.Build();
+            stream.WriteVarInt(packet.OPCode.ToBytesAsVarInt().Length + data.Length);
+            stream.WriteVarInt(packet.OPCode);
             stream.Write(data);
 
             try
             {
                 await _socket.SendAsync(stream.ToArray(), SocketFlags.None);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                _logger.LogError(e, "Error sending packet with OP Code {op} and size {size} to server", opCode, data.Length);
+                _logger.LogError(e, "Error sending packet with OP Code {op} and size {size} to server", packet.OPCode, data.Length);
                 throw;
             }
         }
@@ -91,36 +90,38 @@ namespace Lyrox.Networking.Connection
                     Array.Copy(_buffer, 0, _dataQueue, _currentQueuePosition, bytesRead);
                     _currentQueuePosition += bytesRead;
                     CheckForCompletePackets();
+                    _socket.BeginReceive(_buffer, 0, _buffer.Length, 0, new AsyncCallback(ReceiveCallback), null);
                 }
+                else
+                    _logger.LogWarning("Connection to Server has been terminated");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e, "Error receiving Data from Server");
                 throw;
-            }
-            finally
-            {
-                _socket.BeginReceive(_buffer, 0, _buffer.Length, 0, new AsyncCallback(ReceiveCallback), null);
             }
         }
 
         private void CheckForCompletePackets()
         {
-            while(_currentQueuePosition > 0)
+            while (_currentQueuePosition > 0)
             {
                 using var stream = _streamManager.GetStream(_dataQueue);
-                var packetLength = VarInt.ReadVarInt(stream);
+                var packetLength = VarInt.ReadVarInt(stream); // This could be cached
                 var totalLength = packetLength.ToBytesAsVarInt().Length + packetLength;
 
                 if (_currentQueuePosition < totalLength)
                     break;
 
-                var dataLength = VarInt.ReadVarInt(stream);
-                if (dataLength != 0)
-                    throw new NotImplementedException("Compression is not implemented yet!");
+                if (_compressionEnabled)
+                {
+                    var dataLength = VarInt.ReadVarInt(stream);
+                    if (dataLength != 0)
+                        throw new NotImplementedException("Compression is not implemented yet!");
+                }
 
                 var opCode = VarInt.ReadVarInt(stream);
-                var data = new byte[packetLength - dataLength.ToBytesAsVarInt().Length - opCode.ToBytesAsVarInt().Length];
+                var data = new byte[packetLength - opCode.ToBytesAsVarInt().Length];
                 stream.Read(data, 0, data.Length);
 
                 _packetHandler.HandlePacket(opCode, data);

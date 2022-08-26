@@ -1,7 +1,7 @@
 ﻿using Lyrox.Abstraction;
 using Lyrox.Core.Abstraction;
 using Lyrox.Core.Configuration;
-using Lyrox.Core.Events;
+using Lyrox.Core.Events.Abstraction;
 
 namespace Lyrox
 {

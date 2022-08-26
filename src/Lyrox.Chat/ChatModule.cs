@@ -1,20 +1,20 @@
-﻿using Autofac;
-using Lyrox.Core.Abstraction;
-using Lyrox.Core.Events;
-using Lyrox.Core.Modules;
+﻿using Lyrox.Core.Abstraction;
+using Lyrox.Core.Configuration;
+using Lyrox.Core.Events.Abstraction;
+using Lyrox.Core.Modules.Abstractions;
 
 namespace Lyrox.Chat
 {
     public class ChatModule : IModule
     {
-        public void Load(ContainerBuilder builder)
+        public void Load(IServiceContainer serviceContainer, LyroxConfiguration lyroxConfiguration)
         {
-            builder.RegisterType<ChatManager>().As<IChatManager>();
+            serviceContainer.RegisterType<IChatManager, ChatManager>();
         }
 
-        public void RegisterEventHandlers(IEventManager eventManager)
+        public void RegisterEventHandlers(IEventManager eventManager, LyroxConfiguration lyroxConfiguration)
         {
-            //eventManager.RegisterEventHandler<NetworkPacketReceivedEvent<ChatPacket>, PacketEventHandler>();
+
         }
     }
 }

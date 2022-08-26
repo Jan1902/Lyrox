@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lyrox.Core.Events;
+﻿using Lyrox.Core.Events;
 
 namespace Lyrox.Networking.Events
 {
@@ -16,8 +11,6 @@ namespace Lyrox.Networking.Events
         {
             UUID = uUID;
             Username = username;
-
-            Console.WriteLine("Username: " + Username);
         }
     }
 }

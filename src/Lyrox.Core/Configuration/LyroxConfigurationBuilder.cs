@@ -1,6 +1,6 @@
 ﻿namespace Lyrox.Core.Configuration
 {
-    public class LyroxConfigurationBuilder
+    public class LyroxConfigurationBuilder : ILyroxConfigurationBuilder
     {
         private LyroxConfiguration _configuration;
 
@@ -11,6 +11,25 @@
         {
             _configuration.IPAdress = ipAdress;
             _configuration.Port = port;
+            return this;
+        }
+
+        public LyroxConfigurationBuilder WithCredentials(string username, string password)
+        {
+            _configuration.Username = username;
+            _configuration.Password = password;
+            return this;
+        }
+
+        public LyroxConfigurationBuilder WithCredentials(string username)
+        {
+            _configuration.Username = username;
+            return this;
+        }
+
+        public LyroxConfigurationBuilder DoOnlineAuthentication()
+        {
+            _configuration.DoOnlineAuthentication = true;
             return this;
         }
 

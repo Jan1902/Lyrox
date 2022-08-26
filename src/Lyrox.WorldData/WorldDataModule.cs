@@ -1,18 +1,18 @@
-﻿using Autofac;
-using Lyrox.Core.Abstraction;
-using Lyrox.Core.Events;
-using Lyrox.Core.Modules;
+﻿using Lyrox.Core.Abstraction;
+using Lyrox.Core.Configuration;
+using Lyrox.Core.Events.Abstraction;
+using Lyrox.Core.Modules.Abstractions;
 
 namespace Lyrox.WorldData
 {
     public class WorldDataModule : IModule
     {
-        public void Load(ContainerBuilder builder)
+        public void Load(IServiceContainer serviceContainer, LyroxConfiguration lyroxConfiguration)
         {
-            builder.RegisterType<WorldDataManager>().As<IWorldDataManager>();
+            serviceContainer.RegisterType<IWorldDataManager, WorldDataManager>();
         }
 
-        public void RegisterEventHandlers(IEventManager eventManager)
+        public void RegisterEventHandlers(IEventManager eventManager, LyroxConfiguration lyroxConfiguration)
         {
 
         }

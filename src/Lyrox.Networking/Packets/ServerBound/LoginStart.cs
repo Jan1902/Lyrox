@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lyrox.Networking.Types;
-
-namespace Lyrox.Networking.Packets.ServerBound
+﻿namespace Lyrox.Networking.Packets.ServerBound
 {
     internal class LoginStart : ServerBoundPacket
     {
@@ -14,6 +7,8 @@ namespace Lyrox.Networking.Packets.ServerBound
         public long TimeStamp { get; }
         public byte[] PublicKey { get; }
         public byte[] Signature { get; }
+
+        public override int OPCode => 0x00;
 
         public LoginStart(string name)
         {
@@ -32,11 +27,10 @@ namespace Lyrox.Networking.Packets.ServerBound
 
         public override byte[] Build()
         {
-            AddVarInt((int)OPLogin.LoginStart);
-
+            AddString(Name);
             AddBool(HasSigData);
 
-            if(!HasSigData)
+            if (!HasSigData)
                 return GetBytes();
 
             AddLong(TimeStamp);

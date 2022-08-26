@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lyrox.Core.Events;
+﻿using Lyrox.Core.Events.Abstraction;
 using Lyrox.Networking.Packets.ClientBound;
-using Lyrox.Networking.Packets.ServerBound;
 using Lyrox.Networking.Types;
 using Microsoft.Extensions.Logging;
 
@@ -16,36 +10,49 @@ namespace Lyrox.Networking.Packets
         private readonly IEventManager _eventManager;
         private readonly ILogger<PacketHandler> _logger;
 
-        private readonly Dictionary<int, Type> _packets;
+        private readonly Dictionary<ProtocolState, Dictionary<int, Type>> _packetTypes;
+
+        private ProtocolState _currentProtocolState;
 
         public PacketHandler(IEventManager eventManager, ILogger<PacketHandler> logger)
         {
             _eventManager = eventManager;
             _logger = logger;
 
-            _packets = new();
+            _currentProtocolState = ProtocolState.Handshaking;
+
+            _packetTypes = new();
             SetupMapping();
         }
 
+        public void SetProtocolState(ProtocolState protocolState)
+            => _currentProtocolState = protocolState;
+
         private void SetupMapping()
         {
-            _packets[(int)OPHandshaking.Handshake] = typeof(Handshake);
+            foreach (var protocolState in Enum.GetValues<ProtocolState>())
+                _packetTypes[protocolState] = new();
+
+            _packetTypes[ProtocolState.Login][(int)OPLogin.LoginSuccess] = typeof(LoginSuccess);
+            _packetTypes[ProtocolState.Login][(int)OPLogin.Disconnect] = typeof(DisconnectLogin);
+            _packetTypes[ProtocolState.Play][(int)OPPlay.KeepAliveCB] = typeof(KeepAlive);
         }
 
         public void HandlePacket(int opCode, byte[] data)
         {
-            if (!_packets.ContainsKey(opCode))
+            if (!_packetTypes[_currentProtocolState].ContainsKey(opCode))
             {
-                _logger.LogWarning("Received unknown packet with OP Code {op} and length {lengnth}", opCode, data.Length);
+                _logger.LogWarning("Received unknown packet with OP Code {op} and length {length}", opCode, data.Length);
                 return;
             }
 
-            var packet = Activator.CreateInstance(_packets[opCode]) as ClientBoundPacket;
-            packet.AddBytes(data);
+            var packetType = _packetTypes[_currentProtocolState][opCode];
+            var packet = Activator.CreateInstance(packetType) as ClientBoundPacket;
+            packet.AddInitialBytes(data);
             packet.Parse();
 
-            if (_packets[opCode].IsAssignableTo(typeof(IMappedToEvent)))
-                _eventManager.PublishEvent(((IMappedToEvent)packet).GetEvent());
+            if (packetType.IsAssignableTo(typeof(IMappedToEvent)))
+                _eventManager.PublishEvent(((IMappedToEvent)packet).GetEvent()); //TODO: FIX THIS: TYPE RETURNED IS EVENT, SPECIFIC TYPE IS NEEDED FOR HANDLER RESOLUTION
         }
     }
 }

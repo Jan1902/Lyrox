@@ -3,6 +3,5 @@
     public interface INetworkingManager
     {
         Task Connect();
-        Task SendStartPackets();
     }
 }

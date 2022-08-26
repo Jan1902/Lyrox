@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace Lyrox.Core.Events
+namespace Lyrox.Core.Events.Abstraction
 {
     public interface IEventManager
     {
