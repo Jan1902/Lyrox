@@ -18,11 +18,9 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Change Directory
-      run: cd src
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore src/Lyrox.sln
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build src/Lyrox.sln --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
