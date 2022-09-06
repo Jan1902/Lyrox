@@ -26,4 +26,4 @@ jobs:
       working-directory: src
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      wworking-directory: src
+      working-directory: src
