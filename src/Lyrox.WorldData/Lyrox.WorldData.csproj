@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lyrox.Core\Lyrox.Core.csproj" />
+    <ProjectReference Include="..\Lyrox.Networking.Mojang\Lyrox.Networking.Mojang.csproj" />
   </ItemGroup>
 
 </Project>

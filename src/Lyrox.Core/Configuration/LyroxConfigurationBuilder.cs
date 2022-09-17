@@ -1,4 +1,6 @@
-﻿namespace Lyrox.Core.Configuration
+﻿using Lyrox.Core.Networking.Types;
+
+namespace Lyrox.Core.Configuration
 {
     public class LyroxConfigurationBuilder : ILyroxConfigurationBuilder
     {
@@ -30,6 +32,12 @@
         public LyroxConfigurationBuilder DoOnlineAuthentication()
         {
             _configuration.DoOnlineAuthentication = true;
+            return this;
+        }
+
+        public LyroxConfigurationBuilder UseGameVersion(GameVersion gameVersion)
+        {
+            _configuration.GameVersion = gameVersion;
             return this;
         }
 

@@ -14,4 +14,9 @@
     <ProjectReference Include="..\Lyrox.Core\Lyrox.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PacketHandlers\" />
+    <Folder Include="Packets\" />
+  </ItemGroup>
+
 </Project>

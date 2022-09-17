@@ -2,6 +2,7 @@
 using Lyrox.Core.Configuration;
 using Lyrox.Core.Events.Abstraction;
 using Lyrox.Core.Modules.Abstractions;
+using Lyrox.Core.Networking.Abstraction;
 
 namespace Lyrox.Core.Modules
 {
@@ -36,6 +37,12 @@ namespace Lyrox.Core.Modules
         {
             foreach (var module in _modules)
                 module.RegisterEventHandlers(eventManager, _lyroxConfiguration);
+        }
+
+        public void RegisterPacketHandlers(INetworkPacketManager packetManager)
+        {
+            foreach (var module in _modules)
+                module.RegisterPacketHandlers(packetManager, _lyroxConfiguration);
         }
     }
 }

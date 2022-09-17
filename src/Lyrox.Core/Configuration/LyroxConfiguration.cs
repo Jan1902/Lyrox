@@ -1,4 +1,6 @@
-﻿namespace Lyrox.Core.Configuration
+﻿using Lyrox.Core.Networking.Types;
+
+namespace Lyrox.Core.Configuration
 {
     public class LyroxConfiguration
     {
@@ -7,5 +9,6 @@
         public string Username { get; set; }
         public string Password { get; set; }
         public bool DoOnlineAuthentication { get; set; }
+        public GameVersion GameVersion { get; set; }
     }
 }

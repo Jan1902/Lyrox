@@ -7,13 +7,15 @@ namespace Lyrox.Core.Events
     {
         private readonly Dictionary<Type, List<object>> _handlers;
         private readonly ContainerBuilder _containerBuilder;
+        private readonly Dictionary<Type, List<object>> _methodHandlers;
 
-        private readonly Dictionary<Type, Type> _handlerMapping;
+        private readonly Dictionary<Type, List<Type>> _handlerMapping;
 
         public EventManager(ContainerBuilder containerBuilder)
         {
             _handlers = new();
             _handlerMapping = new();
+            _methodHandlers = new();
 
             _containerBuilder = containerBuilder;
         }
@@ -22,17 +24,24 @@ namespace Lyrox.Core.Events
             where TEvent : Event
             where THandler : IEventHandler<TEvent>
         {
-            if (!_handlerMapping.ContainsValue(typeof(THandler)))
+            if (!_handlerMapping.Values.Any(l => l.Contains(typeof(THandler))))
                 _containerBuilder.RegisterType<THandler>().InstancePerLifetimeScope();
-            _handlerMapping[typeof(TEvent)] = typeof(THandler);
+
+            if (!_handlerMapping.ContainsKey(typeof(TEvent)))
+                _handlerMapping[typeof(TEvent)] = new();
+
+            _handlerMapping[typeof(TEvent)].Add(typeof(THandler));
         }
 
         public void RegisterEventHandlersFromContainer(IContainer container)
         {
             foreach (var eventType in _handlerMapping.Keys)
             {
-                var handler = container.Resolve(_handlerMapping[eventType]);
-                RegisterEventHandler(eventType, handler);
+                foreach (var handlerType in _handlerMapping[eventType])
+                {
+                    var handler = container.Resolve(handlerType);
+                    RegisterEventHandler(eventType, handler);
+                }
             }
         }
 
@@ -70,6 +79,27 @@ namespace Lyrox.Core.Events
                 foreach (var handler in _handlers[typeof(T)]
                     .Select(h => h as IEventHandler<T>)) handler?.HandleEvent(evt);
             }
+
+            if (_methodHandlers.ContainsKey(typeof(T)))
+            {
+                foreach (var handler in _methodHandlers[typeof(T)]
+                    .Select(h => h as Action<T>)) handler?.Invoke(evt);
+            }
+        }
+
+        public void RegisterEventHandler<TEvent>(Action<TEvent> handler) where TEvent : Event
+        {
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
+
+            var handlers = new List<object>();
+
+            if (_methodHandlers.ContainsKey(typeof(TEvent)))
+                handlers = _methodHandlers[typeof(TEvent)];
+            else
+                _methodHandlers[typeof(TEvent)] = handlers;
+
+            handlers.Add(handler);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Lyrox.Core.Abstraction;
 using Lyrox.Core.Configuration;
-using Lyrox.Core.Events.Abstraction;
 using Lyrox.Core.Modules.Abstractions;
+using Lyrox.Core.Networking.Abstraction;
 
 namespace Lyrox.Chat
 {
@@ -12,7 +12,7 @@ namespace Lyrox.Chat
             serviceContainer.RegisterType<IChatManager, ChatManager>();
         }
 
-        public void RegisterEventHandlers(IEventManager eventManager, LyroxConfiguration lyroxConfiguration)
+        public void RegisterPacketHandlers(INetworkPacketManager networkPacketManager, LyroxConfiguration lyroxConfiguration)
         {
 
         }
