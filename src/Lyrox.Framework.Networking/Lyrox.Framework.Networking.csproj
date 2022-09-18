@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lyrox.Framework.Core\Lyrox.Framework.Core.csproj" />
+    <ProjectReference Include="..\Lyrox.Framework.Networking.Core\Lyrox.Framework.Networking.Core.csproj" />
+    <ProjectReference Include="..\Lyrox.Framework.Networking.Mojang\Lyrox.Framework.Networking.Mojang.csproj" />
+  </ItemGroup>
+
+</Project>

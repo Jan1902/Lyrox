@@ -1,0 +1,19 @@
+﻿using Lyrox.Framework.Core.Networking.Abstraction.Packet;
+using Lyrox.Framework.Networking.Mojang.Data;
+using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
+
+namespace Lyrox.Framework.Networking.Mojang.Packets.Base
+{
+    public abstract class MojangClientBoundPacket : IClientBoundNetworkPacket
+    {
+        protected IMojangBinaryReader Reader;
+
+        public void ParsePacket(byte[] data)
+        {
+            Reader = new MojangBinaryReader(new MemoryStream(data));
+            Parse();
+        }
+
+        public abstract void Parse();
+    }
+}
