@@ -2,6 +2,9 @@
 {
     public class ChunkSection
     {
-        public BlockState[,,] BlockStates { get; } = new BlockState[16, 16, 16];
+        public BlockState?[,,] BlockStates { get; }
+
+        public ChunkSection(BlockState[,,] blockStates)
+            => BlockStates = blockStates;
     }
 }

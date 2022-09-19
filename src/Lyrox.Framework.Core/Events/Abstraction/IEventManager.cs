@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Lyrox.Framework.Core.Events;
 
 namespace Lyrox.Framework.Core.Events.Abstraction
 {

@@ -1,13 +1,25 @@
-﻿using Lyrox.Framework.Core.Networking.Abstraction.Packet.Handler;
+﻿using Lyrox.Framework.Core.Abstraction;
+using Lyrox.Framework.Core.Networking.Abstraction.Packet.Handler;
+using Lyrox.Framework.WorldData.Mojang.Data;
 using Lyrox.Framework.WorldData.Mojang.Packets;
 
 namespace Lyrox.Framework.WorldData.Mojang.PacketHandlers
 {
-    public class WorldDataPacketHandler : IPacketHandler<ChunkData>
+    internal class WorldDataPacketHandler : IPacketHandler<ChunkData>
     {
+        private readonly IChunkDataHandler _chunkDataHandler;
+        private readonly IWorldDataManager _worldDataManager;
+
+        public WorldDataPacketHandler(IChunkDataHandler chunkDataHandler, IWorldDataManager worldDataManager)
+        {
+            _chunkDataHandler = chunkDataHandler;
+            _worldDataManager = worldDataManager;
+        }
+
         public void HandlePacket(ChunkData networkPacket)
         {
-            Console.WriteLine($"Received {networkPacket.Data.Length} bytes of Chunk Data for Chunk {networkPacket.ChunkX}/{networkPacket.ChunkZ}");
+            var chunk = _chunkDataHandler.HandleChunkData(networkPacket.Data);
+            _worldDataManager.SetChunk(networkPacket.ChunkX, networkPacket.ChunkZ, chunk);
         }
     }
 }

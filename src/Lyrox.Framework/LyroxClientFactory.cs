@@ -10,7 +10,6 @@ using Lyrox.Framework.Core.Networking.Abstraction;
 using Lyrox.Framework.Networking;
 using Lyrox.Framework.WorldData;
 using Serilog;
-using Serilog.Core;
 using Serilog.Extensions.Autofac.DependencyInjection;
 
 namespace Lyrox.Framework
