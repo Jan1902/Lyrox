@@ -16,12 +16,14 @@ namespace Lyrox.Framework
 {
     public static class LyroxClientFactory
     {
+        private const string LogFilePath = "Log.txt";
+
         public static ILyroxClient GetLyroxClient(LyroxConfiguration configuration)
         {
             var builder = new ContainerBuilder();
             var loggerConfiguration = new LoggerConfiguration()
                 .WriteTo.Console()
-                .WriteTo.File("Log.txt");
+                .WriteTo.File(LogFilePath);
 
             builder.RegisterSerilog(loggerConfiguration);
 
