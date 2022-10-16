@@ -8,7 +8,7 @@ namespace Lyrox.Framework.Chat.Mojang.Packets.ServerBound
     {
         public string Message { get; }
 
-        public override int OPCode => 0x04;
+        public override int OPCode => 0x05;
 
         public ChatMessage(string message)
             => Message = message;
@@ -26,6 +26,12 @@ namespace Lyrox.Framework.Chat.Mojang.Packets.ServerBound
             Writer.WriteLong(salt);
             Writer.WriteVarInt(signature.Length);
             Writer.WriteBytes(signature);
+            Writer.WriteBool(false);
+
+            // Last seen messages
+            Writer.WriteVarInt(0);
+
+            // Last message
             Writer.WriteBool(false);
         }
     }

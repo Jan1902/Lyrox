@@ -2,6 +2,6 @@
 {
     internal interface IPaletteFactory
     {
-        IPalette CreatePalette(int bitsPerBlock);
+        IPalette CreatePalette(int bitsPerBlock, bool isBiome);
     }
 }

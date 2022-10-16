@@ -1,7 +1,7 @@
 ﻿using Lyrox.Framework.Chat.Mojang.Packets.ServerBound;
 using Lyrox.Framework.Core.Abstraction;
 
-namespace Lyrox.Framework.Chat
+namespace Lyrox.Framework.Chat.Mojang
 {
     public class ChatManager : IChatManager
     {

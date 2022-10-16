@@ -24,7 +24,7 @@ namespace Lyrox.Framework.Networking.Mojang.EventHandlers
 
         public void HandleEvent(ConnectionEstablishedEvent evt)
         {
-            _networkConnection.SendPacket(new Handshake(759, _configuration.IPAdress, (ushort)_configuration.Port, ProtocolState.Login));
+            _networkConnection.SendPacket(new Handshake(760, _configuration.IPAdress, (ushort)_configuration.Port, ProtocolState.Login));
             _networkConnection.SendPacket(new LoginStart(_configuration.Username));
             _eventManager.PublishEvent(new ProtocolStateChanged(ProtocolState.Login));
         }

@@ -6,7 +6,7 @@ namespace Lyrox.Framework.Networking.Mojang.Packets.ServerBound
     {
         public long KeepAliveID { get; }
 
-        public override int OPCode => 0x11;
+        public override int OPCode => 0x12;
 
         public KeepAliveSB(long keepAliveID)
             => KeepAliveID = keepAliveID;

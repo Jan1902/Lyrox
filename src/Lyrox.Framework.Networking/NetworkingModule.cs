@@ -39,7 +39,7 @@ namespace Lyrox.Framework.Networking
             {
                 networkPacketManager.RegisterRawNetworkPacketHandler<MojangNetworkingPacketHandler>(0x00);
                 networkPacketManager.RegisterRawNetworkPacketHandler<MojangNetworkingPacketHandler>(0x02);
-                networkPacketManager.RegisterNetworkPacketHandler<KeepAliveCB, MojangNetworkingPacketHandler>(0x1E);
+                networkPacketManager.RegisterNetworkPacketHandler<KeepAliveCB, MojangNetworkingPacketHandler>(0x20);
             }
             else
                 throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);

@@ -19,7 +19,12 @@
             => new(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
 
         public static bool operator ==(Vector3d a, Vector3d b)
-            => a.X == b.X && a.Y == b.Y && a.Z == b.Z;
+        {
+            if (a is null || b is null)
+                return a is null && b is null;
+
+            return a.X == b.X && a.Y == b.Y && a.Z == b.Z;
+        }
         public static bool operator !=(Vector3d a, Vector3d b)
             => !(a == b);
 
@@ -38,8 +43,23 @@
         }
 
         public override int GetHashCode()
+            => HashCode.Combine(X, Y, Z);
+
+        public double Magnitude
+            => (double)Math.Sqrt(X * X + Y * Y + Z * Z);
+
+        public static double CrossProduct(Vector3d a, Vector3d b)
+            => a.Magnitude * b.Magnitude;
+
+        public static Rotation Angle(Vector3d a, Vector3d b)
         {
-            throw new NotImplementedException();
+            var delta = b - a;
+            var yaw = -(float)(Math.Atan2(delta.X, delta.Z) / Math.PI * 180);
+            if (yaw < 0)
+                yaw = 360 + yaw;
+            var pitch = (float)(-Math.Asin(delta.Y / delta.Magnitude) / Math.PI * 180);
+
+            return new Rotation(pitch, yaw);
         }
     }
 }

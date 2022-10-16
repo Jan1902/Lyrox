@@ -13,7 +13,8 @@ namespace Lyrox.Framework.WorldData.Mojang.Data
 
         public Chunk HandleChunkData(byte[] data)
         {
-            var reader = new MojangBinaryReader(new MemoryStream(data));
+            using var stream = new MemoryStream(data);
+            var reader = new MojangBinaryReader(stream);
 
             var sections = new ChunkSection[16];
             for (var i = 0; i < 16; i++)
@@ -24,10 +25,10 @@ namespace Lyrox.Framework.WorldData.Mojang.Data
 
         private ChunkSection HandleChunkSection(MojangBinaryReader reader)
         {
-            var blockCount = reader.ReadShort();
+            _ = reader.ReadShort();
 
             var bitsPerEntry = reader.ReadByte();
-            var palette = _paletteFactory.CreatePalette(bitsPerEntry);
+            var palette = _paletteFactory.CreatePalette(bitsPerEntry, false);
             palette.Read(reader);
 
             var states = new BlockState[16, 16, 16];
@@ -36,15 +37,14 @@ namespace Lyrox.Framework.WorldData.Mojang.Data
             {
                 var state = palette.GetStateForId(0);
 
+                _ = reader.ReadVarInt();
+
                 for (var y = 0; y < 16; y++)
                     for (var z = 0; z < 16; z++)
                         for (var x = 0; x < 16; x++)
                             states[x, y, z] = state;
 
-                // Biome data is irrelevant for now
-                _paletteFactory.CreatePalette(reader.ReadByte()).Read(reader);
-                for (int i = 0; i < reader.ReadVarInt(); i++)
-                    reader.ReadLong();
+                DiscardBiomeData();
 
                 return new ChunkSection(states);
             }
@@ -53,7 +53,7 @@ namespace Lyrox.Framework.WorldData.Mojang.Data
 
             var data = new long[reader.ReadVarInt()];
             for (var i = 0; i < data.Length; i++)
-                data[i] = reader.ReadLong();
+                data[i] = (long)reader.ReadLong();
 
             var offset = 64 % bitsPerEntry;
             var entriesPerLong = 64 / bitsPerEntry;
@@ -77,12 +77,19 @@ namespace Lyrox.Framework.WorldData.Mojang.Data
                 }
             }
 
-            // Biome data is irrelevant for now
-            _paletteFactory.CreatePalette(reader.ReadByte()).Read(reader);
-            for (int i = 0; i < reader.ReadVarInt(); i++)
-                reader.ReadLong();
+            DiscardBiomeData();
 
             return new ChunkSection(states);
+
+            void DiscardBiomeData()
+            {
+                var bitsPerEntry = reader.ReadByte();
+                _paletteFactory.CreatePalette(bitsPerEntry, true).Read(reader);
+
+                var length = reader.ReadVarInt();
+                for (var i = 0; i < length; i++)
+                    reader.ReadLong();
+            }
         }
     }
 }

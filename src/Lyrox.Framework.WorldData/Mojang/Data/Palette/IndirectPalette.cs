@@ -7,7 +7,6 @@ namespace Lyrox.Framework.WorldData.Mojang.Data.Palette
     internal class IndirectPalette : IPalette
     {
         private readonly Dictionary<int, BlockState> _idToState;
-
         private readonly int _bitsPerBlock;
 
         private readonly IGlobalPaletteProvider _globalPaletteProvider;

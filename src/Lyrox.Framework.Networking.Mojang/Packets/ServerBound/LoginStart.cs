@@ -32,14 +32,17 @@ namespace Lyrox.Framework.Networking.Mojang.Packets.ServerBound
             Writer.WriteStringWithVarIntPrefix(Name);
             Writer.WriteBool(HasSigData);
 
-            if (!HasSigData)
-                return;
-
-            Writer.WriteLong(TimeStamp);
-            Writer.WriteVarInt(PublicKey.Length);
-            Writer.WriteBytes(PublicKey);
-            Writer.WriteVarInt(Signature.Length);
-            Writer.WriteBytes(Signature);
+            if (HasSigData)
+            {
+                Writer.WriteLong(TimeStamp);
+                Writer.WriteVarInt(PublicKey.Length);
+                Writer.WriteBytes(PublicKey);
+                Writer.WriteVarInt(Signature.Length);
+                Writer.WriteBytes(Signature);
+            }
+            
+            // Player UUID
+            Writer.WriteBool(false);
         }
     }
 }

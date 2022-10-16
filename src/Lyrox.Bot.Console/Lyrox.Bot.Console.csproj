@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lyrox.Framework\Lyrox.Framework.csproj" />
+    <ProjectReference Include="..\Lyrox.Plugins.WebView\Lyrox.Plugins.WebView.csproj" />
   </ItemGroup>
 
 </Project>

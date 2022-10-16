@@ -26,11 +26,18 @@ namespace Lyrox.Framework.Core.Modules
             instance.Load(_serviceContainer, _lyroxConfiguration);
         }
 
+        public void RegisterModule(Type moduleType)
+        {
+            var instance = Activator.CreateInstance(moduleType) as IModule;
+            _modules.Add(instance);
+            instance.Load(_serviceContainer, _lyroxConfiguration);
+        }
+
         public void LoadModuleServices(ContainerBuilder builder)
         {
             var typeServices = _serviceContainer.GetTypeServices();
             foreach (var typeService in typeServices)
-                builder.RegisterType(typeService.Value).As(typeService.Key).InstancePerLifetimeScope();
+                builder.RegisterType(typeService.Value).As(typeService.Key).InstancePerLifetimeScope().AutoActivate();
         }
 
         public void RegisterEventHandlers(IEventManager eventManager)

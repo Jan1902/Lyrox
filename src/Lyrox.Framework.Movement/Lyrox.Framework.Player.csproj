@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lyrox.Framework.Core\Lyrox.Framework.Core.csproj" />
+    <ProjectReference Include="..\Lyrox.Framework.Networking.Mojang\Lyrox.Framework.Networking.Mojang.csproj" />
+    <ProjectReference Include="..\Lyrox.Framework.Shared\Lyrox.Framework.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

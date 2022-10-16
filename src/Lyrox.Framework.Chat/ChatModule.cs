@@ -14,14 +14,19 @@ namespace Lyrox.Framework.Chat
     {
         public void Load(IServiceContainer serviceContainer, LyroxConfiguration lyroxConfiguration)
         {
-            serviceContainer.RegisterType<IChatManager, ChatManager>();
-            serviceContainer.RegisterType<IJSONChatParser, JSONChatParser>();
+            if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
+            {
+                serviceContainer.RegisterType<IChatManager, ChatManager>();
+                serviceContainer.RegisterType<IJSONChatParser, JSONChatParser>();
+            }
+            else
+                throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
         }
 
         public void RegisterPacketHandlers(INetworkPacketManager networkPacketManager, LyroxConfiguration lyroxConfiguration)
         {
             if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
-                networkPacketManager.RegisterNetworkPacketHandler<PlayerChatMessage, ChatPacketHandler>(0x30);
+                networkPacketManager.RegisterNetworkPacketHandler<PlayerChatMessage, ChatPacketHandler>(0x33);
             else
                 throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
         }

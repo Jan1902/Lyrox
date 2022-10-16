@@ -24,14 +24,13 @@ namespace Lyrox.Framework.Chat.Mojang.PacketHandlers
 
         public void HandlePacket(PlayerChatMessage networkPacket)
         {
-            var sender = _jsonChatParser.ParseChatJson(networkPacket.SenderNameJSON);
-            var text = _jsonChatParser.ParseChatJson(networkPacket.JSONSigned);
+            var sender = _jsonChatParser.ParseChatJson(networkPacket.NetworkName);
 
             if (sender == _lyroxConfiguration.Username)
                 return;
 
-            _logger.LogInformation("[Chat] {sender}: {text}", sender, text);
-            _eventManager.PublishEvent(new ChatMessageReceivedEvent(text, sender));
+            _logger.LogInformation("[Chat] {sender}: {text}", sender, networkPacket.PlainMessage);
+            _eventManager.PublishEvent(new ChatMessageReceivedEvent(networkPacket.PlainMessage, sender));
         }
     }
 }

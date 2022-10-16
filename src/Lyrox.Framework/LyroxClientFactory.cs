@@ -5,9 +5,11 @@ using Lyrox.Framework.Core.Configuration;
 using Lyrox.Framework.Core.Events;
 using Lyrox.Framework.Core.Events.Abstraction;
 using Lyrox.Framework.Core.Modules;
+using Lyrox.Framework.Core.Modules.Abstractions;
 using Lyrox.Framework.Core.Networking;
 using Lyrox.Framework.Core.Networking.Abstraction;
 using Lyrox.Framework.Networking;
+using Lyrox.Framework.Player;
 using Lyrox.Framework.WorldData;
 using Serilog;
 using Serilog.Extensions.Autofac.DependencyInjection;
@@ -16,7 +18,7 @@ namespace Lyrox.Framework
 {
     public static class LyroxClientFactory
     {
-        public static ILyroxClient GetLyroxClient(LyroxConfiguration configuration)
+        public static ILyroxClient GetLyroxClient(LyroxConfiguration configuration, Action<IModuleManager>? pluginBuilding = null)
         {
             var builder = new ContainerBuilder();
             var loggerConfiguration = new LoggerConfiguration()
@@ -36,6 +38,7 @@ namespace Lyrox.Framework
 
             var moduleManager = new ModuleManager(configuration);
             RegisterModules(moduleManager);
+            pluginBuilding?.Invoke(moduleManager);
 
             moduleManager.LoadModuleServices(builder);
             moduleManager.RegisterEventHandlers(eventManager);
@@ -51,6 +54,7 @@ namespace Lyrox.Framework
         private static void RegisterModules(ModuleManager moduleManager)
         {
             moduleManager.RegisterModule<ChatModule>();
+            moduleManager.RegisterModule<PlayerModule>();
             moduleManager.RegisterModule<WorldDataModule>();
             moduleManager.RegisterModule<NetworkingModule>();
         }

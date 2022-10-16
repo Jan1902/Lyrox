@@ -17,11 +17,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Lyrox.Framework.Chat\Lyrox.Framework.Chat.csproj" />
     <ProjectReference Include="..\Lyrox.Framework.Core\Lyrox.Framework.Core.csproj" />
-    <ProjectReference Include="..\Lyrox.Framework.Entities\Lyrox.Framework.Entities.csproj" />
     <ProjectReference Include="..\Lyrox.Framework.Inventory\Lyrox.Framework.Inventory.csproj" />
-    <ProjectReference Include="..\Lyrox.Framework.Movement\Lyrox.Framework.Movement.csproj" />
+    <ProjectReference Include="..\Lyrox.Framework.Movement\Lyrox.Framework.Player.csproj" />
     <ProjectReference Include="..\Lyrox.Framework.Networking\Lyrox.Framework.Networking.csproj" />
-    <ProjectReference Include="..\Lyrox.Framework.WorldData\Lyrox.Framework.WorldData.csproj" />
+    <ProjectReference Include="..\Lyrox.Framework.WorldData\Lyrox.Framework.World.csproj" />
   </ItemGroup>
 
 </Project>

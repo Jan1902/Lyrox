@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Lyrox.Framework.Core.Models.World;
+using Lyrox.Framework.World.Properties;
 using Lyrox.Framework.WorldData.Mojang.Data.Palette.Abstraction;
-using Lyrox.Framework.WorldData.Properties;
 using Newtonsoft.Json.Linq;
 
 namespace Lyrox.Framework.WorldData.Mojang.Data.Palette

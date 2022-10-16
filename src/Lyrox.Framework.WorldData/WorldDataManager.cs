@@ -10,6 +10,38 @@ namespace Lyrox.Framework.WorldData
         public WorldDataManager()
             => _chunks = new();
 
+        public BlockState? GetBlock(int blockX, int blockY, int blockZ)
+        {
+            var chunkX = blockX / 16;
+            var chunkY = blockY / 16;
+            var chunkZ = blockZ / 16;
+
+            var xOffset = blockX % 16;
+            var yOffset = blockY % 16;
+            var zOffset = blockZ % 16;
+
+            return _chunks.ContainsKey((chunkX, chunkZ)) ?
+                _chunks[(chunkX, chunkZ)]
+                .Sections[chunkY]
+                .BlockStates[xOffset, yOffset, zOffset]
+                : null;
+        }
+
+        public void SetBlock(int blockX, int blockY, int blockZ, BlockState blockState)
+        {
+            var chunkX = blockX / 16;
+            var chunkY = blockY / 16;
+            var chunkZ = blockZ / 16;
+
+            var xOffset = blockX % 16;
+            var yOffset = blockY % 16;
+            var zOffset = blockZ % 16;
+
+            _chunks[(chunkX, chunkZ)]
+                .Sections[chunkY]
+                .BlockStates[xOffset, yOffset, zOffset] = blockState;
+        }
+
         public Chunk? GetChunk(int chunkX, int chunkZ)
             => _chunks.ContainsKey((chunkX, chunkZ)) ? _chunks[(chunkX, chunkZ)] : null;
 

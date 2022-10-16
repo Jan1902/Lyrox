@@ -31,7 +31,7 @@ namespace Lyrox.Framework.WorldData
         {
             if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
             {
-                networkPacketManager.RegisterNetworkPacketHandler<ChunkData, WorldDataPacketHandler>(0x1f);
+                networkPacketManager.RegisterNetworkPacketHandler<ChunkData, WorldDataPacketHandler>(0x21);
             }
             else
                 throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);

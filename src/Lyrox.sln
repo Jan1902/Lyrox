@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Networking"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Core", "Lyrox.Framework.Core\Lyrox.Framework.Core.csproj", "{23A69C27-E1AC-4B19-AAA8-5FD047929958}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.WorldData", "Lyrox.Framework.WorldData\Lyrox.Framework.WorldData.csproj", "{5D4BD8F1-5668-451B-9785-AF66E2060B93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.World", "Lyrox.Framework.WorldData\Lyrox.Framework.World.csproj", "{5D4BD8F1-5668-451B-9785-AF66E2060B93}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Chat", "Lyrox.Framework.Chat\Lyrox.Framework.Chat.csproj", "{706C8993-C7C8-4676-BA59-E095FA3D181F}"
 EndProject
@@ -28,11 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bot", "Bot", "{D942D6DE-6CF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Actions", "Lyrox.Framework.Actions\Lyrox.Framework.Actions.csproj", "{FD5B1ECF-9209-4BB6-B3FC-24059510D740}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Movement", "Lyrox.Framework.Movement\Lyrox.Framework.Movement.csproj", "{00260B73-730B-4F0E-8061-E5772ECE873C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Player", "Lyrox.Framework.Movement\Lyrox.Framework.Player.csproj", "{00260B73-730B-4F0E-8061-E5772ECE873C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Inventory", "Lyrox.Framework.Inventory\Lyrox.Framework.Inventory.csproj", "{686ED6C9-7575-41C4-8493-DF2D8BD6C6E7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Entities", "Lyrox.Framework.Entities\Lyrox.Framework.Entities.csproj", "{B01B0794-E4AF-4C46-9364-205CAC4E856C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Networking.Mojang", "Lyrox.Framework.Networking.Mojang\Lyrox.Framework.Networking.Mojang.csproj", "{4CEE93F5-D94B-42FC-BB99-927E92AAAAF3}"
 EndProject
@@ -43,6 +41,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Test", "Lyrox.Framework.Test\Lyrox.Framework.Test.csproj", "{A015DA21-394B-4829-B26F-0D598C18527F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Networking.Core", "Lyrox.Framework.Networking.Core\Lyrox.Framework.Networking.Core.csproj", "{9B782298-8AF4-485D-BAB6-DB77570BE294}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{111A4FEE-8CEB-47A8-93A2-D8FD322881BB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Plugins.WebView", "Lyrox.Plugins.WebView\Lyrox.Plugins.WebView.csproj", "{ADF722B6-F1A0-430C-8B87-8F1AEAC475AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebView", "WebView", "{49E61B85-5433-41F7-93EE-B89DD358A45E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{D39E218A-CD2D-4392-91BE-ECB878F3546B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyrox.Tools.StaticDataCombiner", "Lyrox.Tools.StaticDataCombiner\Lyrox.Tools.StaticDataCombiner.csproj", "{EA7074AF-A566-488E-B39F-F6C31716F784}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyrox.Framework.StaticData", "Lyrox.Framework.StaticData\Lyrox.Framework.StaticData.csproj", "{42DAF315-981F-4A96-AED9-0277F2FE6E73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,10 +100,6 @@ Global
 		{686ED6C9-7575-41C4-8493-DF2D8BD6C6E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{686ED6C9-7575-41C4-8493-DF2D8BD6C6E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{686ED6C9-7575-41C4-8493-DF2D8BD6C6E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B01B0794-E4AF-4C46-9364-205CAC4E856C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B01B0794-E4AF-4C46-9364-205CAC4E856C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B01B0794-E4AF-4C46-9364-205CAC4E856C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B01B0794-E4AF-4C46-9364-205CAC4E856C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4CEE93F5-D94B-42FC-BB99-927E92AAAAF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4CEE93F5-D94B-42FC-BB99-927E92AAAAF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CEE93F5-D94B-42FC-BB99-927E92AAAAF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -110,6 +116,18 @@ Global
 		{9B782298-8AF4-485D-BAB6-DB77570BE294}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B782298-8AF4-485D-BAB6-DB77570BE294}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B782298-8AF4-485D-BAB6-DB77570BE294}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADF722B6-F1A0-430C-8B87-8F1AEAC475AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADF722B6-F1A0-430C-8B87-8F1AEAC475AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADF722B6-F1A0-430C-8B87-8F1AEAC475AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADF722B6-F1A0-430C-8B87-8F1AEAC475AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA7074AF-A566-488E-B39F-F6C31716F784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA7074AF-A566-488E-B39F-F6C31716F784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA7074AF-A566-488E-B39F-F6C31716F784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA7074AF-A566-488E-B39F-F6C31716F784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42DAF315-981F-4A96-AED9-0277F2FE6E73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42DAF315-981F-4A96-AED9-0277F2FE6E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42DAF315-981F-4A96-AED9-0277F2FE6E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42DAF315-981F-4A96-AED9-0277F2FE6E73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,12 +143,15 @@ Global
 		{FD5B1ECF-9209-4BB6-B3FC-24059510D740} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 		{00260B73-730B-4F0E-8061-E5772ECE873C} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 		{686ED6C9-7575-41C4-8493-DF2D8BD6C6E7} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
-		{B01B0794-E4AF-4C46-9364-205CAC4E856C} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 		{4CEE93F5-D94B-42FC-BB99-927E92AAAAF3} = {A874C7B9-A9D6-4201-8B09-518A6168952D}
 		{A874C7B9-A9D6-4201-8B09-518A6168952D} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 		{0A5337DE-3415-4308-99C5-7808B6C09054} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 		{A015DA21-394B-4829-B26F-0D598C18527F} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 		{9B782298-8AF4-485D-BAB6-DB77570BE294} = {A874C7B9-A9D6-4201-8B09-518A6168952D}
+		{ADF722B6-F1A0-430C-8B87-8F1AEAC475AE} = {49E61B85-5433-41F7-93EE-B89DD358A45E}
+		{49E61B85-5433-41F7-93EE-B89DD358A45E} = {111A4FEE-8CEB-47A8-93A2-D8FD322881BB}
+		{EA7074AF-A566-488E-B39F-F6C31716F784} = {D39E218A-CD2D-4392-91BE-ECB878F3546B}
+		{42DAF315-981F-4A96-AED9-0277F2FE6E73} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EBED1CD4-4008-4A7E-97E5-EBB867B0796F}

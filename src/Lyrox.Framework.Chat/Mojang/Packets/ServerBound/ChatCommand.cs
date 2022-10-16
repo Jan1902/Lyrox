@@ -8,7 +8,7 @@ namespace Lyrox.Framework.Chat.Mojang.Packets.ServerBound
     {
         public string Command { get; }
         public string[] Arguments { get; }
-        public override int OPCode => 0x03;
+        public override int OPCode => 0x04;
 
         public ChatCommand(string command, params string[] arguments)
         {
