@@ -20,7 +20,7 @@ namespace Lyrox.Framework
     {
         private const string LogFilePath = "Log.txt";
 
-        public static ILyroxClient GetLyroxClient(LyroxConfiguration configuration)
+        public static ILyroxClient GetLyroxClient(LyroxConfiguration configuration, Action<IModuleManager>? pluginBuilding = null)
         {
             var builder = new ContainerBuilder();
             var loggerConfiguration = new LoggerConfiguration()
@@ -40,6 +40,7 @@ namespace Lyrox.Framework
 
             var moduleManager = new ModuleManager(configuration);
             RegisterModules(moduleManager);
+            pluginBuilding?.Invoke(moduleManager);
 
             moduleManager.LoadModuleServices(builder);
             moduleManager.RegisterEventHandlers(eventManager);
