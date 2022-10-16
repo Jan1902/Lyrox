@@ -19,7 +19,7 @@ namespace Lyrox.Framework
 
         private readonly LyroxConfiguration _configuration;
 
-        public event EventHandler<ChatMessageReceivedEvent> ChatMessageReceived;
+        public event EventHandler<ChatMessageReceivedEvent>? ChatMessageReceived;
 
         public LyroxClient(IWorldDataManager worldDataManager, IChatManager chatManager, IEventManager eventManager, INetworkingManager networkingManager, IPlayerManager playerManager, LyroxConfiguration configuration)
         {

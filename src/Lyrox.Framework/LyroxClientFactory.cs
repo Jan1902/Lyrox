@@ -18,12 +18,18 @@ namespace Lyrox.Framework
 {
     public static class LyroxClientFactory
     {
+<<<<<<< HEAD
         public static ILyroxClient GetLyroxClient(LyroxConfiguration configuration, Action<IModuleManager>? pluginBuilding = null)
+=======
+        private const string LogFilePath = "Log.txt";
+
+        public static ILyroxClient GetLyroxClient(LyroxConfiguration configuration)
+>>>>>>> db4aa368f623507e9e82bee13b108847e82d382d
         {
             var builder = new ContainerBuilder();
             var loggerConfiguration = new LoggerConfiguration()
                 .WriteTo.Console()
-                .WriteTo.File("Log.txt");
+                .WriteTo.File(LogFilePath);
 
             builder.RegisterSerilog(loggerConfiguration);
 
