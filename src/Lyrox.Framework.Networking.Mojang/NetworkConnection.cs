@@ -51,7 +51,7 @@ namespace Lyrox.Framework.Networking.Mojang
             {
                 await _socket.ConnectAsync(_lyroxConfiguration.IPAdress, _lyroxConfiguration.Port);
                 _logger.LogInformation("Connected to Server at {host}: {port}", _lyroxConfiguration.IPAdress, _lyroxConfiguration.Port);
-                _eventManager.PublishEvent(new ConnectionEstablishedEvent());
+                await _eventManager.PublishEvent(new ConnectionEstablishedEvent());
                 _socket.BeginReceive(_buffer, 0, _buffer.Length, 0, new AsyncCallback(ReceiveCallback), null);
             }
             catch (Exception e)

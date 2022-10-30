@@ -33,7 +33,7 @@ void HandleChatMessage(string message)
         lyroxClient.Goto(new Vector3d(double.Parse(tokens[2]), double.Parse(tokens[3]), double.Parse(tokens[4])));
 
     else if (tokens[1] == "block")
-        lyroxClient.SendChatMessage(lyroxClient.GetBlock(new Vector3i(int.Parse(tokens[2]), int.Parse(tokens[3]), int.Parse(tokens[4]))).BlockName);
+        lyroxClient.SendChatMessage(lyroxClient.GetBlock(new Vector3i(int.Parse(tokens[2]), int.Parse(tokens[3]), int.Parse(tokens[4])))?.BlockName ?? "UNKNOWN");
 
     else if (tokens[1] == "chunk")
     {
@@ -42,11 +42,11 @@ void HandleChatMessage(string message)
         var section = lyroxClient.GetChunkSection(chunkPos);
 
         var text = "";
-        for (int z = 0; z < 16; z++)
+        for (var z = 0; z < 16; z++)
         {
             var line = "";
-            for (int x = 0; x < 16; x++)
-                line += section.BlockStates[x, offsetY, z]?.BlockName.Split(":").Last().First();
+            for (var x = 0; x < 16; x++)
+                line += section?.BlockStates[x, offsetY, z]?.BlockName.Split(":").Last().First();
 
             text += line + "\n";
         }

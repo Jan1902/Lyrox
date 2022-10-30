@@ -41,7 +41,7 @@ namespace Lyrox.Framework.Player
             if (IsOnGround && _currentVelocity.Y < 0)
                 _currentVelocity.Y = 0;
 
-            if(!IsOnGround)
+            if (!IsOnGround)
                 _currentVelocity.Y += Gravity * InterpolationInterval / 1000;
 
             if (IsOnGround && _shouldJump)
@@ -66,7 +66,7 @@ namespace Lyrox.Framework.Player
                 : Position.Y == Math.Round(Position.Y)
                     && (_worldDataManger.GetBlock(
                             (int)Math.Round(Position.X - .5),
-                            (int)Position.Y - 1, 
+                            (int)Position.Y - 1,
                             (int)Math.Round(Position.Z - .5))?
                         .IsSolid() ?? false);
 
