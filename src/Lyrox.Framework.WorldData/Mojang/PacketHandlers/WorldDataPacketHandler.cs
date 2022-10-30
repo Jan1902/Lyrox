@@ -16,10 +16,11 @@ namespace Lyrox.Framework.WorldData.Mojang.PacketHandlers
             _worldDataManager = worldDataManager;
         }
 
-        public void HandlePacket(ChunkData networkPacket)
+        public Task HandlePacket(ChunkData networkPacket)
         {
             var chunk = _chunkDataHandler.HandleChunkData(networkPacket.Data);
             _worldDataManager.SetChunk(networkPacket.ChunkX, networkPacket.ChunkZ, chunk);
+            return Task.CompletedTask;
         }
     }
 }
