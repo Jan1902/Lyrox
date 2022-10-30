@@ -60,4 +60,6 @@
     {
         public long[] Items { get; set; }
     }
+
+    public class EndTag : NBTTag { }
 }

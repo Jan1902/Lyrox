@@ -5,9 +5,9 @@ namespace Lyrox.Framework.Networking.Mojang
 {
     public class MojangNBTReader
     {
-        private static readonly Dictionary<int, Type?> _tagTypeIds = new()
+        private static readonly Dictionary<int, Type> _tagTypeIds = new()
         {
-            { 0, null },
+            { 0, typeof(EndTag) },
             { 1, typeof(ByteTag) },
             { 2, typeof(ShortTag) },
             { 3, typeof(IntTag) },
@@ -21,14 +21,16 @@ namespace Lyrox.Framework.Networking.Mojang
             { 12, typeof(LongArrayTag) }
         };
 
-        public static CompoundTag? ParseNBT(IMojangBinaryReader reader)
-            => (CompoundTag)ParseRecursive(reader, null);
+        public static NBTTag ParseNBT(IMojangBinaryReader reader)
+            => (NBTTag)ParseRecursive(reader, null);
 
-        private static NBTTag? ParseRecursive(IMojangBinaryReader reader, NBTTag? parent, int? givenTypeId = null)
+        private static NBTTag ParseRecursive(IMojangBinaryReader reader, NBTTag? parent, int? givenTypeId = null)
         {
             var typeId = givenTypeId ?? reader.ReadByte();
             switch (typeId)
             {
+                case 0:
+                    return new EndTag();
                 case 1:
                     return new ByteTag() { Name = GetName(), Value = reader.ReadByte() };
                 case 2:
@@ -46,6 +48,9 @@ namespace Lyrox.Framework.Networking.Mojang
                 case 9:
                     {
                         var listTypeId = reader.ReadByte();
+                        if (!_tagTypeIds.ContainsKey(listTypeId))
+                            throw new Exception($"Error parsing NBT List Tag with Type ID {listTypeId}");
+
                         var listTag = new ListTag() { Name = GetName(), TagType = _tagTypeIds[listTypeId] };
                         var length = reader.ReadInt();
                         var items = new List<NBTTag>();
@@ -62,7 +67,7 @@ namespace Lyrox.Framework.Networking.Mojang
                         var children = new List<NBTTag>();
                         var child = ParseRecursive(reader, compoundTag);
 
-                        while (child != null)
+                        while (child is not EndTag)
                         {
                             children.Add(child);
                             child = ParseRecursive(reader, compoundTag);
@@ -88,7 +93,7 @@ namespace Lyrox.Framework.Networking.Mojang
                         return tag;
                     }
                 default:
-                    return null;
+                    throw new Exception($"Error parsing NBT Tag with Type ID {typeId}!");
             }
 
             string? GetName()
