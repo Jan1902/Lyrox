@@ -12,10 +12,12 @@ namespace Lyrox.Framework.Test.Mojang
         {
             using var stream = new MemoryStream(Resources.smalltest);
             using var reader = new MojangBinaryReader(stream);
-            var nbt = MojangNBTReader.ParseNBT(reader);
+            var nbtRaw = MojangNBTReader.ParseNBT(reader);
 
-            Assert.That(nbt, Is.Not.Null);
-            Assert.That(nbt, Is.TypeOf<CompoundTag>());
+            Assert.That(nbtRaw, Is.Not.Null);
+            Assert.That(nbtRaw, Is.TypeOf<CompoundTag>());
+
+            var nbt = nbtRaw as CompoundTag;
 
             Assert.Multiple(() =>
             {
