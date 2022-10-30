@@ -1,11 +1,12 @@
-﻿using Lyrox.Framework.Core.Models.World;
+﻿using Lyrox.Framework.Core.Models.NBT;
+using Lyrox.Framework.Core.Models.World;
 using Lyrox.Framework.Networking.Mojang;
 using Lyrox.Framework.Networking.Mojang.Packets.Base;
 using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.WorldData.Mojang.Packets
 {
-    public class ChunkData : MojangClientBoundPacket
+    public class ChunkData : MojangClientBoundPacketBase
     {
         public int ChunkX { get; private set; }
         public int ChunkZ { get; private set; }
@@ -18,7 +19,7 @@ namespace Lyrox.Framework.WorldData.Mojang.Packets
             ChunkZ = Reader.ReadInt();
 
             // NBT Data is irrelevant for now
-            _ = MojangNBTReader.ParseNBT(Reader);
+            var test = MojangNBTReader.ParseNBT(Reader);
 
             Data = Reader.ReadBytes(Reader.ReadVarInt());
 
@@ -37,9 +38,6 @@ namespace Lyrox.Framework.WorldData.Mojang.Packets
                     Data = MojangNBTReader.ParseNBT(Reader)
                 };
             }
-
-            if(length > 0)
-                Console.WriteLine();
 
             // Light Data is irrelevant
         }
