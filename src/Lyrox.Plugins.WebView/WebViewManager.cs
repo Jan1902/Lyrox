@@ -41,7 +41,7 @@ namespace Lyrox.Plugins.WebView
             app.UseStaticFiles();
 
             app.MapGet("/", () => "Welcome to Lyrox Web View!");
-            
+
             app.MapDefaultControllerRoute();
             app.MapRazorPages();
             app.RunAsync();
