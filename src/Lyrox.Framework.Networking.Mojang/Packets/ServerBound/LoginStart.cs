@@ -2,13 +2,13 @@
 
 namespace Lyrox.Framework.Networking.Mojang.Packets.ServerBound
 {
-    internal class LoginStart : MojangServerBoundPacket
+    internal class LoginStart : MojangServerBoundPacketBase
     {
-        public string Name { get; }
-        public bool HasSigData { get; }
-        public long TimeStamp { get; }
-        public byte[] PublicKey { get; }
-        public byte[] Signature { get; }
+        public string Name { get; init; }
+        public bool HasSigData { get; init; }
+        public long TimeStamp { get; init; }
+        public byte[] PublicKey { get; init; }
+        public byte[] Signature { get; init; }
 
         public override int OPCode => 0x00;
 
@@ -40,7 +40,7 @@ namespace Lyrox.Framework.Networking.Mojang.Packets.ServerBound
                 Writer.WriteVarInt(Signature.Length);
                 Writer.WriteBytes(Signature);
             }
-            
+
             // Player UUID
             Writer.WriteBool(false);
         }

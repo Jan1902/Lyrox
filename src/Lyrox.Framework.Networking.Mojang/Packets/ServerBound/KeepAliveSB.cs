@@ -2,9 +2,9 @@
 
 namespace Lyrox.Framework.Networking.Mojang.Packets.ServerBound
 {
-    internal class KeepAliveSB : MojangServerBoundPacket
+    internal class KeepAliveSB : MojangServerBoundPacketBase
     {
-        public long KeepAliveID { get; }
+        public long KeepAliveID { get; init; }
 
         public override int OPCode => 0x12;
 

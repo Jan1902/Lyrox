@@ -20,6 +20,8 @@ namespace Lyrox.Framework
         private readonly LyroxConfiguration _configuration;
 
         public event EventHandler<ChatMessageReceivedEvent>? ChatMessageReceived;
+        public event EventHandler<ConnectionEstablishedEvent>? Connected;
+        public event EventHandler<ConnectionTerminatedEvent>? Disconnected;
 
         public LyroxClient(IWorldDataManager worldDataManager, IChatManager chatManager, IEventManager eventManager, INetworkingManager networkingManager, IPlayerManager playerManager, LyroxConfiguration configuration)
         {
@@ -35,8 +37,14 @@ namespace Lyrox.Framework
 
         private void SetupEvents()
         {
-            _eventManager.RegisterEventHandler<ChatMessageReceivedEvent>((evt)
-                => ChatMessageReceived?.Invoke(this, evt));
+            _ = _eventManager.RegisterEventHandler<ChatMessageReceivedEvent>(
+                (evt) => ChatMessageReceived?.Invoke(this, evt));
+
+            _ = _eventManager.RegisterEventHandler<ConnectionEstablishedEvent>(
+                (evt) => Connected?.Invoke(this, evt));
+
+            _ = _eventManager.RegisterEventHandler<ConnectionTerminatedEvent>(
+                (evt) => Disconnected?.Invoke(this, evt));
         }
 
         public async Task Connect()

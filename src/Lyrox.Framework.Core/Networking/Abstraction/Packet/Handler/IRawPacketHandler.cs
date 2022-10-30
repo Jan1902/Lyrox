@@ -2,6 +2,6 @@
 {
     public interface IRawPacketHandler
     {
-        public void HandlePacket(int opCode, byte[] data);
+        Task HandleRawPacket(int opCode, byte[] data);
     }
 }

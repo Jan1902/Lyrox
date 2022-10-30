@@ -2,7 +2,7 @@
 
 namespace Lyrox.Framework.Networking.Mojang.Packets.ClientBound
 {
-    internal class DisconnectLogin : MojangClientBoundPacket
+    internal class DisconnectLogin : MojangClientBoundPacketBase
     {
         public string Message { get; private set; }
 

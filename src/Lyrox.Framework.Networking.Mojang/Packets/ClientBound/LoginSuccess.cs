@@ -2,7 +2,7 @@
 
 namespace Lyrox.Framework.Networking.Mojang.Packets.ClientBound
 {
-    public class LoginSuccess : MojangClientBoundPacket
+    public class LoginSuccess : MojangClientBoundPacketBase
     {
         public Guid UUID { get; private set; }
         public string Username { get; private set; }

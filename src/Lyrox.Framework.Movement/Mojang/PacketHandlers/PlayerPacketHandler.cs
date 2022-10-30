@@ -17,7 +17,7 @@ namespace Lyrox.Framework.Player.Mojang.PacketHandlers
             _networkingManager = networkingManager;
         }
 
-        public void HandlePacket(SynchronizePlayerPosition networkPacket)
+        public async Task HandlePacket(SynchronizePlayerPosition networkPacket)
         {
             var flags = (SynchronizePlayerPosition.RelativeValues)networkPacket.Flags;
             var position = new Vector3d(flags.HasFlag(SynchronizePlayerPosition.RelativeValues.X) ? (_physicsPlayer.Position.X + networkPacket.X) : networkPacket.X,
@@ -30,7 +30,7 @@ namespace Lyrox.Framework.Player.Mojang.PacketHandlers
             _physicsPlayer.SetCurrentPosition(position);
             _physicsPlayer.SetCurrentRotation(rotation);
 
-            _networkingManager.SendPacket(new ConfirmTeleportation(networkPacket.TeleportID));
+            await _networkingManager.SendPacket(new ConfirmTeleportation(networkPacket.TeleportID));
         }
     }
 }

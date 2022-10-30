@@ -2,7 +2,7 @@
 
 namespace Lyrox.Framework.Player.Mojang.Packets.ClientBound
 {
-    internal class SynchronizePlayerPosition : MojangClientBoundPacket
+    internal class SynchronizePlayerPosition : MojangClientBoundPacketBase
     {
         public double X { get; private set; }
         public double Y { get; private set; }

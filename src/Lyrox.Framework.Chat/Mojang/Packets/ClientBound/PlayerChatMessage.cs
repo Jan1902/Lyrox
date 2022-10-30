@@ -2,7 +2,7 @@
 
 namespace Lyrox.Framework.Chat.Mojang.Packets.ClientBound
 {
-    internal class PlayerChatMessage : MojangClientBoundPacket
+    internal class PlayerChatMessage : MojangClientBoundPacketBase
     {
         public byte[] MessageSignature { get; private set; }
         public Guid SenderUUID { get; private set; }
@@ -46,7 +46,7 @@ namespace Lyrox.Framework.Chat.Mojang.Packets.ClientBound
 
             ChatType = Reader.ReadVarInt();
             NetworkName = Reader.ReadStringWithVarIntPrefix();
-            if(Reader.ReadBool())
+            if (Reader.ReadBool())
                 NetworkTargetName = Reader.ReadStringWithVarIntPrefix();
         }
 

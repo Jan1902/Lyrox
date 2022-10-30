@@ -1,9 +1,9 @@
 ﻿namespace Lyrox.Framework.Core.Events.Implementations
 {
-    public class ChatMessageReceivedEvent : Event
+    public record ChatMessageReceivedEvent : EventBase
     {
-        public string Message { get; set; }
-        public string Sender { get; set; }
+        public string Message { get; init; }
+        public string Sender { get; init; }
 
         public ChatMessageReceivedEvent(string message, string sender)
         {

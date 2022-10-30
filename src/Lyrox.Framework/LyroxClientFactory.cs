@@ -8,6 +8,7 @@ using Lyrox.Framework.Core.Modules;
 using Lyrox.Framework.Core.Modules.Abstractions;
 using Lyrox.Framework.Core.Networking;
 using Lyrox.Framework.Core.Networking.Abstraction;
+using Lyrox.Framework.Inventory;
 using Lyrox.Framework.Networking;
 using Lyrox.Framework.Player;
 using Lyrox.Framework.WorldData;
@@ -59,6 +60,7 @@ namespace Lyrox.Framework
             moduleManager.RegisterModule<PlayerModule>();
             moduleManager.RegisterModule<WorldDataModule>();
             moduleManager.RegisterModule<NetworkingModule>();
+            moduleManager.RegisterModule<InventoryModule>();
         }
     }
 }

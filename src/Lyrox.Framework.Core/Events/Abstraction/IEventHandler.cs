@@ -1,7 +1,7 @@
 ﻿namespace Lyrox.Framework.Core.Events.Abstraction
 {
-    public interface IEventHandler<T> where T : Event
+    public interface IEventHandler<T> where T : EventBase
     {
-        void HandleEvent(T evt);
+        Task HandleEvent(T evt);
     }
 }

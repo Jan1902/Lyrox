@@ -1,6 +1,6 @@
 ﻿namespace Lyrox.Framework.Core.Events.Implementations
 {
-    public class ConnectionEstablishedEvent : Event
+    public record ConnectionEstablishedEvent : EventBase
     {
     }
 }

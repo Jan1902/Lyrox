@@ -14,7 +14,7 @@ namespace Lyrox.Framework.Networking.Mojang.PacketHandlers
         private readonly INetworkConnection _networkConnection;
         private readonly IEventManager _eventManager;
 
-        private readonly Dictionary<ProtocolState, Dictionary<int, Action<byte[]>>> _handlers;
+        private readonly Dictionary<ProtocolState, Dictionary<int, Func<byte[], Task>>> _handlers;
         private ProtocolState _currentProtocolState;
 
         public MojangNetworkingPacketHandler(INetworkConnection networkConnection, IEventManager eventManager)
@@ -23,7 +23,7 @@ namespace Lyrox.Framework.Networking.Mojang.PacketHandlers
             _eventManager = eventManager;
 
             _currentProtocolState = ProtocolState.Handshaking;
-            _eventManager.RegisterEventHandler<ProtocolStateChanged>(HandleProtocolStateChange);
+            _eventManager.RegisterEventHandler<ProtocolStateChangedEvent>(HandleProtocolStateChange);
 
             _handlers = new()
             {
@@ -35,23 +35,23 @@ namespace Lyrox.Framework.Networking.Mojang.PacketHandlers
             };
         }
 
-        private void HandleProtocolStateChange(ProtocolStateChanged protocolStateChanged)
+        private void HandleProtocolStateChange(ProtocolStateChangedEvent protocolStateChanged)
             => _currentProtocolState = protocolStateChanged.ProtocolState;
 
-        public void HandlePacket(int opCode, byte[] data)
+        public async Task HandleRawPacket(int opCode, byte[] data)
         {
             if (_handlers.ContainsKey(_currentProtocolState)
                 && _handlers[_currentProtocolState].ContainsKey(opCode))
-                _handlers[_currentProtocolState][opCode].Invoke(data);
+                await _handlers[_currentProtocolState][opCode].Invoke(data);
         }
 
-        private void HandleLoginSuccess(byte[] data)
-            => _eventManager.PublishEvent(new ProtocolStateChanged(ProtocolState.Play));
+        private async Task HandleLoginSuccess(byte[] data)
+            => await _eventManager.PublishEvent(new ProtocolStateChangedEvent(ProtocolState.Play));
 
-        private void HandleDisconnectLogin(byte[] data)
-            => _eventManager.PublishEvent(new ConnectionTerminatedEvent());
+        private async Task HandleDisconnectLogin(byte[] data)
+            => await _eventManager.PublishEvent(new ConnectionTerminatedEvent());
 
-        public void HandlePacket(KeepAliveCB networkPacket)
-            => _networkConnection.SendPacket(new KeepAliveSB(networkPacket.KeepAliveID));
+        public async Task HandlePacket(KeepAliveCB networkPacket)
+            => await _networkConnection.SendPacket(new KeepAliveSB(networkPacket.KeepAliveID));
     }
 }

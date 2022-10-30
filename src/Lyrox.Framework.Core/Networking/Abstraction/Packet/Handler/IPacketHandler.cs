@@ -2,6 +2,6 @@
 {
     public interface IPacketHandler<T> where T : IClientBoundNetworkPacket
     {
-        void HandlePacket(T networkPacket);
+        Task HandlePacket(T networkPacket);
     }
 }

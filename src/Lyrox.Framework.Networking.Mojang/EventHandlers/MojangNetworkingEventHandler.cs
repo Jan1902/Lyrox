@@ -22,11 +22,11 @@ namespace Lyrox.Framework.Networking.Mojang.EventHandlers
             _eventManager = eventManager;
         }
 
-        public void HandleEvent(ConnectionEstablishedEvent evt)
+        public async Task HandleEvent(ConnectionEstablishedEvent evt)
         {
-            _networkConnection.SendPacket(new Handshake(760, _configuration.IPAdress, (ushort)_configuration.Port, ProtocolState.Login));
-            _networkConnection.SendPacket(new LoginStart(_configuration.Username));
-            _eventManager.PublishEvent(new ProtocolStateChanged(ProtocolState.Login));
+            await _networkConnection.SendPacket(new Handshake(760, _configuration.IPAdress, (ushort)_configuration.Port, ProtocolState.Login));
+            await _networkConnection.SendPacket(new LoginStart(_configuration.Username));
+            await _eventManager.PublishEvent(new ProtocolStateChangedEvent(ProtocolState.Login));
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace Lyrox.Framework.Core.Events
 {
-    public abstract class Event
+    public abstract record EventBase
     {
         public DateTime CreationTime { get; }
 
-        public Event()
+        public EventBase()
             => CreationTime = DateTime.Now;
     }
 }

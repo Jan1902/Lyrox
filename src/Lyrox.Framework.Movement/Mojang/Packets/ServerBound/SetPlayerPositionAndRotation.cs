@@ -3,14 +3,14 @@ using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Player.Mojang.Packets.ServerBound
 {
-    internal class SetPlayerPositionAndRotation : MojangServerBoundPacket
+    internal class SetPlayerPositionAndRotation : MojangServerBoundPacketBase
     {
-        public double X { get; }
-        public double Y { get; }
-        public double Z { get; }
-        public float Yaw { get; }
-        public float Pitch { get; }
-        public bool OnGround { get; }
+        public double X { get; init; }
+        public double Y { get; init; }
+        public double Z { get; init; }
+        public float Yaw { get; init; }
+        public float Pitch { get; init; }
+        public bool OnGround { get; init; }
 
         public override int OPCode => 0x15;
 

@@ -8,6 +8,8 @@ namespace Lyrox.Framework.Abstraction
     {
         Task Connect();
         event EventHandler<ChatMessageReceivedEvent> ChatMessageReceived;
+        event EventHandler<ConnectionEstablishedEvent>? Connected;
+        event EventHandler<ConnectionTerminatedEvent>? Disconnected;
         void SendChatMessage(string message);
         void SendPrivateMessage(string message, string player);
         void SendCommand(string command, string[] arguments);

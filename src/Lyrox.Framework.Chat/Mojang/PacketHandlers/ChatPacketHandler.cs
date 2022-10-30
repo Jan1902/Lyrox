@@ -22,7 +22,7 @@ namespace Lyrox.Framework.Chat.Mojang.PacketHandlers
             _lyroxConfiguration = lyroxConfiguration;
         }
 
-        public void HandlePacket(PlayerChatMessage networkPacket)
+        public async Task HandlePacket(PlayerChatMessage networkPacket)
         {
             var sender = _jsonChatParser.ParseChatJson(networkPacket.NetworkName);
 
@@ -30,7 +30,7 @@ namespace Lyrox.Framework.Chat.Mojang.PacketHandlers
                 return;
 
             _logger.LogInformation("[Chat] {sender}: {text}", sender, networkPacket.PlainMessage);
-            _eventManager.PublishEvent(new ChatMessageReceivedEvent(networkPacket.PlainMessage, sender));
+            await _eventManager.PublishEvent(new ChatMessageReceivedEvent(networkPacket.PlainMessage, sender));
         }
     }
 }

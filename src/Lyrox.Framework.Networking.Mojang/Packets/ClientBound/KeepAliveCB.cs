@@ -2,7 +2,7 @@
 
 namespace Lyrox.Framework.Networking.Mojang.Packets.ClientBound
 {
-    public class KeepAliveCB : MojangClientBoundPacket
+    public class KeepAliveCB : MojangClientBoundPacketBase
     {
         public long KeepAliveID { get; private set; }
 

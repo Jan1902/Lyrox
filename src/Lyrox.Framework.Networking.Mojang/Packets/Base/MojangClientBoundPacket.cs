@@ -4,7 +4,7 @@ using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 
 namespace Lyrox.Framework.Networking.Mojang.Packets.Base
 {
-    public abstract class MojangClientBoundPacket : IClientBoundNetworkPacket
+    public abstract class MojangClientBoundPacketBase : IClientBoundNetworkPacket
     {
         protected IMojangBinaryReader Reader;
 

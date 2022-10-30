@@ -3,12 +3,12 @@ using Lyrox.Framework.Networking.Mojang.Types;
 
 namespace Lyrox.Framework.Networking.Mojang.Packets.ServerBound
 {
-    internal class Handshake : MojangServerBoundPacket
+    internal class Handshake : MojangServerBoundPacketBase
     {
-        public int ProtocolVersion { get; }
-        public string ServerAddress { get; }
-        public ushort ServerPort { get; }
-        public ProtocolState NextState { get; }
+        public int ProtocolVersion { get; init; }
+        public string ServerAddress { get; init; }
+        public ushort ServerPort { get; init; }
+        public ProtocolState NextState { get; init; }
 
         public override int OPCode => 0x00;
 

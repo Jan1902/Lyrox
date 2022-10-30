@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Collections.Concurrent;
+using Autofac;
 using Lyrox.Framework.Core.Networking.Abstraction;
 using Lyrox.Framework.Core.Networking.Abstraction.Packet;
 using Lyrox.Framework.Core.Networking.Abstraction.Packet.Handler;
@@ -7,13 +8,13 @@ namespace Lyrox.Framework.Core.Networking
 {
     public class NetworkPacketManager : INetworkPacketManager
     {
-        private readonly Dictionary<Type, List<object>> _handlers;
-        private readonly Dictionary<int, List<object>> _rawHandlers;
+        private readonly ConcurrentDictionary<Type, List<object>> _handlers;
+        private readonly ConcurrentDictionary<int, List<object>> _rawHandlers;
 
         private readonly ContainerBuilder _containerBuilder;
 
-        private readonly Dictionary<int, (Type PacketType, List<Type> Handlers)> _handlerMapping;
-        private readonly Dictionary<int, List<Type>> _rawHandlerMapping;
+        private readonly ConcurrentDictionary<int, (Type PacketType, List<Type> Handlers)> _handlerMapping;
+        private readonly ConcurrentDictionary<int, List<Type>> _rawHandlerMapping;
 
         public NetworkPacketManager(ContainerBuilder containerBuilder)
         {
@@ -44,7 +45,7 @@ namespace Lyrox.Framework.Core.Networking
 
             if (_rawHandlerMapping.ContainsKey(opCode))
                 foreach (var rawHandler in _rawHandlers[opCode].Select(h => h as IRawPacketHandler))
-                    rawHandler?.HandlePacket(opCode, data);
+                    rawHandler?.HandleRawPacket(opCode, data);
         }
 
         public void RegisterNetworkPacketHandler<TPacket, THandler>(int opCode)

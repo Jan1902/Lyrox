@@ -4,9 +4,9 @@ using Lyrox.Framework.Networking.Mojang.Packets.Base;
 
 namespace Lyrox.Framework.Chat.Mojang.Packets.ServerBound
 {
-    internal class ChatMessage : MojangServerBoundPacket
+    internal class ChatMessage : MojangServerBoundPacketBase
     {
-        public string Message { get; }
+        public string Message { get; init; }
 
         public override int OPCode => 0x05;
 

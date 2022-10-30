@@ -4,10 +4,10 @@ using Lyrox.Framework.Networking.Mojang.Packets.Base;
 
 namespace Lyrox.Framework.Chat.Mojang.Packets.ServerBound
 {
-    internal class ChatCommand : MojangServerBoundPacket
+    internal class ChatCommand : MojangServerBoundPacketBase
     {
-        public string Command { get; }
-        public string[] Arguments { get; }
+        public string Command { get; init; }
+        public string[] Arguments { get; init; }
         public override int OPCode => 0x04;
 
         public ChatCommand(string command, params string[] arguments)
@@ -36,7 +36,7 @@ namespace Lyrox.Framework.Chat.Mojang.Packets.ServerBound
                 Writer.WriteVarInt(signature.Length);
                 Writer.WriteBytes(signature);
             }
-            
+
             Writer.WriteBool(false);
         }
     }

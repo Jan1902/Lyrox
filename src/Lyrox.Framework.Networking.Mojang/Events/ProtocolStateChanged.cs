@@ -3,11 +3,11 @@ using Lyrox.Framework.Networking.Mojang.Types;
 
 namespace Lyrox.Framework.Networking.Mojang.Events
 {
-    internal class ProtocolStateChanged : Event
+    internal record ProtocolStateChangedEvent : EventBase
     {
-        public ProtocolState ProtocolState { get; set; }
+        public ProtocolState ProtocolState { get; init; }
 
-        public ProtocolStateChanged(ProtocolState protocolState)
+        public ProtocolStateChangedEvent(ProtocolState protocolState)
             => ProtocolState = protocolState;
     }
 }

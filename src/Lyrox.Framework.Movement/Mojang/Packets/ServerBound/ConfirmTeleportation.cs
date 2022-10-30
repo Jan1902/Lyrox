@@ -2,9 +2,9 @@
 
 namespace Lyrox.Framework.Player.Mojang.Packets.ServerBound
 {
-    internal class ConfirmTeleportation : MojangServerBoundPacket
+    internal class ConfirmTeleportation : MojangServerBoundPacketBase
     {
-        public int TeleportID { get; }
+        public int TeleportID { get; init; }
 
         public override int OPCode => 0x00;
 
