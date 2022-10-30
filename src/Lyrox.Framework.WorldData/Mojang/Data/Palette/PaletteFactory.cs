@@ -13,7 +13,7 @@ namespace Lyrox.Framework.WorldData.Mojang.Data.Palette
         {
             if (bitsPerBlock == 0)
                 return new SingleValuedPalette(_globalPaletteProvider);
-            else if (isBiome)
+            else if (isBiome && bitsPerBlock <= 3)
                 return new IndirectPalette(bitsPerBlock, _globalPaletteProvider);
             else if (bitsPerBlock <= 4)
                 return new IndirectPalette(4, _globalPaletteProvider);

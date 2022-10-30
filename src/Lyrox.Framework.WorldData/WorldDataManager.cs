@@ -13,7 +13,7 @@ namespace Lyrox.Framework.WorldData
         public BlockState? GetBlock(int blockX, int blockY, int blockZ)
         {
             var chunkX = blockX / 16;
-            var chunkY = blockY / 16;
+            var chunkY = blockY / 16 + 4;
             var chunkZ = blockZ / 16;
 
             var xOffset = blockX % 16;
@@ -30,7 +30,7 @@ namespace Lyrox.Framework.WorldData
         public void SetBlock(int blockX, int blockY, int blockZ, BlockState blockState)
         {
             var chunkX = blockX / 16;
-            var chunkY = blockY / 16;
+            var chunkY = blockY / 16 + 4;
             var chunkZ = blockZ / 16;
 
             var xOffset = blockX % 16;
