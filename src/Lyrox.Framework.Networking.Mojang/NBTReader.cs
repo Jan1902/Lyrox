@@ -91,7 +91,7 @@ namespace Lyrox.Framework.Networking.Mojang
             }
 
             string? GetName()
-                => typeId == 10 || parent is CompoundTag ? reader.ReadStringWithShortPrefix() : null;
+                => parent is null or CompoundTag ? reader.ReadStringWithShortPrefix() : null;
         }
     }
 }
