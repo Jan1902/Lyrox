@@ -63,7 +63,7 @@ namespace Lyrox.Framework.Networking.Mojang
                     }
                 case 10:
                     {
-                        var compoundTag = new CompoundTag { Name = GetName() };
+                        var compoundTag = new CompoundTag(GetName());
                         var children = new List<NBTTag>();
                         var child = ParseRecursive(reader, compoundTag);
 
