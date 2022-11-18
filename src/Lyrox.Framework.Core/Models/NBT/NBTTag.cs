@@ -78,6 +78,16 @@ public class DoubleTag : NBTTag
     public DoubleTag(string? name = null) : base(name) { }
 }
 
+public class ByteArrayTag : NBTTag
+{
+    public byte[] Value { get; set; }
+
+    public ByteArrayTag(byte[] value, string? name = null) : base(name)
+        => Value = value;
+
+    public ByteArrayTag(string? name = null) : base(name) { }
+}
+
 public class StringTag : NBTTag
 {
     public string? Value { get; set; }
