@@ -10,10 +10,12 @@ namespace Lyrox.Framework.Messaging.Internal.Autofac
         public AutoFacMessageBus(IComponentContext componentContext)
         {
             _componentContext = componentContext;
-            RegisterHandlersFromContainer();
+
+            RegisterMessageHandlersFromContainer();
+            RegisterRequestHandlersFromContainer();
         }
 
-        private void RegisterHandlersFromContainer()
+        private void RegisterMessageHandlersFromContainer()
         {
             var messageHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
                 .SelectMany(r => r.Activator.LimitType.GetInterfaces()
@@ -24,9 +26,28 @@ namespace Lyrox.Framework.Messaging.Internal.Autofac
             foreach (var interfaceType in messageHandlerInterfaceTypes)
             {
                 var handlers = (object[])_componentContext.Resolve(interfaceType.MakeArrayType());
-                var tst = interfaceType!.GetGenericArguments().First();
+                
                 foreach (var handler in handlers)
                     SubscribeMessageHandlerInternal(interfaceType!.GetGenericArguments().First(), handler);
+            }
+        }
+
+        private void RegisterRequestHandlersFromContainer()
+        {
+            var requestHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
+                .SelectMany(r => r.Activator.LimitType.GetInterfaces()
+                    .Where(i => i.IsClosedTypeOf(typeof(IRequestHandler<,>))))
+                .Where(i => i != null)
+                .Distinct();
+
+            foreach (var interfaceType in requestHandlerInterfaceTypes)
+            {
+                var handlers = (object[])_componentContext.Resolve(interfaceType.MakeArrayType());
+                
+                foreach (var handler in handlers)
+                    SubscribeRequestHandlerInternal(interfaceType!.GetGenericArguments().First(),
+                        interfaceType!.GetGenericArguments().Last(),
+                        handler);
             }
         }
     }

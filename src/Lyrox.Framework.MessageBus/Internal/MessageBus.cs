@@ -1,4 +1,5 @@
-﻿using Lyrox.Framework.Messaging.Abstraction;
+﻿using System.Collections.Immutable;
+using Lyrox.Framework.Messaging.Abstraction;
 using Lyrox.Framework.Messaging.Abstraction.Core;
 using Lyrox.Framework.Messaging.Abstraction.Handlers;
 using Lyrox.Framework.Messaging.Abstraction.Messages;
@@ -125,5 +126,35 @@ namespace Lyrox.Framework.Messaging.Internal
             return new MessageBusSubscription(
                 () => _messageHandlers[messageType].Remove(handler));
         }
+
+        protected IDisposable SubscribeRequestHandlerInternal(Type requestType, Type responseType, object handler)
+        {
+            if (requestType is null)
+                throw new ArgumentNullException(nameof(requestType));
+            if (handler is null)
+                throw new ArgumentNullException(nameof(handler));
+
+            if (!requestType.IsAssignableTo(typeof(IRequest<>).MakeGenericType(responseType)))
+                throw new ArgumentException("The given message type is not assignable to IMessage", nameof(requestType));
+            if (!handler.GetType().IsAssignableTo(typeof(IRequestHandler<,>).MakeGenericType(requestType, responseType)))
+                throw new ArgumentException("The given handler is not valid for this message type", nameof(handler));
+
+            if (!_requestHandlers.ContainsKey(requestType))
+                _requestHandlers[requestType] = new();
+
+            if (_requestHandlers[requestType].Contains(handler))
+                throw new MessagingException("The given handler is already registered for this message type");
+
+            _requestHandlers[requestType].Add(handler);
+
+            return new MessageBusSubscription(
+                () => _requestHandlers[requestType].Remove(handler));
+        }
+
+        internal ImmutableDictionary<Type, List<object>> MessageHandlers
+            => _messageHandlers.ToImmutableDictionary();
+
+        internal ImmutableDictionary<Type, List<object>> RequestHandlers
+            => _requestHandlers.ToImmutableDictionary();
     }
 }
