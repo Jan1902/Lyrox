@@ -1,6 +1,5 @@
-﻿namespace Lyrox.Framework.Messaging.Abstraction.Messages
+﻿namespace Lyrox.Framework.Base.Messaging.Abstraction.Messages;
+
+public interface IMessage
 {
-    public interface IMessage
-    {
-    }
 }

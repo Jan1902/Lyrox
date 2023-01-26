@@ -54,13 +54,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Tools.StaticDataCombi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.StaticData", "Lyrox.Framework.StaticData\Lyrox.Framework.StaticData.csproj", "{42DAF315-981F-4A96-AED9-0277F2FE6E73}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Messaging", "Lyrox.Framework.MessageBus\Lyrox.Framework.Messaging.csproj", "{C5A75A37-DDD7-4A44-9A13-3ACB66AC1259}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging", "Lyrox.Framework.MessageBus\Lyrox.Framework.Base.Messaging.csproj", "{C5A75A37-DDD7-4A44-9A13-3ACB66AC1259}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Messaging.Test", "Lyrox.Framework.MessageBus.Test\Lyrox.Framework.Messaging.Test.csproj", "{D0C23F6E-67D0-4456-98D0-4CBC2703700F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging.Test", "Lyrox.Framework.MessageBus.Test\Lyrox.Framework.Base.Messaging.Test.csproj", "{D0C23F6E-67D0-4456-98D0-4CBC2703700F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Messaging", "Messaging", "{0A091CC4-D179-49AD-B859-E1A093427945}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyrox.Framework.Messaging.Abstraction", "Lyrox.Framework.Messaging.Abstraction\Lyrox.Framework.Messaging.Abstraction.csproj", "{D908C7D0-41FD-4891-A5B7-4C44915B6D79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging.Abstraction", "Lyrox.Framework.Messaging.Abstraction\Lyrox.Framework.Base.Messaging.Abstraction.csproj", "{D908C7D0-41FD-4891-A5B7-4C44915B6D79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyrox.Framework.Base.Shared", "Lyrox.Framework.Base.Shared\Lyrox.Framework.Base.Shared.csproj", "{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -148,6 +150,10 @@ Global
 		{D908C7D0-41FD-4891-A5B7-4C44915B6D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D908C7D0-41FD-4891-A5B7-4C44915B6D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D908C7D0-41FD-4891-A5B7-4C44915B6D79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +182,7 @@ Global
 		{D0C23F6E-67D0-4456-98D0-4CBC2703700F} = {0A091CC4-D179-49AD-B859-E1A093427945}
 		{0A091CC4-D179-49AD-B859-E1A093427945} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 		{D908C7D0-41FD-4891-A5B7-4C44915B6D79} = {0A091CC4-D179-49AD-B859-E1A093427945}
+		{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EBED1CD4-4008-4A7E-97E5-EBB867B0796F}

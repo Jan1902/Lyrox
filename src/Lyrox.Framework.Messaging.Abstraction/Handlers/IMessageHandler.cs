@@ -1,9 +1,8 @@
-﻿using Lyrox.Framework.Messaging.Abstraction.Messages;
+﻿using Lyrox.Framework.Base.Messaging.Abstraction.Messages;
 
-namespace Lyrox.Framework.Messaging.Abstraction.Handlers
+namespace Lyrox.Framework.Base.Messaging.Abstraction.Handlers;
+
+public interface IMessageHandler<TMessage> where TMessage : IMessage
 {
-    public interface IMessageHandler<TMessage> where TMessage : IMessage
-    {
-        Task HandleMessageAsync(TMessage message);
-    }
+    Task HandleMessageAsync(TMessage message);
 }

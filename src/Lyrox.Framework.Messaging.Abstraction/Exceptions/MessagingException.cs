@@ -1,9 +1,8 @@
-﻿namespace Lyrox.Framework.Messaging.Exceptions
+﻿namespace Lyrox.Framework.Base.Messaging.Abstraction.Exceptions;
+
+public class MessagingException : Exception
 {
-    public class MessagingException : Exception
+    public MessagingException(string? message) : base(message)
     {
-        public MessagingException(string? message) : base(message)
-        {
-        }
     }
 }

@@ -1,54 +1,53 @@
 ﻿using Autofac;
-using Lyrox.Framework.Messaging.Abstraction.Handlers;
+using Lyrox.Framework.Base.Messaging.Abstraction.Handlers;
 
-namespace Lyrox.Framework.Messaging.Internal.Autofac
+namespace Lyrox.Framework.Base.Messaging.Internal.Autofac;
+
+internal class AutofacMessageBus : MessageBus
 {
-    internal class AutoFacMessageBus : MessageBus
+    private readonly IComponentContext _componentContext;
+
+    public AutofacMessageBus(IComponentContext componentContext)
     {
-        private readonly IComponentContext _componentContext;
+        _componentContext = componentContext;
 
-        public AutoFacMessageBus(IComponentContext componentContext)
+        RegisterMessageHandlersFromContainer();
+        RegisterRequestHandlersFromContainer();
+    }
+
+    private void RegisterMessageHandlersFromContainer()
+    {
+        var messageHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
+            .SelectMany(r => r.Activator.LimitType.GetInterfaces()
+                .Where(i => i.IsClosedTypeOf(typeof(IMessageHandler<>))))
+            .Where(i => i != null)
+            .Distinct();
+
+        foreach (var interfaceType in messageHandlerInterfaceTypes)
         {
-            _componentContext = componentContext;
+            var handlers = (object[])_componentContext.Resolve(interfaceType.MakeArrayType());
 
-            RegisterMessageHandlersFromContainer();
-            RegisterRequestHandlersFromContainer();
+            foreach (var handler in handlers)
+                SubscribeMessageHandlerInternal(interfaceType!.GetGenericArguments().First(), handler);
         }
+    }
 
-        private void RegisterMessageHandlersFromContainer()
+    private void RegisterRequestHandlersFromContainer()
+    {
+        var requestHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
+            .SelectMany(r => r.Activator.LimitType.GetInterfaces()
+                .Where(i => i.IsClosedTypeOf(typeof(IRequestHandler<,>))))
+            .Where(i => i != null)
+            .Distinct();
+
+        foreach (var interfaceType in requestHandlerInterfaceTypes)
         {
-            var messageHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
-                .SelectMany(r => r.Activator.LimitType.GetInterfaces()
-                    .Where(i => i.IsClosedTypeOf(typeof(IMessageHandler<>))))
-                .Where(i => i != null)
-                .Distinct();
+            var handlers = (object[])_componentContext.Resolve(interfaceType.MakeArrayType());
 
-            foreach (var interfaceType in messageHandlerInterfaceTypes)
-            {
-                var handlers = (object[])_componentContext.Resolve(interfaceType.MakeArrayType());
-                
-                foreach (var handler in handlers)
-                    SubscribeMessageHandlerInternal(interfaceType!.GetGenericArguments().First(), handler);
-            }
-        }
-
-        private void RegisterRequestHandlersFromContainer()
-        {
-            var requestHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
-                .SelectMany(r => r.Activator.LimitType.GetInterfaces()
-                    .Where(i => i.IsClosedTypeOf(typeof(IRequestHandler<,>))))
-                .Where(i => i != null)
-                .Distinct();
-
-            foreach (var interfaceType in requestHandlerInterfaceTypes)
-            {
-                var handlers = (object[])_componentContext.Resolve(interfaceType.MakeArrayType());
-                
-                foreach (var handler in handlers)
-                    SubscribeRequestHandlerInternal(interfaceType!.GetGenericArguments().First(),
-                        interfaceType!.GetGenericArguments().Last(),
-                        handler);
-            }
+            foreach (var handler in handlers)
+                SubscribeRequestHandlerInternal(interfaceType!.GetGenericArguments().First(),
+                    interfaceType!.GetGenericArguments().Last(),
+                    handler);
         }
     }
 }

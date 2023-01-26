@@ -2,37 +2,36 @@
 using System.Text;
 using Lyrox.Framework.Networking.Mojang.Packets.Base;
 
-namespace Lyrox.Framework.Chat.Mojang.Packets.ServerBound
+namespace Lyrox.Framework.Chat.Mojang.Packets.ServerBound;
+
+internal class ChatMessage : MojangServerBoundPacketBase
 {
-    internal class ChatMessage : MojangServerBoundPacketBase
+    public string Message { get; init; }
+
+    public override int OPCode => 0x05;
+
+    public ChatMessage(string message)
+        => Message = message;
+
+    public override void Build()
     {
-        public string Message { get; init; }
+        var salt = new Random().NextInt64();
+        var buffer = new byte[Message.Length + sizeof(long)];
+        Array.Copy(Encoding.UTF8.GetBytes(Message), 0, buffer, 0, Message.Length);
+        Array.Copy(System.BitConverter.GetBytes(salt), 0, buffer, 0, sizeof(long));
+        var signature = SHA256.Create().ComputeHash(buffer);
 
-        public override int OPCode => 0x05;
+        Writer.WriteStringWithVarIntPrefix(Message);
+        Writer.WriteLong(DateTime.Now.Ticks);
+        Writer.WriteLong(salt);
+        Writer.WriteVarInt(signature.Length);
+        Writer.WriteBytes(signature);
+        Writer.WriteBool(false);
 
-        public ChatMessage(string message)
-            => Message = message;
+        // Last seen messages
+        Writer.WriteVarInt(0);
 
-        public override void Build()
-        {
-            var salt = new Random().NextInt64();
-            var buffer = new byte[Message.Length + sizeof(long)];
-            Array.Copy(Encoding.UTF8.GetBytes(Message), 0, buffer, 0, Message.Length);
-            Array.Copy(System.BitConverter.GetBytes(salt), 0, buffer, 0, sizeof(long));
-            var signature = SHA256.Create().ComputeHash(buffer);
-
-            Writer.WriteStringWithVarIntPrefix(Message);
-            Writer.WriteLong(DateTime.Now.Ticks);
-            Writer.WriteLong(salt);
-            Writer.WriteVarInt(signature.Length);
-            Writer.WriteBytes(signature);
-            Writer.WriteBool(false);
-
-            // Last seen messages
-            Writer.WriteVarInt(0);
-
-            // Last message
-            Writer.WriteBool(false);
-        }
+        // Last message
+        Writer.WriteBool(false);
     }
 }

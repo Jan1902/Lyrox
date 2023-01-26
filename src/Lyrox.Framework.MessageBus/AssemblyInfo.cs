@@ -17,4 +17,4 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("59e2ca65-b6dd-4298-9cb6-c79e35b1c8d6")]
 
-[assembly: InternalsVisibleTo("Lyrox.Framework.Messaging.Test")]
+[assembly: InternalsVisibleTo("Lyrox.Framework.Base.Messaging.Test")]

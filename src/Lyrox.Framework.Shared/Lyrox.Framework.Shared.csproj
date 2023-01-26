@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Lyrox.Framework.Messaging.Abstraction\Lyrox.Framework.Base.Messaging.Abstraction.csproj" />
+  </ItemGroup>
+
 </Project>

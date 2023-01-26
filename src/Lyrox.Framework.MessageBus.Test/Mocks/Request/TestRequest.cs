@@ -1,8 +1,7 @@
-﻿using Lyrox.Framework.Messaging.Abstraction;
+﻿using Lyrox.Framework.Base.Messaging.Abstraction.Requests;
 
-namespace Lyrox.Framework.Messaging.Test.Mocks.Request
+namespace Lyrox.Framework.Base.Messaging.Test.Mocks.Request;
+
+internal class TestRequest : IRequest<TestResponse>
 {
-    internal class TestRequest : IRequest<TestResponse>
-    {
-    }
 }

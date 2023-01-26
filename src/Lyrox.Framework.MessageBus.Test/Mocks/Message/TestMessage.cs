@@ -1,8 +1,7 @@
-﻿using Lyrox.Framework.Messaging.Abstraction.Messages;
+﻿using Lyrox.Framework.Base.Messaging.Abstraction.Messages;
 
-namespace Lyrox.Framework.Messaging.Test.Mocks.Message
+namespace Lyrox.Framework.Base.Messaging.Test.Mocks.Message;
+
+internal class TestMessage : IMessage
 {
-    internal class TestMessage : IMessage
-    {
-    }
 }

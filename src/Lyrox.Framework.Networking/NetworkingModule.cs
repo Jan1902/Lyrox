@@ -1,48 +1,31 @@
-﻿using Lyrox.Framework.Core.Abstraction;
+﻿using Lyrox.Framework.Base.Shared;
+using Lyrox.Framework.Core.Abstraction.Managers;
+using Lyrox.Framework.Core.Abstraction.Modules;
+using Lyrox.Framework.Core.Abstraction.Networking.Packet;
 using Lyrox.Framework.Core.Configuration;
-using Lyrox.Framework.Core.Events.Abstraction;
-using Lyrox.Framework.Core.Events.Implementations;
-using Lyrox.Framework.Core.Exceptions;
-using Lyrox.Framework.Core.Modules.Abstractions;
-using Lyrox.Framework.Core.Networking.Abstraction;
-using Lyrox.Framework.Core.Networking.Types;
 using Lyrox.Framework.Networking.Core;
 using Lyrox.Framework.Networking.Mojang;
-using Lyrox.Framework.Networking.Mojang.EventHandlers;
 using Lyrox.Framework.Networking.Mojang.PacketHandlers;
 using Lyrox.Framework.Networking.Mojang.Packets.ClientBound;
+using Lyrox.Framework.Shared.Exceptions;
+using Lyrox.Framework.Shared.Types;
 
-namespace Lyrox.Framework.Networking
+namespace Lyrox.Framework.Networking;
+
+public class NetworkingModule : IModule
 {
-    public class NetworkingModule : IModule
+    public void Load(ServiceContainer serviceContainer, PacketTypeMapping packetMapping, ILyroxConfiguration lyroxConfiguration)
     {
-        public void Load(IServiceContainer serviceContainer, LyroxConfiguration lyroxConfiguration)
-        {
-            serviceContainer.RegisterType<INetworkingManager, NetworkingManager>();
-            if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
-                serviceContainer.RegisterType<INetworkConnection, NetworkConnection>();
-            else
-                throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
-        }
+        serviceContainer.RegisterType<INetworkingManager, NetworkingManager>();
 
-        public void RegisterEventHandlers(IEventManager eventManager, LyroxConfiguration lyroxConfiguration)
+        if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
         {
-            if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
-                eventManager.RegisterEventHandler<ConnectionEstablishedEvent, MojangNetworkingEventHandler>();
-            else
-                throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
-        }
+            serviceContainer.RegisterType<INetworkConnection, NetworkConnection>();
 
-        public void RegisterPacketHandlers(INetworkPacketManager networkPacketManager, LyroxConfiguration lyroxConfiguration)
-        {
-            if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
-            {
-                networkPacketManager.RegisterRawNetworkPacketHandler<MojangNetworkingPacketHandler>(0x00);
-                networkPacketManager.RegisterRawNetworkPacketHandler<MojangNetworkingPacketHandler>(0x02);
-                networkPacketManager.RegisterNetworkPacketHandler<KeepAliveCB, MojangNetworkingPacketHandler>(0x20);
-            }
-            else
-                throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
+            serviceContainer.RegisterRawPacketHandler<MojangNetworkingPacketHandler>();
+            serviceContainer.RegisterPacketHandler<KeepAliveCB, MojangNetworkingPacketHandler>(packetMapping, 0x20);
         }
+        else
+            throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
     }
 }

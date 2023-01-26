@@ -1,6 +1,3 @@
-﻿using System.Collections.Immutable;
+﻿namespace Lyrox.Framework.Base.Messaging.Abstraction.Core;
 
-namespace Lyrox.Framework.Messaging.Abstraction.Core
-{
-    public interface IMessageBus : IPublishBus, ISubscribeBus { }
-}
+public interface IMessageBus : IPublishBus, ISubscribeBus { }

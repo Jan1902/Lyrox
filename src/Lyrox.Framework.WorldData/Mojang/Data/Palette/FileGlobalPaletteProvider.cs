@@ -1,43 +1,40 @@
 ﻿using System.Text;
 using Lyrox.Framework.Core.Models.World;
+using Lyrox.Framework.World.Mojang.Data.Palette.Abstraction;
 using Lyrox.Framework.World.Properties;
-using Lyrox.Framework.WorldData.Mojang.Data.Palette.Abstraction;
 using Newtonsoft.Json.Linq;
 
-namespace Lyrox.Framework.WorldData.Mojang.Data.Palette
+namespace Lyrox.Framework.World.Mojang.Data.Palette;
+
+internal class FileGlobalPaletteProvider : IGlobalPaletteProvider
 {
-    internal class FileGlobalPaletteProvider : IGlobalPaletteProvider
+    private readonly Dictionary<int, BlockState> _idToState;
+    private readonly Dictionary<BlockState, int> _stateToId;
+
+    public FileGlobalPaletteProvider()
     {
-        private readonly Dictionary<int, BlockState> _idToState;
-        private readonly Dictionary<BlockState, int> _stateToId;
+        _idToState = new();
+        _stateToId = new();
 
-        public FileGlobalPaletteProvider()
-        {
-            _idToState = new();
-            _stateToId = new();
-
-            Load();
-        }
-
-        private void Load()
-        {
-            var json = JObject.Parse(Encoding.UTF8.GetString(Resources.blocks));
-            foreach (var block in json.Properties())
-            {
-                foreach (var state in ((JObject)block.Value)["states"])
-                {
-                    var id = (int)state["id"];
-                    var blockState = new BlockState(id, block.Name);
-                    _idToState[id] = blockState;
-                    _stateToId[blockState] = id;
-                }
-            }
-        }
-
-        public int GetIdFromState(BlockState state)
-            => _stateToId[state];
-
-        public BlockState GetStateFromId(int id)
-            => _idToState[id];
+        Load();
     }
+
+    private void Load()
+    {
+        var json = JObject.Parse(Encoding.UTF8.GetString(Resources.blocks));
+        foreach (var block in json.Properties())
+            foreach (var state in ((JObject)block.Value)["states"])
+            {
+                var id = (int)state["id"];
+                var blockState = new BlockState(id, block.Name);
+                _idToState[id] = blockState;
+                _stateToId[blockState] = id;
+            }
+    }
+
+    public int GetIdFromState(BlockState state)
+        => _stateToId[state];
+
+    public BlockState GetStateFromId(int id)
+        => _idToState[id];
 }

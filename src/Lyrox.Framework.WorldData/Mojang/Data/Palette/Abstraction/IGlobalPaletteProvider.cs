@@ -1,10 +1,9 @@
 ﻿using Lyrox.Framework.Core.Models.World;
 
-namespace Lyrox.Framework.WorldData.Mojang.Data.Palette.Abstraction
+namespace Lyrox.Framework.World.Mojang.Data.Palette.Abstraction;
+
+internal interface IGlobalPaletteProvider
 {
-    internal interface IGlobalPaletteProvider
-    {
-        int GetIdFromState(BlockState state);
-        BlockState GetStateFromId(int id);
-    }
+    int GetIdFromState(BlockState state);
+    BlockState GetStateFromId(int id);
 }

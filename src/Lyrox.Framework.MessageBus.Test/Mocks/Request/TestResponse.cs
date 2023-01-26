@@ -1,7 +1,8 @@
-﻿namespace Lyrox.Framework.Messaging.Test.Mocks.Request
+﻿using Lyrox.Framework.Base.Messaging.Abstraction.Requests;
+
+namespace Lyrox.Framework.Base.Messaging.Test.Mocks.Request;
+
+internal class TestResponse : ResponseBase
 {
-    internal class TestResponse : ResponseBase
-    {
-        public TestResponse() : base(true) { }
-    }
+    public TestResponse() : base(true) { }
 }

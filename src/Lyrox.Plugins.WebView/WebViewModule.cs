@@ -1,19 +1,12 @@
-﻿using Lyrox.Framework.Core.Configuration;
-using Lyrox.Framework.Core.Events.Abstraction;
-using Lyrox.Framework.Core.Modules.Abstractions;
+﻿using Lyrox.Framework.Base.Shared;
+using Lyrox.Framework.Core.Abstraction.Modules;
+using Lyrox.Framework.Core.Abstraction.Networking.Packet;
+using Lyrox.Framework.Core.Configuration;
 
-namespace Lyrox.Plugins.WebView
+namespace Lyrox.Plugins.WebView;
+
+public class WebViewModule : IModule
 {
-    public class WebViewModule : IModule
-    {
-        public void Load(IServiceContainer serviceContainer, LyroxConfiguration lyroxConfiguration)
-        {
-            serviceContainer.RegisterType<WebViewManager, WebViewManager>();
-        }
-
-        public void RegisterEventHandlers(IEventManager eventManager, LyroxConfiguration lyroxConfiguration)
-        {
-
-        }
-    }
+    public void Load(ServiceContainer serviceContainer, PacketTypeMapping packetMapping, ILyroxConfiguration lyroxConfiguration)
+        => serviceContainer.RegisterType<WebViewManager, WebViewManager>();
 }

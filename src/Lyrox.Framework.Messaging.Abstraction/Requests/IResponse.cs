@@ -1,8 +1,7 @@
-﻿namespace Lyrox.Framework.Messaging.Abstraction
+﻿namespace Lyrox.Framework.Base.Messaging.Abstraction.Requests;
+
+public interface IResponse
 {
-    public interface IResponse
-    {
-        public bool Successful { get; }
-        public IEnumerable<string>? Errors { get; }
-    }
+    public bool Successful { get; }
+    public IEnumerable<string>? Errors { get; }
 }
