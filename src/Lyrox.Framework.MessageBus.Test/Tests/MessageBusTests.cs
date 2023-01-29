@@ -56,6 +56,7 @@ public class MessageBusTests
         builder.RegisterInstance(requestHandlerMock.Object).As<IRequestHandler<TestRequest, TestResponse>>().SingleInstance();
 
         var container = builder.Build();
+        container.SetupAutofacMessageBus();
         var messageBus = container.Resolve<IMessageBus>();
 
         var messageBusInternal = messageBus as MessageBus;
