@@ -1,32 +1,21 @@
-﻿using Lyrox.Framework.Core.Configuration;
-using Lyrox.Framework.Core.Events.Abstraction;
-using Lyrox.Framework.Core.Exceptions;
-using Lyrox.Framework.Core.Modules.Abstractions;
-using Lyrox.Framework.Core.Networking.Abstraction;
+﻿using Lyrox.Framework.Base.Shared;
+using Lyrox.Framework.Core.Abstraction.Managers;
+using Lyrox.Framework.Core.Abstraction.Modules;
+using Lyrox.Framework.Core.Abstraction.Networking.Packet;
+using Lyrox.Framework.Core.Configuration;
+using Lyrox.Framework.Networking.Core;
 using Lyrox.Framework.Player.Mojang.PacketHandlers;
 using Lyrox.Framework.Player.Mojang.Packets.ClientBound;
 
-namespace Lyrox.Framework.Player
+namespace Lyrox.Framework.Player;
+
+public class PlayerModule : IModule
 {
-    public class PlayerModule : IModule
+    public void Load(ServiceContainer serviceContainer, PacketTypeMapping packetMapping, ILyroxConfiguration lyroxConfiguration)
     {
-        public void Load(IServiceContainer serviceContainer, LyroxConfiguration lyroxConfiguration)
-        {
-            serviceContainer.RegisterType<IPhysicsPlayer, PhysicsPlayer>();
-            serviceContainer.RegisterType<IPlayerManager, PlayerManager>();
-        }
+        serviceContainer.RegisterType<IPhysicsPlayer, PhysicsPlayer>();
+        serviceContainer.RegisterType<IPlayerManager, PlayerManager>();
 
-        public void RegisterEventHandlers(IEventManager eventManager, LyroxConfiguration lyroxConfiguration)
-        {
-
-        }
-
-        public void RegisterPacketHandlers(INetworkPacketManager networkPacketManager, LyroxConfiguration lyroxConfiguration)
-        {
-            if (lyroxConfiguration.GameVersion == Core.Networking.Types.GameVersion.Mojang)
-                networkPacketManager.RegisterNetworkPacketHandler<SynchronizePlayerPosition, PlayerPacketHandler>(0x39);
-            else
-                throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
-        }
+        serviceContainer.RegisterPacketHandler<SynchronizePlayerPosition, PlayerPacketHandler>(packetMapping, 0x39);
     }
 }

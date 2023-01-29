@@ -2,144 +2,143 @@
 using BitConverter;
 using Lyrox.Framework.Networking.Mojang.Data.Types;
 
-namespace Lyrox.Framework.Networking.Mojang.Packets.Base
+namespace Lyrox.Framework.Networking.Mojang.Packets.Base;
+
+public abstract class NetworkPacketBase
 {
-    public abstract class NetworkPacketBase
+    private readonly Stream _stream;
+    private readonly EndianBitConverter _bitConverter;
+
+    protected Stream UnderlyingStream => _stream;
+
+    protected NetworkPacketBase()
     {
-        private readonly Stream _stream;
-        private readonly EndianBitConverter _bitConverter;
+        _bitConverter = EndianBitConverter.BigEndian;
+        _stream = new MemoryStream();
+    }
 
-        protected Stream UnderlyingStream => _stream;
+    protected NetworkPacketBase(int opCode) : this()
+        => _stream.WriteVarInt(opCode);
 
-        protected NetworkPacketBase()
-        {
-            _bitConverter = EndianBitConverter.BigEndian;
-            _stream = new MemoryStream();
-        }
+    protected void AddVarInt(int value)
+        => _stream.WriteVarInt(value);
 
-        protected NetworkPacketBase(int opCode) : this()
-            => _stream.WriteVarInt(opCode);
+    protected int GetVarInt()
+        => _stream.ReadVarInt();
 
-        protected void AddVarInt(int value)
-            => _stream.WriteVarInt(value);
+    public void SetInitialData(byte[] bytes)
+    {
+        _stream.Write(bytes);
+        _stream.Seek(0, SeekOrigin.Begin);
+    }
 
-        protected int GetVarInt()
-            => _stream.ReadVarInt();
+    public void AddBytes(byte[] bytes)
+        => _stream.Write(bytes);
 
-        public void SetInitialData(byte[] bytes)
-        {
-            _stream.Write(bytes);
-            _stream.Seek(0, SeekOrigin.Begin);
-        }
+    protected byte[] GetBytes(int count)
+    {
+        var buffer = new byte[count];
+        _stream.Read(buffer, 0, count);
+        return buffer;
+    }
 
-        public void AddBytes(byte[] bytes)
-            => _stream.Write(bytes);
+    protected byte[] GetBytes()
+    {
+        _stream.Seek(0, SeekOrigin.Begin);
+        var data = new byte[_stream.Length];
+        _stream.Read(data, 0, (int)_stream.Length);
+        return data;
+    }
 
-        protected byte[] GetBytes(int count)
-        {
-            var buffer = new byte[count];
-            _stream.Read(buffer, 0, count);
-            return buffer;
-        }
+    protected void AddUShort(ushort value)
+        => AddBytes(_bitConverter.GetBytes(value));
 
-        protected byte[] GetBytes()
-        {
-            _stream.Seek(0, SeekOrigin.Begin);
-            var data = new byte[_stream.Length];
-            _stream.Read(data, 0, (int)_stream.Length);
-            return data;
-        }
+    protected ushort GetUShort()
+        => _bitConverter.ToUInt16(GetBytes(sizeof(ushort)), 0);
 
-        protected void AddUShort(ushort value)
-            => AddBytes(_bitConverter.GetBytes(value));
+    protected void AddShort(short value)
+        => AddBytes(_bitConverter.GetBytes(value));
 
-        protected ushort GetUShort()
-            => _bitConverter.ToUInt16(GetBytes(sizeof(ushort)), 0);
+    protected short GetShort()
+        => _bitConverter.ToInt16(GetBytes(sizeof(short)), 0);
 
-        protected void AddShort(short value)
-            => AddBytes(_bitConverter.GetBytes(value));
+    protected void AddString(string value)
+    {
+        var bytes = Encoding.UTF8.GetBytes(value);
+        AddVarInt(bytes.Length);
+        AddBytes(bytes);
+    }
 
-        protected short GetShort()
-            => _bitConverter.ToInt16(GetBytes(sizeof(short)), 0);
+    protected string GetString()
+        => Encoding.UTF8.GetString(GetBytes(GetVarInt()));
 
-        protected void AddString(string value)
-        {
-            var bytes = Encoding.UTF8.GetBytes(value);
-            AddVarInt(bytes.Length);
-            AddBytes(bytes);
-        }
+    protected string GetString(int length)
+        => Encoding.UTF8.GetString(GetBytes(length));
 
-        protected string GetString()
-            => Encoding.UTF8.GetString(GetBytes(GetVarInt()));
+    protected void AddByte(byte value)
+        => _stream.WriteByte(value);
 
-        protected string GetString(int length)
-            => Encoding.UTF8.GetString(GetBytes(length));
+    protected byte GetByte()
+        => (byte)_stream.ReadByte();
 
-        protected void AddByte(byte value)
-            => _stream.WriteByte(value);
+    protected void AddBool(bool value)
+        => AddBytes(_bitConverter.GetBytes(value));
 
-        protected byte GetByte()
-            => (byte)_stream.ReadByte();
+    protected bool GetBool()
+        => _bitConverter.ToBoolean(GetBytes(sizeof(bool)), 0);
 
-        protected void AddBool(bool value)
-            => AddBytes(_bitConverter.GetBytes(value));
+    protected void AddDouble(double value)
+        => AddBytes(_bitConverter.GetBytes(value));
 
-        protected bool GetBool()
-            => _bitConverter.ToBoolean(GetBytes(sizeof(bool)), 0);
+    protected double GetDouble()
+        => _bitConverter.ToDouble(GetBytes(sizeof(double)), 0);
 
-        protected void AddDouble(double value)
-            => AddBytes(_bitConverter.GetBytes(value));
+    protected void AddFloat(float value)
+        => AddBytes(_bitConverter.GetBytes(value));
 
-        protected double GetDouble()
-            => _bitConverter.ToDouble(GetBytes(sizeof(double)), 0);
+    protected float GetFloat()
+        => _bitConverter.ToSingle(GetBytes(sizeof(float)), 0);
 
-        protected void AddFloat(float value)
-            => AddBytes(_bitConverter.GetBytes(value));
+    protected void AddLong(long value)
+        => AddBytes(_bitConverter.GetBytes(value));
 
-        protected float GetFloat()
-            => _bitConverter.ToSingle(GetBytes(sizeof(float)), 0);
+    protected long GetLong()
+        => _bitConverter.ToInt64(GetBytes(sizeof(long)), 0);
 
-        protected void AddLong(long value)
-            => AddBytes(_bitConverter.GetBytes(value));
+    protected void AddULong(ulong value)
+        => AddBytes(_bitConverter.GetBytes(value));
 
-        protected long GetLong()
-            => _bitConverter.ToInt64(GetBytes(sizeof(long)), 0);
+    protected ulong GetULong()
+        => _bitConverter.ToUInt64(GetBytes(sizeof(ulong)), 0);
 
-        protected void AddULong(ulong value)
-            => AddBytes(_bitConverter.GetBytes(value));
+    protected void AddInt(int value)
+        => AddBytes(_bitConverter.GetBytes(value));
 
-        protected ulong GetULong()
-            => _bitConverter.ToUInt64(GetBytes(sizeof(ulong)), 0);
+    protected int GetInt()
+        => _bitConverter.ToInt32(GetBytes(sizeof(int)), 0);
 
-        protected void AddInt(int value)
-            => AddBytes(_bitConverter.GetBytes(value));
+    protected void AddUUID(Guid uuid)
+    {
+        var data = uuid.ToByteArray();
 
-        protected int GetInt()
-            => _bitConverter.ToInt32(GetBytes(sizeof(int)), 0);
+        _bitConverter.ToUInt64(data, 8);
+        _bitConverter.ToUInt64(data, 0);
 
-        protected void AddUUID(Guid uuid)
-        {
-            var data = uuid.ToByteArray();
+        AddBytes(data);
+    }
 
-            _bitConverter.ToUInt64(data, 8);
-            _bitConverter.ToUInt64(data, 0);
+    protected Guid GetUUID()
+    {
+        //var longB = GetULong();
+        //var longA = GetULong();
+        var data = new byte[16];
+        var dataA = GetBytes(8);
+        var dataB = GetBytes(8);
+        Array.Copy(dataA, 0, data, 0, 8);
+        Array.Copy(dataB, 0, data, 8, 8);
+        //Array.Copy(_bitConverter.GetBytes(longA), data, 8);
+        //Array.Copy(_bitConverter.GetBytes(longB), 0, data, 8, 8);
 
-            AddBytes(data);
-        }
-
-        protected Guid GetUUID()
-        {
-            //var longB = GetULong();
-            //var longA = GetULong();
-            var data = new byte[16];
-            var dataA = GetBytes(8);
-            var dataB = GetBytes(8);
-            Array.Copy(dataA, 0, data, 0, 8);
-            Array.Copy(dataB, 0, data, 8, 8);
-            //Array.Copy(_bitConverter.GetBytes(longA), data, 8);
-            //Array.Copy(_bitConverter.GetBytes(longB), 0, data, 8, 8);
-
-            return new Guid(data);
-        }
+        return new Guid(data);
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace Lyrox.Framework.Chat.Mojang
+﻿namespace Lyrox.Framework.Chat.Mojang;
+
+internal interface IJSONChatParser
 {
-    internal interface IJSONChatParser
-    {
-        string ParseChatJson(string json);
-    }
+    string ParseChatJson(string json);
 }

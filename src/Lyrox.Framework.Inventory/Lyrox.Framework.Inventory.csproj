@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lyrox.Framework.Core\Lyrox.Framework.Core.csproj" />
-    <ProjectReference Include="..\Lyrox.Framework.Networking.Mojang\Lyrox.Framework.Networking.Mojang.csproj" />
+    <Compile Remove="Events\**" />
+    <EmbeddedResource Remove="Events\**" />
+    <None Remove="Events\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
+    <ProjectReference Include="..\Lyrox.Framework.Core\Lyrox.Framework.Core.csproj" />
+    <ProjectReference Include="..\Lyrox.Framework.Networking.Mojang\Lyrox.Framework.Networking.Mojang.csproj" />
   </ItemGroup>
 
 </Project>

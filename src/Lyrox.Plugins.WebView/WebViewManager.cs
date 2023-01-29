@@ -5,48 +5,47 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Lyrox.Plugins.WebView
+namespace Lyrox.Plugins.WebView;
+
+public class WebViewManager
 {
-    public class WebViewManager
+    private readonly ILyroxConfiguration _lyroxConfiguration;
+    private readonly ILogger<WebViewManager> _logger;
+
+    public WebViewManager(ILyroxConfiguration lyroxConfiguration, ILogger<WebViewManager> logger)
     {
-        private readonly LyroxConfiguration _lyroxConfiguration;
-        private readonly ILogger<WebViewManager> _logger;
+        _lyroxConfiguration = lyroxConfiguration;
+        _logger = logger;
 
-        public WebViewManager(LyroxConfiguration lyroxConfiguration, ILogger<WebViewManager> logger)
+        Init();
+    }
+
+    private void Init()
+    {
+        _lyroxConfiguration.CustomOptions.TryGetValue("webViewPort", out var port);
+
+        var builder = WebApplication.CreateBuilder();
+        builder.Services.AddRazorPages();
+        builder.Services.AddControllersWithViews();
+        builder.Logging.ClearProviders();
+
+        var app = builder.Build();
+
+        if (!app.Environment.IsDevelopment())
         {
-            _lyroxConfiguration = lyroxConfiguration;
-            _logger = logger;
-
-            Init();
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
         }
 
-        private void Init()
-        {
-            _lyroxConfiguration.CustomOptions.TryGetValue("webViewPort", out var port);
+        //app.UseHttpsRedirection();
+        app.UseStaticFiles();
 
-            var builder = WebApplication.CreateBuilder();
-            builder.Services.AddRazorPages();
-            builder.Services.AddControllersWithViews();
-            builder.Logging.ClearProviders();
+        app.MapGet("/", () => "Welcome to Lyrox Web View!");
 
-            var app = builder.Build();
+        app.MapDefaultControllerRoute();
+        app.MapRazorPages();
+        app.RunAsync();
 
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
-
-            //app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.MapGet("/", () => "Welcome to Lyrox Web View!");
-
-            app.MapDefaultControllerRoute();
-            app.MapRazorPages();
-            app.RunAsync();
-
-            _logger.LogInformation("Web View running on port {port}", port);
-        }
+        _logger.LogInformation($"Web View running on port {port}");
     }
 }

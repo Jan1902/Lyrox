@@ -2,41 +2,41 @@
 using Lyrox.Framework.Networking.Mojang;
 using Lyrox.Framework.Networking.Mojang.Packets.Base;
 
-namespace Lyrox.Framework.Inventory.Mojang.Packets
+namespace Lyrox.Framework.Inventory.Mojang.Packets;
+
+internal class SetContainerContent : MojangClientBoundPacketBase
 {
-    internal class SetContainerContent : MojangClientBoundPacketBase
+    public byte WindowID { get; private set; }
+    public int StateID { get; private set; }
+    public Slot[] Slots { get; set; }
+    public Slot CarriedItem { get; set; }
+
+    public override void Parse()
     {
-        public byte WindowID { get; private set; }
-        public int StateID { get; private set; }
-        public Slot[] Slots { get; set; }
-        public Slot CarriedItem { get; set; }
+        WindowID = Reader.ReadByte();
+        StateID = Reader.ReadVarInt();
 
-        public override void Parse()
+        var length = Reader.ReadVarInt();
+        Slots = new Slot[length];
+
+        for (int i = 0; i < length; i++)
+            Slots[i] = ParseSlot();
+
+        CarriedItem = ParseSlot();
+    }
+
+    private Slot ParseSlot()
+    {
+        var slot = new Slot();
+        slot.Present = Reader.ReadBool();
+
+        if (slot.Present)
         {
-            WindowID = Reader.ReadByte();
-            StateID = Reader.ReadVarInt();
-
-            var length = Reader.ReadVarInt();
-            Slots = new Slot[length];
-
-            for (int i = 0; i < length; i++)
-                Slots[i] = ParseSlot();
-
-            CarriedItem = ParseSlot();
+            slot.ItemID = Reader.ReadVarInt();
+            slot.ItemCount = Reader.ReadByte();
+            slot.NBT = MojangNBTReader.ParseNBT(Reader);
         }
 
-        private Slot ParseSlot()
-        {
-            var slot = new Slot();
-            slot.Present = Reader.ReadBool();
-            if (slot.Present)
-            {
-                slot.ItemID = Reader.ReadVarInt();
-                slot.ItemCount = Reader.ReadByte();
-                slot.NBT = MojangNBTReader.ParseNBT(Reader);
-            }
-
-            return slot;
-        }
+        return slot;
     }
 }

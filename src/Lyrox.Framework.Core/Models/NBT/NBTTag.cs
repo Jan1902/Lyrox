@@ -80,7 +80,7 @@ public class DoubleTag : NBTTag
 
 public class ByteArrayTag : NBTTag
 {
-    public byte[] Value { get; set; }
+    public byte[]? Value { get; set; }
 
     public ByteArrayTag(byte[] value, string? name = null) : base(name)
         => Value = value;

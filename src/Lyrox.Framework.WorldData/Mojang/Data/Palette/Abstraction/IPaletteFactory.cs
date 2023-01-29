@@ -1,7 +1,6 @@
-﻿namespace Lyrox.Framework.WorldData.Mojang.Data.Palette.Abstraction
+﻿namespace Lyrox.Framework.World.Mojang.Data.Palette.Abstraction;
+
+internal interface IPaletteFactory
 {
-    internal interface IPaletteFactory
-    {
-        IPalette CreatePalette(int bitsPerBlock, bool isBiome);
-    }
+    IPalette CreatePalette(int bitsPerBlock, bool isBiome);
 }

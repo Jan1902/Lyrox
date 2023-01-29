@@ -1,14 +1,13 @@
-﻿namespace Lyrox.Framework.Core.Models.World
-{
-    public static class BlockStateExtensions
-    {
-        private static readonly string[] NonSolidBlocks = new[]
-        {
-            "air",
-            "grass"
-        };
+﻿namespace Lyrox.Framework.Core.Models.World;
 
-        public static bool IsSolid(this BlockState blockState)
-            => !NonSolidBlocks.Contains(blockState.BlockName.Split(':').Last().ToLower());
-    }
+public static class BlockStateExtensions
+{
+    private static readonly string[] NonSolidBlocks = new[]
+    {
+        "air",
+        "grass"
+    };
+
+    public static bool IsSolid(this BlockState blockState)
+        => !NonSolidBlocks.Contains(blockState.BlockName.Split(':').Last().ToLower());
 }

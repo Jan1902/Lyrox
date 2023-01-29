@@ -1,8 +1,7 @@
-﻿namespace Lyrox.Framework.Actions.Abstraction
+﻿namespace Lyrox.Framework.Actions.Abstraction;
+
+public interface IActionQueue
 {
-    public interface IActionQueue
-    {
-        void Enqueue(IAction action);
-        void EnqueueImmediately(IAction action);
-    }
+    void Enqueue(IAction action);
+    void EnqueueImmediately(IAction action);
 }

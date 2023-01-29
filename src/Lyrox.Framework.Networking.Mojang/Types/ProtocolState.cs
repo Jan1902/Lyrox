@@ -1,10 +1,9 @@
-﻿namespace Lyrox.Framework.Networking.Mojang.Types
+﻿namespace Lyrox.Framework.Networking.Mojang.Types;
+
+public enum ProtocolState
 {
-    public enum ProtocolState
-    {
-        Handshaking,
-        Status,
-        Login,
-        Play
-    }
+    Handshaking,
+    Status,
+    Login,
+    Play
 }

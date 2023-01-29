@@ -1,7 +1,6 @@
-﻿namespace Lyrox.Framework.StaticData
-{
-    public class StaticDataProvider
-    {
+﻿namespace Lyrox.Framework.StaticData;
 
-    }
+public class StaticDataProvider
+{
+
 }

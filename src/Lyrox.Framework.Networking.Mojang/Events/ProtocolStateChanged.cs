@@ -1,13 +1,12 @@
-﻿using Lyrox.Framework.Core.Events;
+﻿using Lyrox.Framework.Base.Messaging.Abstraction.Messages;
 using Lyrox.Framework.Networking.Mojang.Types;
 
-namespace Lyrox.Framework.Networking.Mojang.Events
-{
-    internal record ProtocolStateChangedEvent : EventBase
-    {
-        public ProtocolState ProtocolState { get; init; }
+namespace Lyrox.Framework.Networking.Mojang.Events;
 
-        public ProtocolStateChangedEvent(ProtocolState protocolState)
-            => ProtocolState = protocolState;
-    }
+internal record ProtocolStateChangedMessage : IMessage
+{
+    public ProtocolState ProtocolState { get; init; }
+
+    public ProtocolStateChangedMessage(ProtocolState protocolState)
+        => ProtocolState = protocolState;
 }
