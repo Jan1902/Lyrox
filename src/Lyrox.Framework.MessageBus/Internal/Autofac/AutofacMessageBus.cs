@@ -8,9 +8,10 @@ internal class AutofacMessageBus : MessageBus
     private readonly IComponentContext _componentContext;
 
     public AutofacMessageBus(IComponentContext componentContext)
-    {
-        _componentContext = componentContext;
+        => _componentContext = componentContext;
 
+    internal void Setup()
+    {
         RegisterMessageHandlersFromContainer();
         RegisterRequestHandlersFromContainer();
     }
@@ -19,8 +20,7 @@ internal class AutofacMessageBus : MessageBus
     {
         var messageHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
             .SelectMany(r => r.Activator.LimitType.GetInterfaces()
-                .Where(i => i.IsClosedTypeOf(typeof(IMessageHandler<>))))
-            .Where(i => i != null)
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMessageHandler<>)))
             .Distinct();
 
         foreach (var interfaceType in messageHandlerInterfaceTypes)
@@ -36,8 +36,7 @@ internal class AutofacMessageBus : MessageBus
     {
         var requestHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
             .SelectMany(r => r.Activator.LimitType.GetInterfaces()
-                .Where(i => i.IsClosedTypeOf(typeof(IRequestHandler<,>))))
-            .Where(i => i != null)
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>)))
             .Distinct();
 
         foreach (var interfaceType in requestHandlerInterfaceTypes)

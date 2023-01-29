@@ -1,4 +1,5 @@
-﻿using Lyrox.Framework.Base.Shared;
+﻿using Lyrox.Framework.Base.Messaging.Abstraction.Handlers;
+using Lyrox.Framework.Base.Shared;
 using Lyrox.Framework.Core.Abstraction.Networking.Packet;
 using Lyrox.Framework.Core.Abstraction.Networking.Packet.Handler;
 
@@ -10,11 +11,11 @@ public static class Extensions
         where TPacket : IClientBoundNetworkPacket
         where THandler : IPacketHandler<TPacket>
     {
-        serviceContainer.RegisterType<IPacketHandler<TPacket>, THandler>();
+        serviceContainer.RegisterType<IMessageHandler<PacketReceivedMessage<TPacket>>, THandler>();
         packetMapping.AddMapping<TPacket>(opCode);
     }
 
     public static void RegisterRawPacketHandler<THandler>(this ServiceContainer serviceContainer)
         where THandler : IRawPacketHandler
-        => serviceContainer.RegisterType<IRawPacketHandler, THandler>();
+        => serviceContainer.RegisterType<IMessageHandler<RawPacketReceivedMessage>, THandler>();
 }

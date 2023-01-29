@@ -1,4 +1,4 @@
-﻿using Lyrox.Framework.Configuration;
+﻿using Lyrox.Framework.Core.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,10 +9,10 @@ namespace Lyrox.Plugins.WebView;
 
 public class WebViewManager
 {
-    private readonly LyroxConfiguration _lyroxConfiguration;
+    private readonly ILyroxConfiguration _lyroxConfiguration;
     private readonly ILogger<WebViewManager> _logger;
 
-    public WebViewManager(LyroxConfiguration lyroxConfiguration, ILogger<WebViewManager> logger)
+    public WebViewManager(ILyroxConfiguration lyroxConfiguration, ILogger<WebViewManager> logger)
     {
         _lyroxConfiguration = lyroxConfiguration;
         _logger = logger;

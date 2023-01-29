@@ -41,6 +41,8 @@ public static class LyroxClientFactory
         builder.RegisterType<NetworkPacketManager>().As<INetworkPacketManager>();
 
         var container = builder.Build();
+        container.SetupAutofacMessageBus();
+
         return container.Resolve<ILyroxClient>();
     }
 

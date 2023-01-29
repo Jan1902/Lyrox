@@ -8,5 +8,5 @@ namespace Lyrox.Plugins.WebView;
 public class WebViewModule : IModule
 {
     public void Load(ServiceContainer serviceContainer, PacketTypeMapping packetMapping, ILyroxConfiguration lyroxConfiguration)
-        => serviceContainer.RegisterType<WebViewManager, WebViewManager>();
+        => serviceContainer.RegisterType<WebViewManager>();
 }

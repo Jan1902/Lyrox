@@ -97,7 +97,10 @@ public class NetworkConnection : INetworkConnection
                 _socket.BeginReceive(_buffer, 0, _buffer.Length, 0, new AsyncCallback(ReceiveCallback), null);
             }
             else
+            {
+                //_messageBus.PublishAsync(new ConnectionTerminatedMessage());
                 _logger.LogWarning("Connection to Server has been terminated");
+            }
         }
         catch (Exception e)
         {
