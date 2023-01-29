@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Lyrox.Framework.Core.Models.Inventory;
+﻿using Lyrox.Framework.Core.Models.Inventory;
 using Lyrox.Framework.Networking.Mojang;
 using Lyrox.Framework.Networking.Mojang.Packets.Base;
 

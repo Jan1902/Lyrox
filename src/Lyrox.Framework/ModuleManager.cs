@@ -34,7 +34,7 @@ public class ModuleManager : IModuleManager
         foreach (var (As, Type) in serviceContainer.GetTypeServices())
             builder.RegisterType(Type).As(As).InstancePerLifetimeScope().AutoActivate();
 
-        foreach(var (As, Instance) in serviceContainer.GetInstanceServices())
+        foreach (var (As, Instance) in serviceContainer.GetInstanceServices())
             builder.RegisterInstance(Instance).As(As);
 
         return packetMapping;
