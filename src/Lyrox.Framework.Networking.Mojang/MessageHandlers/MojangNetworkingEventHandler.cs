@@ -1,13 +1,13 @@
 ﻿using Lyrox.Framework.Base.Messaging.Abstraction.Core;
 using Lyrox.Framework.Base.Messaging.Abstraction.Handlers;
-using Lyrox.Framework.Core.Configuration;
+using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Networking.Core;
-using Lyrox.Framework.Networking.Mojang.Events;
+using Lyrox.Framework.Networking.Mojang.Messages;
 using Lyrox.Framework.Networking.Mojang.Packets.ServerBound;
 using Lyrox.Framework.Networking.Mojang.Types;
-using Lyrox.Framework.Shared.Events;
+using Lyrox.Framework.Shared.Messages;
 
-namespace Lyrox.Framework.Networking.Mojang.EventHandlers;
+namespace Lyrox.Framework.Networking.Mojang.MessageHandlers;
 
 public class MojangNetworkingMessageHandler
     : IMessageHandler<ConnectionEstablishedMessage>

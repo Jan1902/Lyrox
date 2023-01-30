@@ -1,4 +1,4 @@
-﻿namespace Lyrox.Framework.Core.Abstraction.Networking;
+﻿namespace Lyrox.Framework.Networking.Core;
 
 public interface INetworkPacketManager
 {

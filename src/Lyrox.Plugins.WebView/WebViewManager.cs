@@ -1,4 +1,4 @@
-﻿using Lyrox.Framework.Core.Configuration;
+﻿using Lyrox.Framework.Core.Abstraction.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

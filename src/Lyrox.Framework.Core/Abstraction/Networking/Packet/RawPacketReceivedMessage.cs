@@ -1,6 +1,6 @@
 ﻿using Lyrox.Framework.Base.Messaging.Abstraction.Messages;
 
-namespace Lyrox.Framework.Core.Abstraction.Networking.Packet.Handler;
+namespace Lyrox.Framework.Core.Abstraction.Networking.Packet;
 
 public record RawPacketReceivedMessage : IMessage
 {

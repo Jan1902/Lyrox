@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Lyrox.Framework.Shared.Types;
 
-namespace Lyrox.Framework.Core.Configuration;
+namespace Lyrox.Framework.Core.Abstraction.Configuration;
 
 public interface ILyroxConfiguration
 {

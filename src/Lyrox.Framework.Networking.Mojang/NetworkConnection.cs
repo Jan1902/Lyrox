@@ -1,11 +1,10 @@
 ﻿using System.Net.Sockets;
 using Lyrox.Framework.Base.Messaging.Abstraction.Core;
-using Lyrox.Framework.Core.Abstraction.Networking;
+using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Core.Abstraction.Networking.Packet;
-using Lyrox.Framework.Core.Configuration;
 using Lyrox.Framework.Networking.Core;
 using Lyrox.Framework.Networking.Mojang.Data.Types;
-using Lyrox.Framework.Shared.Events;
+using Lyrox.Framework.Shared.Messages;
 using Microsoft.Extensions.Logging;
 using Microsoft.IO;
 

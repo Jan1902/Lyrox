@@ -2,7 +2,7 @@
 using Lyrox.Framework.Client.Abstraction;
 using Lyrox.Framework.Core.Abstraction.Managers;
 using Lyrox.Framework.Core.Models.World;
-using Lyrox.Framework.Shared.Events;
+using Lyrox.Framework.Shared.Messages;
 using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Client;
