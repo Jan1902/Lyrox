@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Lyrox.Framework.Base.Shared\Lyrox.Framework.Base.Shared.csproj" />
     <ProjectReference Include="..\Lyrox.Framework.Shared\Lyrox.Framework.Shared.csproj" />
   </ItemGroup>
