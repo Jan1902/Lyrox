@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bot", "Bot", "{D942D6DE-6CF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Actions", "Lyrox.Framework.Actions\Lyrox.Framework.Actions.csproj", "{FD5B1ECF-9209-4BB6-B3FC-24059510D740}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Player", "Lyrox.Framework.Movement\Lyrox.Framework.Player.csproj", "{00260B73-730B-4F0E-8061-E5772ECE873C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Player", "Lyrox.Framework.Player\Lyrox.Framework.Player.csproj", "{00260B73-730B-4F0E-8061-E5772ECE873C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Inventory", "Lyrox.Framework.Inventory\Lyrox.Framework.Inventory.csproj", "{686ED6C9-7575-41C4-8493-DF2D8BD6C6E7}"
 EndProject
@@ -54,13 +54,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Tools.StaticDataCombi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.StaticData", "Lyrox.Framework.StaticData\Lyrox.Framework.StaticData.csproj", "{42DAF315-981F-4A96-AED9-0277F2FE6E73}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging", "Lyrox.Framework.MessageBus\Lyrox.Framework.Base.Messaging.csproj", "{C5A75A37-DDD7-4A44-9A13-3ACB66AC1259}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging", "Lyrox.Framework.Base.Messaging\Lyrox.Framework.Base.Messaging.csproj", "{C5A75A37-DDD7-4A44-9A13-3ACB66AC1259}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging.Test", "Lyrox.Framework.MessageBus.Test\Lyrox.Framework.Base.Messaging.Test.csproj", "{D0C23F6E-67D0-4456-98D0-4CBC2703700F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging.Test", "Lyrox.Framework.Base.Messaging.Test\Lyrox.Framework.Base.Messaging.Test.csproj", "{D0C23F6E-67D0-4456-98D0-4CBC2703700F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Messaging", "Messaging", "{0A091CC4-D179-49AD-B859-E1A093427945}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging.Abstraction", "Lyrox.Framework.Messaging.Abstraction\Lyrox.Framework.Base.Messaging.Abstraction.csproj", "{D908C7D0-41FD-4891-A5B7-4C44915B6D79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging.Abstraction", "Lyrox.Framework.Base.Messaging.Abstraction\Lyrox.Framework.Base.Messaging.Abstraction.csproj", "{D908C7D0-41FD-4891-A5B7-4C44915B6D79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyrox.Framework.Base.Shared", "Lyrox.Framework.Base.Shared\Lyrox.Framework.Base.Shared.csproj", "{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}"
 EndProject
