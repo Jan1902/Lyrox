@@ -1,16 +1,16 @@
 ﻿using Lyrox.Framework.Base.Messaging.Abstraction;
 using Lyrox.Framework.Base.Shared;
+using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Core.Abstraction.Managers;
 using Lyrox.Framework.Core.Abstraction.Modules;
 using Lyrox.Framework.Core.Abstraction.Networking.Packet;
-using Lyrox.Framework.Core.Configuration;
 using Lyrox.Framework.Networking.Core;
 using Lyrox.Framework.Networking.Mojang;
-using Lyrox.Framework.Networking.Mojang.EventHandlers;
+using Lyrox.Framework.Networking.Mojang.MessageHandlers;
 using Lyrox.Framework.Networking.Mojang.PacketHandlers;
 using Lyrox.Framework.Networking.Mojang.Packets.ClientBound;
-using Lyrox.Framework.Shared.Events;
 using Lyrox.Framework.Shared.Exceptions;
+using Lyrox.Framework.Shared.Messages;
 using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Networking;

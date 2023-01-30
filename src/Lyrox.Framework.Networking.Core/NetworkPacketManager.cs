@@ -2,7 +2,7 @@
 using Lyrox.Framework.Core.Abstraction.Networking.Packet;
 using Lyrox.Framework.Core.Abstraction.Networking.Packet.Handler;
 
-namespace Lyrox.Framework.Core.Abstraction.Networking;
+namespace Lyrox.Framework.Networking.Core;
 
 public class NetworkPacketManager : INetworkPacketManager
 {

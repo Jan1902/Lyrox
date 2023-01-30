@@ -1,8 +1,8 @@
 ﻿using Lyrox.Framework.Base.Messaging.Abstraction.Core;
 using Lyrox.Framework.Chat.Mojang.Packets.ClientBound;
+using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Core.Abstraction.Networking.Packet.Handler;
-using Lyrox.Framework.Core.Configuration;
-using Lyrox.Framework.Shared.Events;
+using Lyrox.Framework.Shared.Messages;
 using Microsoft.Extensions.Logging;
 
 namespace Lyrox.Framework.Chat.Mojang.PacketHandlers;

@@ -1,7 +1,7 @@
 ﻿using Lyrox.Framework.Base.Messaging.Abstraction.Messages;
 using Lyrox.Framework.Networking.Mojang.Types;
 
-namespace Lyrox.Framework.Networking.Mojang.Events;
+namespace Lyrox.Framework.Networking.Mojang.Messages;
 
 internal record ProtocolStateChangedMessage : IMessage
 {

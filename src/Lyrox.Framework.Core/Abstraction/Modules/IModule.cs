@@ -1,6 +1,6 @@
 ﻿using Lyrox.Framework.Base.Shared;
+using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Core.Abstraction.Networking.Packet;
-using Lyrox.Framework.Core.Configuration;
 
 namespace Lyrox.Framework.Core.Abstraction.Modules;
 

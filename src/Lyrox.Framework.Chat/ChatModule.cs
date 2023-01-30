@@ -2,10 +2,10 @@
 using Lyrox.Framework.Chat.Mojang;
 using Lyrox.Framework.Chat.Mojang.PacketHandlers;
 using Lyrox.Framework.Chat.Mojang.Packets.ClientBound;
+using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Core.Abstraction.Managers;
 using Lyrox.Framework.Core.Abstraction.Modules;
 using Lyrox.Framework.Core.Abstraction.Networking.Packet;
-using Lyrox.Framework.Core.Configuration;
 using Lyrox.Framework.Networking.Core;
 using Lyrox.Framework.Shared.Exceptions;
 using Lyrox.Framework.Shared.Types;

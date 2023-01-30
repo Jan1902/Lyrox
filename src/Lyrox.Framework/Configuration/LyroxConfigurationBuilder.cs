@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using Lyrox.Framework.Core.Configuration;
+using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Configuration;
