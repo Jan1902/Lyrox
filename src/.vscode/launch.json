@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Lyrox.Bot.Console/bin/Debug/net6.0/Lyrox.Bot.Console.dll",
+            "program": "${workspaceFolder}/Lyrox.Bot.Console/bin/Debug/net7.0/Lyrox.Bot.Console.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Lyrox.Bot.Console/bin/Debug/net6.0",
+            "cwd": "${workspaceFolder}/Lyrox.Bot.Console/bin/Debug/net7.0",
             "console": "internalConsole",
             "stopAtEntry": false
         },
