@@ -1,22 +1,21 @@
 ﻿using Lyrox.Framework.Chat.Mojang.Packets.ServerBound;
-using Lyrox.Framework.Core.Abstraction;
+using Lyrox.Framework.Core.Abstraction.Managers;
 
-namespace Lyrox.Framework.Chat.Mojang
+namespace Lyrox.Framework.Chat.Mojang;
+
+public class ChatManager : IChatManager
 {
-    public class ChatManager : IChatManager
-    {
-        private readonly INetworkingManager _networkingManager;
+    private readonly INetworkingManager _networkingManager;
 
-        public ChatManager(INetworkingManager networkingManager)
-            => _networkingManager = networkingManager;
+    public ChatManager(INetworkingManager networkingManager)
+        => _networkingManager = networkingManager;
 
-        public void SendChatMessage(string message)
-            => _networkingManager.SendPacket(new ChatMessage(message));
+    public Task SendChatMessage(string message)
+        => _networkingManager.SendPacket(new ChatMessage(message));
 
-        public void SendCommand(string command, string[] arguments)
-            => _networkingManager.SendPacket(new ChatCommand(command, arguments));
+    public Task SendCommand(string command, string[] arguments)
+        => _networkingManager.SendPacket(new ChatCommand(command, arguments));
 
-        public void SendPrivateMessage(string message, string player)
-            => _networkingManager.SendPacket(new ChatCommand("msg", player, message));
-    }
+    public Task SendPrivateMessage(string message, string player)
+        => _networkingManager.SendPacket(new ChatCommand("msg", player, message));
 }

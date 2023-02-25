@@ -1,13 +1,13 @@
-﻿using Lyrox.Framework.WorldData.Mojang.Data.Palette.Abstraction;
+using Lyrox.Framework.World.Mojang.Data.Palette.Abstraction;
 
-namespace Lyrox.Framework.WorldData.Mojang.Data.Palette
+namespace Lyrox.Framework.World.Mojang.Data.Palette;
+
+internal class PaletteFactory : IPaletteFactory
 {
-    internal class PaletteFactory : IPaletteFactory
-    {
-        private readonly IGlobalPaletteProvider _globalPaletteProvider;
+    private readonly IGlobalPaletteProvider _globalPaletteProvider;
 
-        public PaletteFactory(IGlobalPaletteProvider globalPaletteProvider)
-            => _globalPaletteProvider = globalPaletteProvider;
+    public PaletteFactory(IGlobalPaletteProvider globalPaletteProvider)
+        => _globalPaletteProvider = globalPaletteProvider;
 
         public IPalette CreatePalette(int bitsPerBlock, bool isBiome)
         {

@@ -1,10 +1,9 @@
-﻿using Lyrox.Framework.Core.Networking.Abstraction.Packet;
+﻿using Lyrox.Framework.Core.Abstraction.Networking.Packet;
 
-namespace Lyrox.Framework.Networking.Core
+namespace Lyrox.Framework.Networking.Core;
+
+public interface INetworkConnection
 {
-    public interface INetworkConnection
-    {
-        Task Connect();
-        Task SendPacket(IServerBoundNetworkPacket packet);
-    }
+    Task Connect();
+    Task SendPacket(IServerBoundNetworkPacket packet);
 }

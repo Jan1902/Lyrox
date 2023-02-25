@@ -1,9 +1,8 @@
 ﻿using Lyrox.Framework.Core.Models.World;
 
-namespace Lyrox.Framework.WorldData.Mojang.Data
+namespace Lyrox.Framework.World.Mojang.Data;
+
+internal interface IChunkDataHandler
 {
-    internal interface IChunkDataHandler
-    {
-        Chunk HandleChunkData(byte[] data);
-    }
+    Chunk HandleChunkData(byte[] data);
 }

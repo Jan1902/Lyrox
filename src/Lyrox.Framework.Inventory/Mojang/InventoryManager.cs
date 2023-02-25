@@ -1,10 +1,9 @@
-﻿using Lyrox.Framework.Core.Abstraction;
+﻿using Lyrox.Framework.Core.Abstraction.Managers;
 using Lyrox.Framework.Core.Models.Inventory;
 
-namespace Lyrox.Framework.Inventory.Mojang
+namespace Lyrox.Framework.Inventory.Mojang;
+
+public class InventoryManager : IInventoryManager
 {
-    public class InventoryManager : IInventoryManager
-    {
-        public Slot[] PlayerInventory { get; set; }
-    }
+    public Slot[]? PlayerInventory { get; set; }
 }

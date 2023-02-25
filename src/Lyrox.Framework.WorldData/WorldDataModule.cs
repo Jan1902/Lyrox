@@ -1,40 +1,33 @@
-﻿using Lyrox.Framework.Core.Abstraction;
-using Lyrox.Framework.Core.Configuration;
-using Lyrox.Framework.Core.Exceptions;
-using Lyrox.Framework.Core.Modules.Abstractions;
-using Lyrox.Framework.Core.Networking.Abstraction;
-using Lyrox.Framework.Core.Networking.Types;
-using Lyrox.Framework.WorldData.Mojang.Data;
-using Lyrox.Framework.WorldData.Mojang.Data.Palette;
-using Lyrox.Framework.WorldData.Mojang.Data.Palette.Abstraction;
-using Lyrox.Framework.WorldData.Mojang.PacketHandlers;
-using Lyrox.Framework.WorldData.Mojang.Packets;
+﻿using Lyrox.Framework.Base.Shared;
+using Lyrox.Framework.Core.Abstraction.Configuration;
+using Lyrox.Framework.Core.Abstraction.Managers;
+using Lyrox.Framework.Core.Abstraction.Modules;
+using Lyrox.Framework.Core.Abstraction.Networking.Packet;
+using Lyrox.Framework.Networking.Core;
+using Lyrox.Framework.Shared.Exceptions;
+using Lyrox.Framework.Shared.Types;
+using Lyrox.Framework.World.Mojang.Data;
+using Lyrox.Framework.World.Mojang.Data.Palette;
+using Lyrox.Framework.World.Mojang.Data.Palette.Abstraction;
+using Lyrox.Framework.World.Mojang.PacketHandlers;
+using Lyrox.Framework.World.Mojang.Packets;
 
-namespace Lyrox.Framework.WorldData
+namespace Lyrox.Framework.World;
+
+public class WorldDataModule : IModule
 {
-    public class WorldDataModule : IModule
+    public void Load(ServiceContainer serviceContainer, PacketTypeMapping packetMapping, ILyroxConfiguration lyroxConfiguration)
     {
-        public void Load(IServiceContainer serviceContainer, LyroxConfiguration lyroxConfiguration)
+        serviceContainer.RegisterType<IWorldDataManager, WorldDataManager>();
+        if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
         {
-            serviceContainer.RegisterType<IWorldDataManager, WorldDataManager>();
-            if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
-            {
-                serviceContainer.RegisterType<IChunkDataHandler, ChunkDataHandler>();
-                serviceContainer.RegisterType<IGlobalPaletteProvider, FileGlobalPaletteProvider>();
-                serviceContainer.RegisterType<IPaletteFactory, PaletteFactory>();
-            }
-            else
-                throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
-        }
+            serviceContainer.RegisterType<IChunkDataHandler, ChunkDataHandler>();
+            serviceContainer.RegisterType<IGlobalPaletteProvider, FileGlobalPaletteProvider>();
+            serviceContainer.RegisterType<IPaletteFactory, PaletteFactory>();
 
-        public void RegisterPacketHandlers(INetworkPacketManager networkPacketManager, LyroxConfiguration lyroxConfiguration)
-        {
-            if (lyroxConfiguration.GameVersion == GameVersion.Mojang)
-            {
-                networkPacketManager.RegisterNetworkPacketHandler<ChunkData, WorldDataPacketHandler>(0x21);
-            }
-            else
-                throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
+            serviceContainer.RegisterPacketHandler<ChunkData, WorldDataPacketHandler>(packetMapping, 0x21);
         }
+        else
+            throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
     }
 }
