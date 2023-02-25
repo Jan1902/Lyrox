@@ -18,10 +18,7 @@ namespace Lyrox.Framework.WorldData.Mojang.Data
 
             var sections = new ChunkSection[24];
             for (var i = 0; i < 24; i++)
-            {
-                //Console.WriteLine(i);
                 sections[i] = HandleChunkSection(reader);
-            }
 
             return new Chunk(sections);
         }
@@ -53,7 +50,7 @@ namespace Lyrox.Framework.WorldData.Mojang.Data
                 return new ChunkSection(states);
             }
 
-            var individualValueMask = (uint)((1 << bitsPerEntry) - 1);
+            var individualValueMask = (ulong)((1 << bitsPerEntry) - 1);
 
             var data = new ulong[reader.ReadVarInt()];
             for (var i = 0; i < data.Length; i++)
@@ -72,16 +69,13 @@ namespace Lyrox.Framework.WorldData.Mojang.Data
                     {
                         var blockNumber = (((y * 16) + z) * 16) + x;
                         var longIndex = blockNumber / entriesPerLong;
-                        var individualOffset = offset + (blockNumber % entriesPerLong) * bitsPerEntry;
-                        individualOffset = (blockNumber * bitsPerEntry) % 64;
+                        var individualOffset = (blockNumber % entriesPerLong) * bitsPerEntry;
 
-                        var id = (uint)(data[longIndex] >> individualOffset);
+                        var id = (ulong)(data[longIndex] >> individualOffset);
                         id &= individualValueMask;
 
                         var state = palette.GetStateForId((int)id);
 
-                        //if (state is null)
-                        //    Console.WriteLine();
                         states[x, y, z] = state;
                         lastOffset = individualOffset;
                     }
