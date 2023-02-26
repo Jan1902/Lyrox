@@ -4,6 +4,6 @@ public class ChunkSection
 {
     public BlockState?[,,] BlockStates { get; }
 
-    public ChunkSection(BlockState[,,] blockStates)
+    public ChunkSection(BlockState?[,,] blockStates)
         => BlockStates = blockStates;
 }

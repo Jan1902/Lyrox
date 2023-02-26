@@ -32,7 +32,7 @@ internal class ChunkDataHandler : IChunkDataHandler
         palette.Read(reader);
         bitsPerEntry = (byte)palette.GetBitsPerBlock();
 
-        var states = new BlockState[16, 16, 16];
+        var states = new BlockState?[16, 16, 16];
 
         if (bitsPerEntry == 0)
         {
@@ -50,32 +50,19 @@ internal class ChunkDataHandler : IChunkDataHandler
             return new ChunkSection(states);
         }
 
-        var individualValueMask = (ulong)((1 << bitsPerEntry) - 1);
-
         var data = new ulong[reader.ReadVarInt()];
         for (var i = 0; i < data.Length; i++)
             data[i] = reader.ReadULong();
 
-        var offset = 64 % bitsPerEntry;
-        var entriesPerLong = 64 / bitsPerEntry;
-
-        var lastOffset = 0;
+        var compactedArray = new CompactedDataArray(data, bitsPerEntry);
 
         for (var y = 0; y < 16; y++)
             for (var z = 0; z < 16; z++)
                 for (var x = 0; x < 16; x++)
                 {
                     var blockNumber = (((y * 16) + z) * 16) + x;
-                    var longIndex = blockNumber / entriesPerLong;
-                    var individualOffset = (blockNumber % entriesPerLong) * bitsPerEntry;
-
-                    var id = (ulong)(data[longIndex] >> individualOffset);
-                    id &= individualValueMask;
-
-                    var state = palette.GetStateForId((int)id);
-
+                    var state = palette.GetStateForId((int)compactedArray[blockNumber]);
                     states[x, y, z] = state;
-                    lastOffset = individualOffset;
                 }
                 
         DiscardBiomeData();
