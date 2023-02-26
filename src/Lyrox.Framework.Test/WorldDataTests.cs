@@ -1,6 +1,6 @@
 ﻿using Lyrox.Framework.Core.Models.World;
-using Lyrox.Framework.WorldData.Mojang.Data.Palette;
-using Lyrox.Framework.WorldData.Mojang.Data.Palette.Abstraction;
+using Lyrox.Framework.World.Mojang.Data.Palette;
+using Lyrox.Framework.World.Mojang.Data.Palette.Abstraction;
 
 namespace Lyrox.Framework.Test
 {
