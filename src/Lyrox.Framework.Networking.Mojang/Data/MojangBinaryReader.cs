@@ -2,6 +2,7 @@
 using BitConverter;
 using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 using Lyrox.Framework.Networking.Mojang.Data.Types;
+using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Networking.Mojang.Data;
 
@@ -18,6 +19,9 @@ public class MojangBinaryReader : IMojangBinaryReader, IDisposable
 
     public int ReadVarInt()
         => _stream.ReadVarInt();
+
+    public Vector3i ReadPosition()
+        => _stream.ReadPosition();
 
     public byte ReadByte()
         => (byte)_stream.ReadByte();

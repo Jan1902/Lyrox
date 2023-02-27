@@ -1,4 +1,6 @@
-﻿namespace Lyrox.Framework.Networking.Mojang.Data.Abstraction;
+﻿using Lyrox.Framework.Shared.Types;
+
+namespace Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 
 public interface IMojangBinaryReader
 {
@@ -19,4 +21,5 @@ public interface IMojangBinaryReader
     ushort ReadUShort();
     Guid ReadUUID();
     int ReadVarInt();
+    Vector3i ReadPosition();
 }

@@ -1,4 +1,4 @@
-using Lyrox.Framework.Core.Abstraction.Managers;
+﻿using Lyrox.Framework.Core.Abstraction.Managers;
 using Lyrox.Framework.Core.Models.World;
 
 namespace Lyrox.Framework.World;
@@ -10,32 +10,38 @@ public class WorldDataManager : IWorldDataManager
     public WorldDataManager()
         => _chunks = new();
 
-        public BlockState? GetBlock(int blockX, int blockY, int blockZ)
-        {
-            var chunkX = blockX / 16;
-            var chunkY = blockY / 16 + 4;
-            var chunkZ = blockZ / 16;
+    public BlockState? GetBlock(int blockX, int blockY, int blockZ)
+    {
+        var chunkX = (int)Math.Floor(blockX / 16f);
+        var chunkY = (int)Math.Floor(blockY / 16f) + 4;
+        var chunkZ = (int)Math.Floor(blockZ / 16f);
 
         var xOffset = blockX % 16;
         var yOffset = blockY % 16;
         var zOffset = blockZ % 16;
 
-        return _chunks.ContainsKey((chunkX, chunkZ)) ?
-            _chunks[(chunkX, chunkZ)]
+        xOffset = xOffset >= 0 ? xOffset : 16 + xOffset;
+        yOffset = yOffset >= 0 ? yOffset : 16 + yOffset;
+        zOffset = zOffset >= 0 ? zOffset : 16 + zOffset;
+
+        return GetChunk(chunkX, chunkZ)?
             .Sections[chunkY]
-            .BlockStates[xOffset, yOffset, zOffset]
-            : null;
+            .BlockStates[xOffset, yOffset, zOffset];
     }
 
-        public void SetBlock(int blockX, int blockY, int blockZ, BlockState blockState)
-        {
-            var chunkX = blockX / 16;
-            var chunkY = blockY / 16 + 4;
-            var chunkZ = blockZ / 16;
+    public void SetBlock(int blockX, int blockY, int blockZ, BlockState blockState)
+    {
+        var chunkX = (int)Math.Floor(blockX / 16f);
+        var chunkY = (int)Math.Floor(blockY / 16f) + 4;
+        var chunkZ = (int)Math.Floor(blockZ / 16f);
 
         var xOffset = blockX % 16;
         var yOffset = blockY % 16;
         var zOffset = blockZ % 16;
+
+        xOffset = xOffset >= 0 ? xOffset : 16 + xOffset;
+        yOffset = yOffset >= 0 ? yOffset : 16 + yOffset;
+        zOffset = zOffset >= 0 ? zOffset : 16 + zOffset;
 
         _chunks[(chunkX, chunkZ)]
             .Sections[chunkY]
