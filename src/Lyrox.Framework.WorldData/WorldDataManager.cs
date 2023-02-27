@@ -49,7 +49,7 @@ public class WorldDataManager : IWorldDataManager
     }
 
     public Chunk? GetChunk(int chunkX, int chunkZ)
-        => _chunks.ContainsKey((chunkX, chunkZ)) ? _chunks[(chunkX, chunkZ)] : null;
+        => _chunks.TryGetValue((chunkX, chunkZ), out var value) ? value : null;
 
     public void SetChunk(int chunkX, int chunkZ, Chunk chunk)
     {

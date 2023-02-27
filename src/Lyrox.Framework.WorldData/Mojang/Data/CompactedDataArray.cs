@@ -1,9 +1,9 @@
-namespace Lyrox.Framework.World.Mojang.Data;
+﻿namespace Lyrox.Framework.World.Mojang.Data;
 
 internal class CompactedDataArray
 {
-    private ulong[] _dataArray;
-    private int _bitsPerEntry;
+    private readonly ulong[] _dataArray;
+    private readonly int _bitsPerEntry;
 
     public CompactedDataArray(ulong[] dataArray, int bitsPerEntry)
     {
