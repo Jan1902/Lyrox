@@ -1,4 +1,6 @@
-﻿namespace Lyrox.Framework.Networking.Mojang.Data.Abstraction;
+﻿using Lyrox.Framework.Shared.Types;
+
+namespace Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 
 public interface IMojangBinaryWriter
 {
@@ -19,4 +21,5 @@ public interface IMojangBinaryWriter
     void WriteUShort(ushort value);
     void WriteUUID(Guid uuid);
     void WriteVarInt(int value);
+    void WritePosition(Vector3i value);
 }

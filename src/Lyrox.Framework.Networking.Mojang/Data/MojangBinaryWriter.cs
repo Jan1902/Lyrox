@@ -2,10 +2,11 @@
 using BitConverter;
 using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 using Lyrox.Framework.Networking.Mojang.Data.Types;
+using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Networking.Mojang.Data;
 
-public class MojangBinaryWriter : IMojangBinaryWriter
+public class MojangBinaryWriter : IMojangBinaryWriter, IDisposable
 {
     private readonly Stream _stream;
     private readonly EndianBitConverter _bitConverter;
@@ -23,6 +24,9 @@ public class MojangBinaryWriter : IMojangBinaryWriter
 
     public void WriteVarInt(int value)
         => _stream.WriteVarInt(value);
+
+    public void WritePosition(Vector3i value)
+        => _stream.WritePosition(value);
 
     public void WriteByte(byte value)
         => _stream.WriteByte(value);
@@ -87,4 +91,7 @@ public class MojangBinaryWriter : IMojangBinaryWriter
 
         WriteBytes(data);
     }
+
+    public void Dispose()
+        => _stream.Dispose();
 }

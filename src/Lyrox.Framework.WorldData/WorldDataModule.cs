@@ -26,6 +26,7 @@ public class WorldDataModule : IModule
             serviceContainer.RegisterType<IPaletteFactory, PaletteFactory>();
 
             serviceContainer.RegisterPacketHandler<ChunkData, WorldDataPacketHandler>(packetMapping, 0x21);
+            serviceContainer.RegisterPacketHandler<BlockUpdate, WorldDataPacketHandler>(packetMapping, 0x09);
         }
         else
             throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
