@@ -1,4 +1,4 @@
-using Lyrox.Framework.Core.Abstraction.Managers;
+﻿using Lyrox.Framework.Core.Abstraction.Managers;
 using Lyrox.Framework.Core.Models.World;
 
 namespace Lyrox.Framework.World;
@@ -12,9 +12,9 @@ public class WorldDataManager : IWorldDataManager
 
     public BlockState? GetBlock(int blockX, int blockY, int blockZ)
     {
-        var chunkX = blockX / 16;
-        var chunkY = blockY / 16 + 4;
-        var chunkZ = blockZ / 16;
+        var chunkX = (int)Math.Floor(blockX / 16f);
+        var chunkY = (int)Math.Floor(blockY / 16f) + 4;
+        var chunkZ = (int)Math.Floor(blockZ / 16f);
 
         var xOffset = blockX % 16;
         var yOffset = blockY % 16;
@@ -31,9 +31,9 @@ public class WorldDataManager : IWorldDataManager
 
     public void SetBlock(int blockX, int blockY, int blockZ, BlockState blockState)
     {
-        var chunkX = blockX / 16;
-        var chunkY = blockY / 16 + 4;
-        var chunkZ = blockZ / 16;
+        var chunkX = (int)Math.Floor(blockX / 16f);
+        var chunkY = (int)Math.Floor(blockY / 16f) + 4;
+        var chunkZ = (int)Math.Floor(blockZ / 16f);
 
         var xOffset = blockX % 16;
         var yOffset = blockY % 16;
