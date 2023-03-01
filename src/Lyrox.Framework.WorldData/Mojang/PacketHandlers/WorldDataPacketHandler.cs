@@ -12,11 +12,11 @@ internal class WorldDataPacketHandler :
     IPacketHandler<BlockUpdate>
 {
     private readonly IChunkDataHandler _chunkDataHandler;
-    private readonly IWorldDataManager _worldDataManager;
+    private readonly WorldDataManager _worldDataManager;
     private readonly IGlobalPaletteProvider _globalPaletteProvider;
     private readonly ILogger<WorldDataPacketHandler> _logger;
 
-    public WorldDataPacketHandler(IChunkDataHandler chunkDataHandler, IWorldDataManager worldDataManager, IGlobalPaletteProvider globalPaletteProvider, ILogger<WorldDataPacketHandler> logger)
+    public WorldDataPacketHandler(IChunkDataHandler chunkDataHandler, WorldDataManager worldDataManager, IGlobalPaletteProvider globalPaletteProvider, ILogger<WorldDataPacketHandler> logger)
     {
         _chunkDataHandler = chunkDataHandler;
         _worldDataManager = worldDataManager;
