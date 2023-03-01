@@ -1,9 +1,10 @@
 ﻿using Lyrox.Framework.Core.Abstraction.Managers;
 using Lyrox.Framework.Core.Models.World;
+using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.World;
 
-public class WorldDataManager : IWorldDataManager
+internal class WorldDataManager : IWorldDataManager
 {
     private readonly Dictionary<(int X, int Z), Chunk> _chunks;
 
@@ -29,7 +30,7 @@ public class WorldDataManager : IWorldDataManager
             .BlockStates[xOffset, yOffset, zOffset];
     }
 
-    public void SetBlock(int blockX, int blockY, int blockZ, BlockState blockState)
+    internal void SetBlock(int blockX, int blockY, int blockZ, BlockState blockState)
     {
         var chunkX = (int)Math.Floor(blockX / 16f);
         var chunkY = (int)Math.Floor(blockY / 16f) + 4;
@@ -48,10 +49,13 @@ public class WorldDataManager : IWorldDataManager
             .BlockStates[xOffset, yOffset, zOffset] = blockState;
     }
 
-    public Chunk? GetChunk(int chunkX, int chunkZ)
-        => _chunks.ContainsKey((chunkX, chunkZ)) ? _chunks[(chunkX, chunkZ)] : null;
+    internal void SetBlock(Vector3i blockPos, BlockState blockState)
+        => SetBlock(blockPos.X, blockPos.Y, blockPos.Z, blockState);
 
-    public void SetChunk(int chunkX, int chunkZ, Chunk chunk)
+    public Chunk? GetChunk(int chunkX, int chunkZ)
+        => _chunks.TryGetValue((chunkX, chunkZ), out var chunk) ? chunk : null;
+
+    internal void SetChunk(int chunkX, int chunkZ, Chunk chunk)
     {
         var existingChunk = GetChunk(chunkX, chunkZ);
 
