@@ -1,4 +1,4 @@
-using BitConverter;
+﻿using BitConverter;
 using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Networking.Mojang.Data.Types;
@@ -21,7 +21,7 @@ internal static class Position
     {
         var writer = new MojangBinaryWriter(stream);
         
-        var result = ((value.X & 0x3FFFFFF) << 38) | ((value.Z & 0x3FFFFFF) << 12) | (value.Y & 0xFFF);
+        var result = (((long)value.X & 0x3FFFFFF) << 38) | (((long)value.Z & 0x3FFFFFF) << 12) | ((long)value.Y & 0xFFF);
         writer.WriteLong(result);
     }
 

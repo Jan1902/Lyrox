@@ -1,30 +1,48 @@
-using Lyrox.Framework.Networking.Mojang.Data;
+﻿using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 using Lyrox.Framework.Networking.Mojang.Data.Types;
-using Lyrox.Framework.Networking.Mojang.Packets.Base;
 using Lyrox.Framework.Shared.Types;
 
+namespace Lyrox.Framework.Networking.Mojang;
+
+[AttributeUsage(AttributeTargets.Parameter)]
 internal class VarIntAttribute : Attribute { }
+
+[AttributeUsage(AttributeTargets.Parameter)]
 internal class PositionAttribute : Attribute { }
-internal class LengthPrefixedAttribute : Attribute { }
+
+[AttributeUsage(AttributeTargets.Parameter)]
+internal class LengthPrefixedAttribute : Attribute
+{
+    public LengthPrefix LengthPrefixType { get; private set; }
+
+    public LengthPrefixedAttribute(LengthPrefix lengthPrefixType)
+        => LengthPrefixType = lengthPrefixType;
+}
+
+[AttributeUsage(AttributeTargets.Parameter)]
 internal class OptionalAttribute : Attribute { }
 
-internal record BlockUpdate([Position] Vector3i Location, [VarInt] int ID);
-internal record KeepAlive(long KeepAliveID);
-internal record LoginSuccess(Guid UUID, string Username);
+internal interface IAutoParsedPacket { }
+internal interface ICustomParsedPacket { void Parse(Stream stream); }
+
+internal enum LengthPrefix { VarInt, Int, UInt }
+
+internal record BlockUpdate([Position] Vector3i Location, [VarInt] int ID) : IAutoParsedPacket;
+internal record KeepAlive(long KeepAliveID) : IAutoParsedPacket;
+internal record LoginSuccess(Guid UUID, string Username) : IAutoParsedPacket;
 
 internal record PlayerChatMessage(
-    [Optional][LengthPrefixed] byte[] MessageSignature,
+    [Optional][LengthPrefixed(LengthPrefix.VarInt)] byte[] MessageSignature,
     Guid SenderUUID,
-    [LengthPrefixed] byte[] HeaderSignature,
+    [LengthPrefixed(LengthPrefix.VarInt)] byte[] HeaderSignature,
     string PlainMessage,
     [Optional] string FormattedMessage,
     DateTime Timestamp,
-    long Salt);
-
+    long Salt) : IAutoParsedPacket;
 
 internal class Deserializer
 {
-    public TPacket Deserialize<TPacket>(MojangBinaryReader reader) where TPacket : MojangClientBoundPacketBase
+    public static TPacket Deserialize<TPacket>(IMojangBinaryReader reader) where TPacket : IAutoParsedPacket
     {
         var parameters = typeof(TPacket).GetConstructors().First().GetParameters();
         var paramList = new List<object>();
@@ -33,67 +51,67 @@ internal class Deserializer
         {
             var attributes = new Queue<object>(param.GetCustomAttributes(false));
 
-            while(attributes.Any())
-            {
-                switch (attributes.Dequeue())
-                {
-                    case OptionalAttribute:
-                        if (reader.ReadBool())
-                            goto case null;
-                        break;
+            paramList.Add(DeserializeParameter(reader, param.ParameterType, attributes)!);
+        }
 
-                    case null:
-                        paramList.Add(ReadType(reader, param.ParameterType));
-                        break;
-                }
+        return (TPacket)Activator.CreateInstance(typeof(TPacket), paramList.ToArray())!;
+    }
+
+    private static object? DeserializeParameter(IMojangBinaryReader reader, Type type, Queue<object> attributes)
+    {
+        while (attributes.Any())
+        {
+            switch (attributes.Peek())
+            {
+                case OptionalAttribute:
+                    _ = attributes.Dequeue();
+                    if (reader.ReadBool())
+                        continue;
+                    return null;
+                case VarIntAttribute:
+                    return ReadPrimitive(reader, typeof(VarInt));
+                case PositionAttribute:
+                    return ReadPrimitive(reader, typeof(Position));
+                case LengthPrefixedAttribute lengthPrefix:
+                    _ = attributes.Dequeue();
+
+                    var length = ReadLengthPrefix(reader, lengthPrefix.LengthPrefixType);
+                    if (type == typeof(string))
+                        return ReadPrimitive(reader, typeof(string), length);
+                    else if(type == typeof(byte[]))
+                        return ReadPrimitive(reader, typeof(byte[]), length);
+
+                    var array = Array.CreateInstance(type.GetElementType()!, length);
+                    for (var i = 0; i < length; i++)
+                        array.SetValue(DeserializeParameter(reader, type.GetElementType()!, attributes), i);
+                    return array;
+
+                default:
+                    return ReadPrimitive(reader, type);
             }
         }
 
-        return (TPacket)Activator.CreateInstance(typeof(TPacket), paramList)!;
+        return ReadPrimitive(reader, type);
     }
 
-    private object DeserializeValue()
+    private static int ReadLengthPrefix(IMojangBinaryReader reader, LengthPrefix prefixType) => prefixType switch
     {
-        
-    }
+        LengthPrefix.VarInt => reader.ReadVarInt(),
+        LengthPrefix.Int => reader.ReadInt(),
+        LengthPrefix.UInt => (int)reader.ReadUInt(),
+        _ => throw new NotSupportedException()
+    };
 
-    private object ReadType(MojangBinaryReader reader, Type type)
+    private static object ReadPrimitive(IMojangBinaryReader reader, Type type, int? length = null) => type switch
     {
-        switch (type.GetCustomAttributes(false).Last())
-        {
-            case VarIntAttribute:
-                return ReadPrimitive(reader, typeof(VarInt));
-            case PositionAttribute:
-                return ReadPrimitive(reader, typeof(Position));
-            case LengthPrefixedAttribute:
-                var length = reader.ReadVarInt();
-                var array = Array.CreateInstance(type.GetElementType()!, length);
-                for (int i = 0; i < length; i++)
-                    array.SetValue(ReadPrimitive(reader, type.GetElementType()!), i);
-                return array;
-
-            default:
-                return ReadPrimitive(reader, type);
-        }
-    }
-
-    private object ReadPrimitive(MojangBinaryReader reader, Type type)
-    {
-        switch (type)
-        {
-            case Type t when t == typeof(VarInt):
-                return reader.ReadVarInt();
-            case Type t when t == typeof(Position):
-                return reader.ReadPosition();
-            case Type t when t == typeof(int):
-                return reader.ReadInt();
-            case Type t when t == typeof(DateTime):
-                return new DateTime(reader.ReadLong());
-            case Type t when t == typeof(string):
-                return reader.ReadStringWithVarIntPrefix();
-
-            default:
-                throw new Exception("Given Data Type can not be parsed");
-        }
-    }
+        Type t when t == typeof(VarInt) => reader.ReadVarInt(),
+        Type t when t == typeof(Position) => reader.ReadPosition(),
+        Type t when t == typeof(int) => reader.ReadInt(),
+        Type t when t == typeof(long) => reader.ReadLong(),
+        Type t when t == typeof(DateTime) => new DateTime(reader.ReadLong()),
+        Type t when t == typeof(string) => length != null ? reader.ReadStringWithLength(length ?? 0) : reader.ReadStringWithVarIntPrefix(),
+        Type t when t == typeof(Guid) => reader.ReadUUID(),
+        Type t when t == typeof(byte[]) => reader.ReadBytes(length ?? 0),
+        _ => throw new NotSupportedException("Given Data Type can not be parsed"),
+    };
 }
