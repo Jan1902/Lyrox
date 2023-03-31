@@ -62,7 +62,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Messaging", "Messaging", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Messaging.Abstraction", "Lyrox.Framework.Base.Messaging.Abstraction\Lyrox.Framework.Base.Messaging.Abstraction.csproj", "{D908C7D0-41FD-4891-A5B7-4C44915B6D79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyrox.Framework.Base.Shared", "Lyrox.Framework.Base.Shared\Lyrox.Framework.Base.Shared.csproj", "{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.Base.Shared", "Lyrox.Framework.Base.Shared\Lyrox.Framework.Base.Shared.csproj", "{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeGeneration", "CodeGeneration", "{9BE064C7-7E2E-4DAE-8C2F-A65406CB2902}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lyrox.Framework.CodeGeneration", "Lyrox.Framework.CodeGeneration\Lyrox.Framework.CodeGeneration.csproj", "{15367206-17E9-4272-9956-B3C42E90F0AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyrox.Framework.CodeGeneration.Test", "Lyrox.Framework.CodeGeneration.Test\Lyrox.Framework.CodeGeneration.Test.csproj", "{C4033440-9862-4A3B-8A28-9229452252FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyrox.Framework.CodeGeneration.Shared", "Lyrox.Framework.CodeGeneration.Shared\Lyrox.Framework.CodeGeneration.Shared.csproj", "{17A39091-2D9A-4862-99A5-D9B9E98ADA97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -154,6 +162,18 @@ Global
 		{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15367206-17E9-4272-9956-B3C42E90F0AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15367206-17E9-4272-9956-B3C42E90F0AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15367206-17E9-4272-9956-B3C42E90F0AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15367206-17E9-4272-9956-B3C42E90F0AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4033440-9862-4A3B-8A28-9229452252FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4033440-9862-4A3B-8A28-9229452252FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4033440-9862-4A3B-8A28-9229452252FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4033440-9862-4A3B-8A28-9229452252FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17A39091-2D9A-4862-99A5-D9B9E98ADA97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17A39091-2D9A-4862-99A5-D9B9E98ADA97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17A39091-2D9A-4862-99A5-D9B9E98ADA97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17A39091-2D9A-4862-99A5-D9B9E98ADA97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,6 +203,10 @@ Global
 		{0A091CC4-D179-49AD-B859-E1A093427945} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
 		{D908C7D0-41FD-4891-A5B7-4C44915B6D79} = {0A091CC4-D179-49AD-B859-E1A093427945}
 		{FFD52057-56BF-4B7F-AB84-16C6DFBAAFEF} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
+		{9BE064C7-7E2E-4DAE-8C2F-A65406CB2902} = {BA32D88F-714D-4EB4-8FE7-BDB6D91AB909}
+		{15367206-17E9-4272-9956-B3C42E90F0AA} = {9BE064C7-7E2E-4DAE-8C2F-A65406CB2902}
+		{C4033440-9862-4A3B-8A28-9229452252FF} = {9BE064C7-7E2E-4DAE-8C2F-A65406CB2902}
+		{17A39091-2D9A-4862-99A5-D9B9E98ADA97} = {9BE064C7-7E2E-4DAE-8C2F-A65406CB2902}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EBED1CD4-4008-4A7E-97E5-EBB867B0796F}
