@@ -24,23 +24,25 @@ namespace Lyrox.Framework.CodeGeneration
                         .Any(a => a.Name.GetText().ToString() == attributeName)));
 
             foreach (var recordDecleration in classesWithAttribute)
-                context.AddSource($"{recordDecleration.Identifier.ValueText}_AutoParsing.g.cs", GenerateRecord(context, recordDecleration));
+                context.AddSource($"{recordDecleration.Identifier.ValueText}_AutoParsing.g.cs", GenerateRecord(recordDecleration));
         }
 
-        public string GenerateRecord(GeneratorExecutionContext context, RecordDeclarationSyntax packetDecleration)
+        public string GenerateRecord(RecordDeclarationSyntax packetDecleration)
         {
             const string parseMethodName = "Parse";
 
-            var method = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("void"), parseMethodName)
+            var method = SyntaxFactory.MethodDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.VoidKeyword)), parseMethodName)
                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.OverrideKeyword))
                 .WithBody(SyntaxFactory.Block());
 
-            var newClass = SyntaxFactory.RecordDeclaration(SyntaxFactory.Token(SyntaxKind.RecordKeyword), packetDecleration.Identifier.ValueText)
+            var newRecord = SyntaxFactory.RecordDeclaration(SyntaxFactory.Token(SyntaxKind.RecordKeyword), packetDecleration.Identifier.ValueText)
+                .WithOpenBraceToken(SyntaxFactory.Token(SyntaxKind.OpenBraceToken))
                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.PartialKeyword))
-                .AddMembers(method);
+                .AddMembers(method)
+                .WithCloseBraceToken(SyntaxFactory.Token(SyntaxKind.CloseBraceToken));
 
             var newNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(packetDecleration.Ancestors().OfType<NamespaceDeclarationSyntax>().FirstOrDefault().Name.ToFullString()))
-                .AddMembers(newClass);
+                .AddMembers(newRecord);
 
             var syntaxFactory = SyntaxFactory.CompilationUnit()
                 .AddUsings(SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System")))
