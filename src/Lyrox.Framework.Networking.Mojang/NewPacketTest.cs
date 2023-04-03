@@ -76,10 +76,9 @@ internal class Deserializer
                     _ = attributes.Dequeue();
 
                     var length = ReadLengthPrefix(reader, lengthPrefix.LengthPrefixType);
-                    if (type == typeof(string))
-                        return ReadPrimitive(reader, typeof(string), length);
-                    else if(type == typeof(byte[]))
-                        return ReadPrimitive(reader, typeof(byte[]), length);
+                    if (type == typeof(string)
+                        || type == typeof(byte[]))
+                        return ReadPrimitive(reader, type, length);
 
                     var array = Array.CreateInstance(type.GetElementType()!, length);
                     for (var i = 0; i < length; i++)

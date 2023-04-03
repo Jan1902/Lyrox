@@ -21,7 +21,7 @@ public static class LyroxClientFactory
     public static ILyroxClient GetLyroxClient(ILyroxConfiguration configuration, Action<IModuleManager>? pluginBuilding = null)
     {
         var loggerConfiguration = new LoggerConfiguration()
-            .WriteTo.Console()
+            .WriteTo.Console(Serilog.Events.LogEventLevel.Verbose)
             .WriteTo.File(LogFilePath);
 
         var builder = new ContainerBuilder();
