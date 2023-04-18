@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.10.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.3.0" />
     <PackageReference Include="NUnit.Analyzers" Version="3.5.0" />
@@ -19,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Lyrox.Framework.CodeGeneration\Lyrox.Framework.CodeGeneration.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\Lyrox.Framework.CodeGeneration.Shared\Lyrox.Framework.CodeGeneration.Shared.csproj" />
+    <ProjectReference Include="..\Lyrox.Framework.Networking.Mojang\Lyrox.Framework.Networking.Mojang.csproj" />
   </ItemGroup>
 
 </Project>

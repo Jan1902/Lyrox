@@ -1,32 +1,30 @@
-﻿namespace Lyrox.Framework.CodeGeneration.Test
+﻿namespace Lyrox.Framework.CodeGeneration.Test;
+
+using Lyrox.Framework.CodeGeneration.Shared;
+using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
+
+// Parsing Idea
+
+// Simple Packet
+[AutoParsed]
+public record Handshake([VarInt] int HandshakeId);
+
+// Complex Packet
+[AutoParsed]
+public record Test([Optional]int Id, [LengthPrefixed]string Name, bool Active);
+
+[AutoParsed]
+public record PlayerList([Optional][LengthPrefixed]string[] PlayerNames);
+
+// Custom Packet
+[CustomParsed<Login, LoginParser>]
+public record Login(string Name);
+
+public class LoginParser : IPacketParser<Login>
 {
-    [AutoParsed]
-    public partial record Handshake : Packet
-    {
-        public int HandshakeID { get; private set; }
-    }
+    public Login Deserialize(IMojangBinaryReader reader)
+        => new(reader.ReadStringWithVarIntPrefix());
 
-    public record Login : Packet
-    {
-        public string Name { get; private set; }
-
-        public override void Parse()
-        {
-            var length = Reader.ReadInt();
-            Name = Reader.ReadString(length);
-        }
-    }
-
-    public abstract record Packet
-    {
-        protected Reader Reader = new Reader();
-
-        public abstract void Parse();
-    }
-
-    public class Reader
-    {
-        public int ReadInt() => 1;
-        public string ReadString(int length) => "Hello World";
-    }
+    public void Serialize(IMojangBinaryWriter writer, Login packet)
+        => writer.WriteStringWithVarIntPrefix(packet.Name);
 }

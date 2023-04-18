@@ -1,4 +1,8 @@
-﻿namespace Lyrox.Framework.CodeGeneration.Test;
+﻿using FluentAssertions;
+using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
+using Moq;
+
+namespace Lyrox.Framework.CodeGeneration.Test;
 
 public class Tests
 {
@@ -10,10 +14,12 @@ public class Tests
     [Test]
     public void Test1()
     {
-        Packet packet = new Login();
-        packet.Parse();
+        var reader = Mock.Of<IMojangBinaryReader>();
 
-        packet = new Handshake();
-        packet.Parse();
+        var handshake = new Handshake_Parsing().Deserialize(reader);
+        var test = new Test_Parsing().Deserialize(reader);
+
+        handshake.Should().NotBeNull();
+        test.Should().NotBeNull();
     }
 }
