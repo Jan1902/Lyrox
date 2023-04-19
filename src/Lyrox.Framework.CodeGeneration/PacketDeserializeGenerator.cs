@@ -9,7 +9,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Lyrox.Framework.CodeGeneration
 {
-    [Generator]
+    //[Generator]
     public class PacketDeserializeGenerator : ISourceGenerator
     {
         private const string DeserializeMethodName = "Deserialize";

@@ -6,21 +6,21 @@ using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 // Parsing Idea
 
 // Simple Packet
-[AutoParsed]
+[AutoSerialized]
 public record Handshake([VarInt] int HandshakeId);
 
 // Complex Packet
-[AutoParsed]
+[AutoSerialized]
 public record Test([Optional]int Id, [LengthPrefixed]string Name, bool Active);
 
-[AutoParsed]
+[AutoSerialized]
 public record PlayerList([Optional][LengthPrefixed]string[] PlayerNames);
 
 // Custom Packet
-[CustomParsed<Login, LoginParser>]
+[CustomSerialized<Login, LoginParser>]
 public record Login(string Name);
 
-public class LoginParser : IPacketParser<Login>
+public class LoginParser : IPacketSerializer<Login>
 {
     public Login Deserialize(IMojangBinaryReader reader)
         => new(reader.ReadStringWithVarIntPrefix());

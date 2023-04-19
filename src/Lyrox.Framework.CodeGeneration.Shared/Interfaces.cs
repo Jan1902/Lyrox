@@ -5,19 +5,19 @@ namespace Lyrox.Framework.CodeGeneration.Shared;
 
 // Framework Logic
 
-public interface IPacketParser<TPacket> where TPacket : class
+public interface IPacketSerializer<TPacket> where TPacket : class
 {
     TPacket Deserialize(IMojangBinaryReader reader);
     void Serialize(IMojangBinaryWriter writer, TPacket packet);
 }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class AutoParsedAttribute : Attribute { }
+public class AutoSerializedAttribute : Attribute { }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class CustomParsedAttribute<TPacket, TParser> : Attribute
+public class CustomSerializedAttribute<TPacket, TParser> : Attribute
     where TPacket : class
-    where TParser : IPacketParser<TPacket>
+    where TParser : IPacketSerializer<TPacket>
 { }
 
 [AttributeUsage(AttributeTargets.Parameter)]
