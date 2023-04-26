@@ -2,6 +2,7 @@
 using Lyrox.Framework.Base.Messaging;
 using Lyrox.Framework.Chat;
 using Lyrox.Framework.Client.Abstraction;
+using Lyrox.Framework.CodeGeneration.Shared;
 using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Core.Abstraction.Modules;
 using Lyrox.Framework.Inventory;
@@ -39,6 +40,7 @@ public static class LyroxClientFactory
 
         builder.RegisterInstance(packetMapping);
         builder.RegisterType<NetworkPacketManager>().As<INetworkPacketManager>();
+        builder.RegisterType<PacketSerializer>().As<IPacketSerializer>();
 
         var container = builder.Build();
         container.SetupAutofacMessageBus();

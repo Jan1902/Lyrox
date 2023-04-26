@@ -3,7 +3,7 @@ using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Networking.Mojang.Data.Types;
 
-internal static class Position
+public static class Position
 {
     public static Vector3i ReadPositionFromStream(Stream stream)
     {

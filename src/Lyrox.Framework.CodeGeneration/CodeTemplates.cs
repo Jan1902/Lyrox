@@ -2,7 +2,8 @@
 {
     internal class CodeTemplates
     {
-        public const string SerializerSkeleton = @"using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
+        public const string SerializerSkeleton = @"
+using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 using Lyrox.Framework.CodeGeneration.Shared;
 
 namespace {NAMESPACE}
@@ -21,16 +22,20 @@ namespace {NAMESPACE}
     }
 }";
 
-        public const string SerializerMappingSkeleton = @"{USINGS}
+        public const string SerializerMappingSkeleton = @"
+{USINGS}
 
-namespace Lyrox.Framework.Networking
+namespace Lyrox.Framework.Networking.Core
 {
 	public static class SerializerMappings
 	{
-		public static readonly Dictionary<Type, Type> Mappings = new Dictionary<Type, Type>
+		private static readonly Dictionary<Type, Type> _mappings = new Dictionary<Type, Type>
 		{
 			{MAPPINGCONTENT}
 		};
+
+        public static bool TryGetSerializerType(Type packetType, out Type serializerType)
+            => _mappings.TryGetValue(packetType, out serializerType);
 	}
 }";
     }

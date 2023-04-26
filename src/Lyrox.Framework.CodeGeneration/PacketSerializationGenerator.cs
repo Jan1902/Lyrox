@@ -23,56 +23,25 @@ namespace Lyrox.Framework.CodeGeneration
             var recordDeclerations = context.Compilation.SyntaxTrees
                 .SelectMany(st => st.GetRoot()
                     .DescendantNodes()
-                    .Where(n => n is RecordDeclarationSyntax)
-                    .Select(n => n as RecordDeclarationSyntax));
-
-            var serializationClasses = new List<(string Packet, string Namespace, string Serializer)>();
+                    .OfType<RecordDeclarationSyntax>());
 
             foreach (var recordDecleration in recordDeclerations)
             {
                 var semanticModel = context.Compilation.GetSemanticModel(recordDecleration.SyntaxTree);
-                var serializerClass = "";
 
                 if (semanticModel.GetDeclaredSymbol(recordDecleration).GetAttributes().Any(a => a.AttributeClass.Name == AutoSerializedAttributeName))
                 {
                     var source = GenerateClass(context.Compilation.GetSemanticModel(recordDecleration.SyntaxTree), recordDecleration);
                     source = CSharpSyntaxTree.ParseText(source).GetRoot().NormalizeWhitespace().ToFullString();
 
-                    File.WriteAllText($@"C:\Users\heinbokel\Desktop\{recordDecleration.Identifier.ValueText}{FileSuffix}", source);
+                    //File.WriteAllText($@"C:\Users\heinbokel\Desktop\{recordDecleration.Identifier.ValueText}{FileSuffix}", source);
                     context.AddSource($"{recordDecleration.Identifier.ValueText}{FileSuffix}", source);
-
-                    serializerClass = $"{recordDecleration.Identifier.ValueText}_Serializaton";
                 }
                 else
                 {
                     var customSerializedAttribute = semanticModel.GetDeclaredSymbol(recordDecleration).GetAttributes().FirstOrDefault(a => a.AttributeClass.Name == CustomSerializedAttributeName);
-                    if (customSerializedAttribute != null)
-                        serializerClass = customSerializedAttribute.AttributeClass.TypeArguments.Last().Name;
                 }
-
-                serializationClasses.Add((recordDecleration.Identifier.ValueText,
-                    semanticModel.GetDeclaredSymbol(recordDecleration).ContainingNamespace.ToDisplayString(),
-                    serializerClass));
             }
-
-            var mappingSource = GenerateSerializerMappings(serializationClasses);
-            mappingSource = CSharpSyntaxTree.ParseText(mappingSource).GetRoot().NormalizeWhitespace().ToFullString();
-            File.WriteAllText(@"C:\Users\heinbokel\Desktop\Mappings.g.cs", mappingSource);
-            context.AddSource($"PacketSerializationMappings{FileSuffix}", mappingSource);
-        }
-
-        public string GenerateSerializerMappings(IEnumerable<(string Packet, string Namespace, string Serializer)> mappings)
-        {
-            var mappingCode = string.Join(",\n", mappings.Select(m => $"{{typeof({m.Packet}), typeof({m.Serializer})}}"));
-            var code = CodeTemplates.SerializerMappingSkeleton;
-            
-            Placeholder("mappingcontent", mappingCode);
-            Placeholder("usings", string.Join("\n", mappings.Select(m => m.Namespace).Distinct().Select(m => $"using {m};")));
-
-            void Placeholder(string placeholder, string value)
-                => code = ReplacePlaceholder(code, placeholder, value);
-
-            return code;
         }
 
         public string GenerateClass(SemanticModel semanticModel, RecordDeclarationSyntax packetDecleration)
@@ -122,7 +91,10 @@ namespace Lyrox.Framework.CodeGeneration
                 }
 
                 var typeKeyword = customTypeName ?? (parameter.Type is PredefinedTypeSyntax p ? p.Keyword.ToString() : semanticModel.GetTypeInfo(parameter.Type).Type.Name);
-                var value = GetReaderCall(typeKeyword, isLengthPrefixed ? "int" : null);
+                var value = GetReaderCall(typeKeyword, isLengthPrefixed ? "VarInt" : null);
+
+                if (isArray && typeKeyword == "byte")
+                    typeKeyword = "bytes";
 
                 if (isOptional)
                     value = $"{GetReaderCall("bool")} ? {value} : default";
@@ -146,11 +118,18 @@ namespace Lyrox.Framework.CodeGeneration
                     method = "ReadStringWithLength";
                     break;
 
+                case "guid":
+                    method = "ReadUUID";
+                    break;
+
+                case "string":
+                    method = "ReadStringWithVarIntPrefix";
+                    break;
+
                 case "int":
                 case "long":
                 case "short":
                 case "bool":
-                case "string":
                 case "byte":
                 case "varInt":
                 case "position":

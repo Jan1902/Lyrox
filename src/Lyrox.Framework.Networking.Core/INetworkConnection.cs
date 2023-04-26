@@ -6,4 +6,5 @@ public interface INetworkConnection
 {
     Task Connect();
     Task SendPacket(IServerBoundNetworkPacket packet);
+    event EventHandler<(int PacketID, byte[] Data)> NetworkPacketReceived;
 }

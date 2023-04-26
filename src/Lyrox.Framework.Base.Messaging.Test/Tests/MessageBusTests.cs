@@ -5,6 +5,7 @@ using Lyrox.Framework.Base.Messaging.Abstraction.Core;
 using Lyrox.Framework.Base.Messaging.Abstraction.Handlers;
 using Lyrox.Framework.Base.Messaging.Internal;
 using Lyrox.Framework.Base.Messaging.Test.Mocks.Message;
+using Lyrox.Framework.Base.Messaging.Test.Mocks.Packet;
 using Lyrox.Framework.Base.Messaging.Test.Mocks.Request;
 using Moq;
 
@@ -66,6 +67,27 @@ public class MessageBusTests
             .Value.Should().ContainSingle().Which.Should().BeAssignableTo<IMessageHandler<TestMessage>>();
         messageBusInternal!.RequestHandlers.Should().ContainSingle().Which
             .Value.Should().ContainSingle().Which.Should().BeAssignableTo<IRequestHandler<TestRequest, TestResponse>>();
+    }
+
+    [Test]
+    public void AutofacMessageBus_ShouldRegisterInheritedHandlers()
+    {
+        var builder = new ContainerBuilder();
+        builder.RegisterAutofacMessagebus();
+
+        var messageHandlerMock = new Mock<IPacketHandler<TestMessage>>();
+
+        builder.RegisterInstance(messageHandlerMock.Object).As<IPacketHandler<TestMessage>>().SingleInstance();
+
+        var container = builder.Build();
+        container.SetupAutofacMessageBus();
+        var messageBus = container.Resolve<IMessageBus>();
+
+        var messageBusInternal = messageBus as MessageBus;
+        messageBus.Should().NotBeNull();
+
+        messageBusInternal!.MessageHandlers.Should().ContainSingle().Which
+            .Value.Should().ContainSingle().Which.Should().BeAssignableTo<IMessageHandler<PacketReceivedMessage<TestMessage>>>();
     }
 
     [Test]

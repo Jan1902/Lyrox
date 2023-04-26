@@ -2,5 +2,5 @@
 
 public interface IClientBoundNetworkPacket
 {
-    void ParsePacket(byte[] data);
+    //void ParsePacket(byte[] data);
 }

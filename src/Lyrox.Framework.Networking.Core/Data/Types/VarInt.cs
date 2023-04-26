@@ -1,6 +1,6 @@
 ﻿namespace Lyrox.Framework.Networking.Mojang.Data.Types;
 
-internal static class VarInt
+public static class VarInt
 {
     public const int MIN_SIZE = 1;
     public const int MAX_SIZE = 5;

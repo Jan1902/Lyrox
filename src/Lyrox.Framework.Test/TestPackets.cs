@@ -11,10 +11,10 @@ public record Handshake([VarInt] int HandshakeId);
 
 // Complex Packet
 [AutoSerialized]
-public record Test([Optional]int Id, [LengthPrefixed]string Name, bool Active);
+public record ConnectionEstablished([Optional]int Id, [LengthPrefixed]string Name, bool Active);
 
-[AutoSerialized]
-public record PlayerList([Optional][LengthPrefixed]string[] PlayerNames);
+//[AutoSerialized]
+//public record PlayerList([Optional][LengthPrefixed]string[] PlayerNames);
 
 // Custom Packet
 [CustomSerialized<Login, LoginParser>]

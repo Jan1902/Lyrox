@@ -19,7 +19,7 @@ internal class ChatMessage : MojangServerBoundPacketBase
         var buffer = new byte[Message.Length + sizeof(long)];
         Array.Copy(Encoding.UTF8.GetBytes(Message), 0, buffer, 0, Message.Length);
         Array.Copy(System.BitConverter.GetBytes(salt), 0, buffer, 0, sizeof(long));
-        var signature = SHA256.Create().ComputeHash(buffer);
+        var signature = SHA256.HashData(buffer);
 
         Writer.WriteStringWithVarIntPrefix(Message);
         Writer.WriteLong(DateTime.Now.Ticks);

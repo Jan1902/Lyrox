@@ -1,9 +1,10 @@
-﻿using Lyrox.Framework.Core.Models.NBT;
+﻿using System.Runtime.CompilerServices;
+using Lyrox.Framework.Core.Models.NBT;
 using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 
 namespace Lyrox.Framework.Networking.Mojang;
 
-public class MojangNBTReader
+public static class MojangNBTReader
 {
     private static readonly Dictionary<int, Type> _tagTypeIds = new()
     {
@@ -93,4 +94,7 @@ public class MojangNBTReader
         string? GetName()
             => parent is null or CompoundTag ? reader.ReadStringWithShortPrefix() : null;
     }
+
+    public static NBTTag ReadNBTTag(this IMojangBinaryReader reader)
+        => ParseNBT(reader);
 }

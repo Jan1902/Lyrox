@@ -19,7 +19,7 @@ internal class SetContainerContent : MojangClientBoundPacketBase
         var length = Reader.ReadVarInt();
         Slots = new Slot[length];
 
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
             Slots[i] = ParseSlot();
 
         CarriedItem = ParseSlot();
@@ -34,7 +34,7 @@ internal class SetContainerContent : MojangClientBoundPacketBase
         {
             slot.ItemID = Reader.ReadVarInt();
             slot.ItemCount = Reader.ReadByte();
-            slot.NBT = MojangNBTReader.ParseNBT(Reader);
+            slot.NBT = Reader.ReadNBTTag();
         }
 
         return slot;

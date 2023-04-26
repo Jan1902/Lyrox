@@ -13,5 +13,8 @@ public class PacketTypeMapping
         => _packetTypeMapping.TryAdd(opCode, typeof(TPacket));
 
     public Type? GetPacketType(int opCode)
-        => _packetTypeMapping.TryGetValue(opCode, out var type) ? type : null;
+        => _packetTypeMapping.TryGetValue(opCode, out var type) ? type : default;
+
+    public IEnumerable<(int ID, Type PacketType)> GetAllPacketMappings()
+        => _packetTypeMapping.ToList().Select(m => (m.Key, m.Value));
 }

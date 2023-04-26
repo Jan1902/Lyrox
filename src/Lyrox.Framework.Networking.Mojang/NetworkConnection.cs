@@ -12,10 +12,11 @@ namespace Lyrox.Framework.Networking.Mojang;
 
 public class NetworkConnection : INetworkConnection
 {
+    public event EventHandler<(int PacketID, byte[] Data)> NetworkPacketReceived;
+
     private readonly ILyroxConfiguration _lyroxConfiguration;
     private readonly ILogger<NetworkConnection> _logger;
     private readonly IMessageBus _messageBus;
-    private readonly INetworkPacketManager _packetManager;
 
     private readonly RecyclableMemoryStreamManager _streamManager;
 
@@ -27,7 +28,7 @@ public class NetworkConnection : INetworkConnection
 
     private bool _compressionEnabled;
 
-    public NetworkConnection(ILyroxConfiguration lyroxConfiguration, ILogger<NetworkConnection> logger, IMessageBus messageBus, INetworkPacketManager packetManager)
+    public NetworkConnection(ILyroxConfiguration lyroxConfiguration, ILogger<NetworkConnection> logger, IMessageBus messageBus)
     {
         _streamManager = new();
         _socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -37,7 +38,6 @@ public class NetworkConnection : INetworkConnection
         _lyroxConfiguration = lyroxConfiguration;
         _logger = logger;
         _messageBus = messageBus;
-        _packetManager = packetManager;
     }
 
     public async Task Connect()
@@ -97,7 +97,7 @@ public class NetworkConnection : INetworkConnection
             }
             else
             {
-                //_messageBus.PublishAsync(new ConnectionTerminatedMessage());
+                _messageBus.PublishAsync(new ConnectionTerminatedMessage());
                 _logger.LogWarning("Connection to Server has been terminated");
             }
         }
@@ -130,7 +130,7 @@ public class NetworkConnection : INetworkConnection
             var data = new byte[packetLength - opCode.ToBytesAsVarInt().Length];
             stream.Read(data, 0, data.Length);
 
-            _packetManager.HandleNetworkPacket(opCode, data);
+            NetworkPacketReceived?.Invoke(this, (opCode, data));
 
             Array.Copy(_dataQueue, totalLength, _dataQueue, 0, _currentQueuePosition - totalLength);
             _currentQueuePosition -= totalLength;

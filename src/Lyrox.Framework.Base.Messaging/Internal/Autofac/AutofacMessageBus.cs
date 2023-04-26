@@ -20,15 +20,16 @@ internal class AutofacMessageBus : MessageBus
     {
         var messageHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
             .SelectMany(r => r.Activator.LimitType.GetInterfaces()
-                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMessageHandler<>)))
+                .Select(type => (type, GetInheritedGenericInterface(type, typeof(IMessageHandler<>))))
+                .Where(i => i.Item2 is not null))
             .Distinct();
 
         foreach (var interfaceType in messageHandlerInterfaceTypes)
         {
-            var handlers = (object[])_componentContext.Resolve(interfaceType.MakeArrayType());
+            var handlers = (object[])_componentContext.Resolve(interfaceType.type.MakeArrayType());
 
             foreach (var handler in handlers)
-                SubscribeMessageHandlerInternal(interfaceType!.GetGenericArguments().First(), handler);
+                SubscribeMessageHandlerInternal(interfaceType.Item2!.GetGenericArguments().First(), handler);
         }
     }
 
@@ -36,17 +37,38 @@ internal class AutofacMessageBus : MessageBus
     {
         var requestHandlerInterfaceTypes = _componentContext.ComponentRegistry.Registrations
             .SelectMany(r => r.Activator.LimitType.GetInterfaces()
-                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>)))
+                .Select(type => (type, GetInheritedGenericInterface(type, typeof(IRequestHandler<,>))))
+                .Where(i => i.Item2 is not null))
             .Distinct();
 
         foreach (var interfaceType in requestHandlerInterfaceTypes)
         {
-            var handlers = (object[])_componentContext.Resolve(interfaceType.MakeArrayType());
+            var handlers = (object[])_componentContext.Resolve(interfaceType.type.MakeArrayType());
 
             foreach (var handler in handlers)
-                SubscribeRequestHandlerInternal(interfaceType!.GetGenericArguments().First(),
-                    interfaceType!.GetGenericArguments().Last(),
+                SubscribeRequestHandlerInternal(interfaceType.Item2!.GetGenericArguments().First(),
+                    interfaceType!.Item2.GetGenericArguments().Last(),
                     handler);
         }
+    }
+
+    private static Type? GetInheritedGenericInterface(Type givenType, Type genericType)
+    {
+        var interfaceTypes = givenType.GetInterfaces();
+
+        foreach (var it in interfaceTypes)
+        {
+            if (it.IsGenericType && it.GetGenericTypeDefinition() == genericType)
+                return it;
+        }
+
+        if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
+            return givenType;
+
+        var baseType = givenType.BaseType;
+        if (baseType == null)
+            return default;
+
+        return GetInheritedGenericInterface(baseType, genericType);
     }
 }

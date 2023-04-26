@@ -25,9 +25,10 @@ public class NetworkingModule : IModule
         {
             serviceContainer.RegisterType<INetworkConnection, NetworkConnection>();
 
-            serviceContainer.RegisterRawPacketHandler<MojangNetworkingPacketHandler>();
-            serviceContainer.RegisterPacketHandler<KeepAliveCB, MojangNetworkingPacketHandler>(packetMapping, 0x20);
-            serviceContainer.RegisterMessageHandler<ConnectionEstablishedMessage, MojangNetworkingMessageHandler>();
+            serviceContainer.RegisterType<MojangNetworkingPacketHandler>();
+            serviceContainer.RegisterType<MojangNetworkingMessageHandler>();
+
+            packetMapping.AddMapping<KeepAliveCB>(0x20);
         }
         else
             throw new GameVersionNotSupportedException(lyroxConfiguration.GameVersion);
