@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using BitConverter;
 using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 using Lyrox.Framework.Networking.Mojang.Data.Types;
@@ -6,7 +7,7 @@ using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Networking.Mojang.Data;
 
-public class MojangBinaryReader : IMojangBinaryReader, IDisposable
+public class MojangBinaryReader : IMinecraftBinaryReader
 {
     private readonly Stream _stream;
     private readonly EndianBitConverter _bitConverter;
@@ -18,10 +19,36 @@ public class MojangBinaryReader : IMojangBinaryReader, IDisposable
     }
 
     public int ReadVarInt()
-        => _stream.ReadVarInt();
+    {
+        var numRead = 0;
+        var result = 0;
+        byte read;
+
+        do
+        {
+            read = ReadByte();
+            var value = read & 0x7f;
+            result |= value << 7 * numRead;
+
+            numRead++;
+            if (numRead > 5)
+                throw new Exception("VarInt is too big");
+        }
+        while ((read & 0x80) != 0);
+
+        return result;
+    }
 
     public Vector3i ReadPosition()
-        => _stream.ReadPosition();
+    {
+        var value = ReadLong();
+
+        var x = value >> 38;
+        var y = value << 52 >> 52;
+        var z = value << 26 >> 38;
+
+        return new Vector3i((int)x, (int)y, (int)z);
+    }
 
     public byte ReadByte()
         => (byte)_stream.ReadByte();

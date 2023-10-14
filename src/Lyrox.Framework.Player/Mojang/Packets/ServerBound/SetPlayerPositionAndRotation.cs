@@ -1,5 +1,4 @@
-﻿using Lyrox.Framework.Networking.Mojang.Packets.Base;
-using Lyrox.Framework.Shared.Types;
+﻿using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Player.Mojang.Packets.ServerBound;
 

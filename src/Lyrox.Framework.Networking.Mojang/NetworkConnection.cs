@@ -3,6 +3,8 @@ using Lyrox.Framework.Base.Messaging.Abstraction.Core;
 using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Core.Abstraction.Networking.Packet;
 using Lyrox.Framework.Networking.Core;
+using Lyrox.Framework.Networking.Core.Data.Abstraction;
+using Lyrox.Framework.Networking.Mojang.Data;
 using Lyrox.Framework.Networking.Mojang.Data.Types;
 using Lyrox.Framework.Shared.Messages;
 using Microsoft.Extensions.Logging;
@@ -17,6 +19,7 @@ public class NetworkConnection : INetworkConnection
     private readonly ILyroxConfiguration _lyroxConfiguration;
     private readonly ILogger<NetworkConnection> _logger;
     private readonly IMessageBus _messageBus;
+    private readonly IPacketSerializer _packetSerializer;
 
     private readonly RecyclableMemoryStreamManager _streamManager;
 
@@ -28,7 +31,7 @@ public class NetworkConnection : INetworkConnection
 
     private bool _compressionEnabled;
 
-    public NetworkConnection(ILyroxConfiguration lyroxConfiguration, ILogger<NetworkConnection> logger, IMessageBus messageBus)
+    public NetworkConnection(ILyroxConfiguration lyroxConfiguration, ILogger<NetworkConnection> logger, IMessageBus messageBus, IPacketSerializer packetSerializer)
     {
         _streamManager = new();
         _socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -38,9 +41,10 @@ public class NetworkConnection : INetworkConnection
         _lyroxConfiguration = lyroxConfiguration;
         _logger = logger;
         _messageBus = messageBus;
+        _packetSerializer = packetSerializer;
     }
 
-    public async Task Connect()
+    public async Task ConnectAsync()
     {
         if (_lyroxConfiguration.IPAdress == default
             || _lyroxConfiguration.Port == default)
@@ -60,15 +64,22 @@ public class NetworkConnection : INetworkConnection
         }
     }
 
-    public async Task SendPacket(IServerBoundNetworkPacket packet)
+    public async Task SendPacketAsync(IPacket packet)
     {
         if (!_socket.Connected)
             return;
 
         using var stream = _streamManager.GetStream();
-        var data = packet.BuildPacket();
-        stream.WriteVarInt(packet.OPCode.ToBytesAsVarInt().Length + data.Length);
-        stream.WriteVarInt(packet.OPCode);
+        using var writer = new MojangBinaryWriter(stream);
+
+        var opCode = _packetSerializer.GetOpCode(packet.GetType())
+            ?? throw new Exception("Invalid Packet Type");
+
+        var data = _packetSerializer.SerializePacket(packet.GetType(), packet);
+
+        writer.WriteVarInt(opCode.ToBytesAsVarInt().Length + data.Length);
+        writer.WriteVarInt(opCode);
+
         stream.Write(data);
 
         try
@@ -77,7 +88,7 @@ public class NetworkConnection : INetworkConnection
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error sending packet with OP Code {op} and size {size} to server", packet.OPCode, data.Length);
+            _logger.LogError(e, "Error sending packet with OP Code {op} and size {size} to server", opCode, data.Length);
             throw;
         }
     }
@@ -113,7 +124,9 @@ public class NetworkConnection : INetworkConnection
         while (_currentQueuePosition > 0)
         {
             using var stream = _streamManager.GetStream(_dataQueue);
-            var packetLength = stream.ReadVarInt(); // This could be cached
+            using var reader = new MojangBinaryReader(stream);
+
+            var packetLength = reader.ReadVarInt(); // This could be cached
             var totalLength = packetLength.ToBytesAsVarInt().Length + packetLength;
 
             if (_currentQueuePosition < totalLength)
@@ -121,12 +134,12 @@ public class NetworkConnection : INetworkConnection
 
             if (_compressionEnabled)
             {
-                var dataLength = stream.ReadVarInt();
+                var dataLength = reader.ReadVarInt();
                 if (dataLength != 0)
                     throw new NotImplementedException("Compression is not implemented yet!");
             }
 
-            var opCode = stream.ReadVarInt();
+            var opCode = reader.ReadVarInt();
             var data = new byte[packetLength - opCode.ToBytesAsVarInt().Length];
             stream.Read(data, 0, data.Length);
 

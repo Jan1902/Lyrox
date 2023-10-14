@@ -2,8 +2,8 @@
 using Lyrox.Framework.Core.Abstraction.Networking.Packet.Handler;
 using Lyrox.Framework.Networking.Core;
 using Lyrox.Framework.Networking.Mojang.Messages;
+using Lyrox.Framework.Networking.Mojang.Packets;
 using Lyrox.Framework.Networking.Mojang.Packets.ClientBound;
-using Lyrox.Framework.Networking.Mojang.Packets.ServerBound;
 using Lyrox.Framework.Networking.Mojang.Types;
 using Lyrox.Framework.Shared.Messages;
 
@@ -57,5 +57,5 @@ public class MojangNetworkingPacketHandler : IRawPacketHandler, IPacketHandler<K
         => _messageBus.PublishAsync(new ConnectionTerminatedMessage());
 
     public Task HandlePacketAsync(KeepAliveCB networkPacket)
-        => _networkConnection.SendPacket(new KeepAliveSB(networkPacket.KeepAliveID));
+        => _networkConnection.SendPacketAsync(new KeepAliveSB(networkPacket.KeepAliveID));
 }

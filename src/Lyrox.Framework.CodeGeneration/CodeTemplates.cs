@@ -23,19 +23,18 @@ namespace {NAMESPACE}
 }";
 
         public const string SerializerMappingSkeleton = @"
-{USINGS}
+using System.Collections.Immutable;
+using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
+using Lyrox.Framework.CodeGeneration.Shared;
 
-namespace Lyrox.Framework.Networking.Core
+namespace {NAMESPACE}
 {
 	public static class SerializerMappings
 	{
-		private static readonly Dictionary<Type, Type> _mappings = new Dictionary<Type, Type>
+		public static readonly ImmutableDictionary<Type, Type> _mappings = new Dictionary<Type, Type>
 		{
 			{MAPPINGCONTENT}
-		};
-
-        public static bool TryGetSerializerType(Type packetType, out Type serializerType)
-            => _mappings.TryGetValue(packetType, out serializerType);
+		}.ToImmutableDictionary();
 	}
 }";
     }

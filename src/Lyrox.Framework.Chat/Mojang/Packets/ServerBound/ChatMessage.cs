@@ -1,37 +1,36 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Lyrox.Framework.Networking.Mojang.Packets.Base;
+using Lyrox.Framework.CodeGeneration.Shared;
+using Lyrox.Framework.Core.Abstraction.Networking.Packet;
+using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 
 namespace Lyrox.Framework.Chat.Mojang.Packets.ServerBound;
 
-internal class ChatMessage : MojangServerBoundPacketBase
+[CustomSerializedPacket<ChatMessage, ChatMessageSerializer>(0x05)]
+internal record ChatMessage(string Message) : IPacket;
+
+internal class ChatMessageSerializer : IPacketSerializer<ChatMessage>
 {
-    public string Message { get; init; }
-
-    public override int OPCode => 0x05;
-
-    public ChatMessage(string message)
-        => Message = message;
-
-    public override void Build()
+    public ChatMessage Deserialize(IMinecraftBinaryReader reader) => throw new NotImplementedException();
+    public void Serialize(IMinecraftBinaryWriter writer, ChatMessage packet)
     {
         var salt = new Random().NextInt64();
-        var buffer = new byte[Message.Length + sizeof(long)];
-        Array.Copy(Encoding.UTF8.GetBytes(Message), 0, buffer, 0, Message.Length);
+        var buffer = new byte[packet.Message.Length + sizeof(long)];
+        Array.Copy(Encoding.UTF8.GetBytes(packet.Message), 0, buffer, 0, packet.Message.Length);
         Array.Copy(System.BitConverter.GetBytes(salt), 0, buffer, 0, sizeof(long));
         var signature = SHA256.HashData(buffer);
 
-        Writer.WriteStringWithVarIntPrefix(Message);
-        Writer.WriteLong(DateTime.Now.Ticks);
-        Writer.WriteLong(salt);
-        Writer.WriteVarInt(signature.Length);
-        Writer.WriteBytes(signature);
-        Writer.WriteBool(false);
+        writer.WriteStringWithVarIntPrefix(packet.Message);
+        writer.WriteLong(DateTime.Now.Ticks);
+        writer.WriteLong(salt);
+        writer.WriteVarInt(signature.Length);
+        writer.WriteBytes(signature);
+        writer.WriteBool(false);
 
         // Last seen messages
-        Writer.WriteVarInt(0);
+        writer.WriteVarInt(0);
 
         // Last message
-        Writer.WriteBool(false);
+        writer.WriteBool(false);
     }
 }

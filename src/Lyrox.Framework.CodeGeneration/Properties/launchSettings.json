@@ -2,7 +2,7 @@
   "profiles": {
     "Profile 1": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "..\\Lyrox.Framework.CodeGeneration.Test\\Lyrox.Framework.CodeGeneration.Test.csproj"
+      "targetProject": "..\\Lyrox.Framework.Test\\Lyrox.Framework.Test.csproj"
     }
   }
 }

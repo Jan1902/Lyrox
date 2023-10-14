@@ -1,6 +1,4 @@
-﻿using Lyrox.Framework.Networking.Mojang.Packets.Base;
-
-namespace Lyrox.Framework.Player.Mojang.Packets.ClientBound;
+﻿namespace Lyrox.Framework.Player.Mojang.Packets.ClientBound;
 
 internal class SynchronizePlayerPosition : MojangClientBoundPacketBase
 {

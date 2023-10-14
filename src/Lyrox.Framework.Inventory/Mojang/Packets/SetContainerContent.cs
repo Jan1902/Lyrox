@@ -1,6 +1,5 @@
 ﻿using Lyrox.Framework.Core.Models.Inventory;
 using Lyrox.Framework.Networking.Mojang;
-using Lyrox.Framework.Networking.Mojang.Packets.Base;
 
 namespace Lyrox.Framework.Inventory.Mojang.Packets;
 

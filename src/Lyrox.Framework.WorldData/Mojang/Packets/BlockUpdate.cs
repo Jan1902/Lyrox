@@ -1,4 +1,3 @@
-using Lyrox.Framework.Networking.Mojang.Packets.Base;
 using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.World.Mojang.Packets;

@@ -1,6 +1,5 @@
 ﻿using Lyrox.Framework.Core.Models.World;
 using Lyrox.Framework.Networking.Mojang;
-using Lyrox.Framework.Networking.Mojang.Packets.Base;
 using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.World.Mojang.Packets;

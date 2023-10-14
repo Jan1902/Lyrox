@@ -1,6 +1,4 @@
-﻿using Lyrox.Framework.Networking.Mojang.Packets.Base;
-
-namespace Lyrox.Framework.Player.Mojang.Packets.ServerBound;
+﻿namespace Lyrox.Framework.Player.Mojang.Packets.ServerBound;
 
 internal class ConfirmTeleportation : MojangServerBoundPacketBase
 {

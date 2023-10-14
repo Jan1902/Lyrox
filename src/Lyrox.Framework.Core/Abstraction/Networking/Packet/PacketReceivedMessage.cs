@@ -3,7 +3,7 @@
 namespace Lyrox.Framework.Core.Abstraction.Networking.Packet;
 
 public record PacketReceivedMessage<TPacket> : IMessage
-    where TPacket : IClientBoundNetworkPacket
+    where TPacket : IPacket
 {
     public TPacket Packet { get; }
 

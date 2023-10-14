@@ -30,6 +30,7 @@ internal class ChatPacketHandler : IPacketHandler<PlayerChatMessage>
             return;
 
         _logger.LogInformation("[Chat] {sender}: {text}", sender, networkPacket.PlainMessage);
+
         await _messageBus.PublishAsync(new ChatMessageReceivedMessage(networkPacket.PlainMessage, sender));
     }
 }

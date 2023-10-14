@@ -2,7 +2,7 @@
 
 namespace Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 
-public interface IMojangBinaryWriter
+public interface IMinecraftBinaryWriter : IDisposable
 {
     Stream UnderlyingStream { get; }
     void WriteBool(bool value);

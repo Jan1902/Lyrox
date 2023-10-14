@@ -2,12 +2,12 @@
 using Lyrox.Framework.Base.Messaging;
 using Lyrox.Framework.Chat;
 using Lyrox.Framework.Client.Abstraction;
-using Lyrox.Framework.CodeGeneration.Shared;
 using Lyrox.Framework.Core.Abstraction.Configuration;
 using Lyrox.Framework.Core.Abstraction.Modules;
 using Lyrox.Framework.Inventory;
 using Lyrox.Framework.Networking;
 using Lyrox.Framework.Networking.Core;
+using Lyrox.Framework.Networking.Core.Data.Abstraction;
 using Lyrox.Framework.Player;
 using Lyrox.Framework.World;
 using Serilog;

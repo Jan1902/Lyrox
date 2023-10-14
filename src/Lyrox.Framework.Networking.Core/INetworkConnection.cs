@@ -4,7 +4,8 @@ namespace Lyrox.Framework.Networking.Core;
 
 public interface INetworkConnection
 {
-    Task Connect();
-    Task SendPacket(IServerBoundNetworkPacket packet);
+    Task ConnectAsync();
+    Task SendPacketAsync(IPacket packet);
+
     event EventHandler<(int PacketID, byte[] Data)> NetworkPacketReceived;
 }

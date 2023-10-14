@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Lyrox.Framework.Networking.Core\Lyrox.Framework.Networking.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Packets\ClientBound\" />
-  </ItemGroup>
-
 </Project>

@@ -6,11 +6,11 @@ using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 // Parsing Idea
 
 // Simple Packet
-[AutoSerialized]
+[AutoSerializedPacket]
 public record Handshake([VarInt] int HandshakeId);
 
 // Complex Packet
-[AutoSerialized]
+[AutoSerializedPacket]
 public record ConnectionEstablished([Optional]int Id, [LengthPrefixed]string Name, bool Active);
 
 //[AutoSerialized]
@@ -22,9 +22,9 @@ public record Login(string Name);
 
 public class LoginParser : IPacketSerializer<Login>
 {
-    public Login Deserialize(IMojangBinaryReader reader)
+    public Login Deserialize(IMinecraftBinaryReader reader)
         => new(reader.ReadStringWithVarIntPrefix());
 
-    public void Serialize(IMojangBinaryWriter writer, Login packet)
+    public void Serialize(IMinecraftBinaryWriter writer, Login packet)
         => writer.WriteStringWithVarIntPrefix(packet.Name);
 }

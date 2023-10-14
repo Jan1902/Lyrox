@@ -1,30 +1,30 @@
-﻿using System;
+﻿using Lyrox.Framework.Core.Abstraction.Networking.Packet;
 using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 
 namespace Lyrox.Framework.CodeGeneration.Shared;
 
-// Framework Logic
-
-public interface IPacketSerializer<TPacket> where TPacket : class
+public interface IPacketSerializer<TPacket> where TPacket : IPacket
 {
-    TPacket Deserialize(IMojangBinaryReader reader);
-    void Serialize(IMojangBinaryWriter writer, TPacket packet);
+    TPacket Deserialize(IMinecraftBinaryReader reader);
+    void Serialize(IMinecraftBinaryWriter writer, TPacket packet);
 }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class AutoSerializedAttribute : Attribute { }
+public class AutoSerializedPacketAttribute : Attribute
+{
+    public int PacketID { get; init; }
+
+    public AutoSerializedPacketAttribute(int packetId)
+        => PacketID = packetId;
+}
 
 [AttributeUsage(AttributeTargets.Class)]
-public class CustomSerializedAttribute<TPacket, TParser> : Attribute
-    where TPacket : class
+public class CustomSerializedPacketAttribute<TPacket, TParser> : Attribute
+    where TPacket : IPacket
     where TParser : IPacketSerializer<TPacket>
-{ }
+{
+    public int PacketID { get; init; }
 
-[AttributeUsage(AttributeTargets.Parameter)]
-public class VarIntAttribute : Attribute { }
-
-[AttributeUsage(AttributeTargets.Parameter)]
-public class OptionalAttribute : Attribute { }
-
-[AttributeUsage(AttributeTargets.Parameter)]
-public class LengthPrefixedAttribute : Attribute { }
+    public CustomSerializedPacketAttribute(int packetId)
+        => PacketID = packetId;
+}

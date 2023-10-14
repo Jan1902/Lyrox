@@ -1,10 +1,4 @@
-﻿using Lyrox.Framework.Networking.Core;
-using Lyrox.Framework.Networking.Mojang.Data;
-using Lyrox.Framework.Networking.Mojang.Packets.ClientBound;
-using Lyrox.Framework.Shared.Types;
-using Lyrox.Framework.World.Mojang.Packets;
-
-namespace Lyrox.Framework.Test;
+﻿namespace Lyrox.Framework.Test;
 
 public class NewPacketParsingTests
 {

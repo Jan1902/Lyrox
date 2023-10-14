@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using BitConverter;
 using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 using Lyrox.Framework.Networking.Mojang.Data.Types;
@@ -6,7 +7,7 @@ using Lyrox.Framework.Shared.Types;
 
 namespace Lyrox.Framework.Networking.Mojang.Data;
 
-public class MojangBinaryWriter : IMojangBinaryWriter, IDisposable
+public class MojangBinaryWriter : IMinecraftBinaryWriter
 {
     private readonly Stream _stream;
     private readonly EndianBitConverter _bitConverter;
@@ -23,10 +24,20 @@ public class MojangBinaryWriter : IMojangBinaryWriter, IDisposable
         => _stream.Seek(0, SeekOrigin.Begin);
 
     public void WriteVarInt(int value)
-        => _stream.WriteVarInt(value);
+    {
+        do
+        {
+            var temp = (byte)(value & 127);
+            value >>= 7;
+            if (value != 0)
+                temp |= 128;
+            WriteByte(temp);
+        }
+        while (value != 0);
+    }
 
     public void WritePosition(Vector3i value)
-        => _stream.WritePosition(value);
+        => WriteLong((((long)value.X & 0x3FFFFFF) << 38) | (((long)value.Z & 0x3FFFFFF) << 12) | ((long)value.Y & 0xFFF));
 
     public void WriteByte(byte value)
         => _stream.WriteByte(value);

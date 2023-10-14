@@ -2,7 +2,7 @@
 
 namespace Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 
-public interface IMojangBinaryReader
+public interface IMinecraftBinaryReader : IDisposable
 {
     bool ReadBool();
     byte ReadByte();

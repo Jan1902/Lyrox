@@ -9,7 +9,7 @@ public class PacketTypeMapping
     public PacketTypeMapping()
         => _packetTypeMapping = new();
 
-    public void AddMapping<TPacket>(int opCode) where TPacket : IClientBoundNetworkPacket
+    public void AddMapping<TPacket>(int opCode) where TPacket : IPacket
         => _packetTypeMapping.TryAdd(opCode, typeof(TPacket));
 
     public Type? GetPacketType(int opCode)

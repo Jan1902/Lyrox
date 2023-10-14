@@ -5,50 +5,9 @@ using static Lyrox.Framework.Chat.Mojang.Packets.ClientBound.PlayerChatMessage;
 
 namespace Lyrox.Framework.Chat.Mojang.Packets.ClientBound;
 
-[CustomSerialized<PlayerChatMessage, PlayerChatMessageSerializer>]
-internal record PlayerChatMessage : IClientBoundNetworkPacket
+[CustomSerializedPacket<PlayerChatMessage, PlayerChatMessageSerializer>(0x33)]
+internal record PlayerChatMessage(byte[]? MessageSignature, Guid SenderUUID, byte[] HeaderSignature, string PlainMessage, string? FormattedMessage, DateTime TimeStamp, long Salt, string? UnsignedContent, FilterType Filter, int ChatType, string NetworkName, string? NetworkTargetName) : IPacket
 {
-    public byte[]? MessageSignature { get; }
-    public Guid SenderUUID { get; }
-    public byte[] HeaderSignature { get; }
-    public string PlainMessage { get; }
-    public string? FormattedMessage { get; }
-    public DateTime Timestamp { get; }
-    public long Salt { get; }
-    public string? UnsignedContent { get; }
-    public FilterType Filter { get; }
-    public int ChatType { get; }
-    public string NetworkName { get; }
-    public string? NetworkTargetName { get; }
-
-    public PlayerChatMessage(
-        byte[]? messageSignature,
-        Guid senderUUID,
-        byte[] headerSignature,
-        string plainMessage,
-        string? formattedMessage,
-        DateTime timestamp,
-        long salt,
-        string? unsignedContent,
-        FilterType filter,
-        int chatType,
-        string networkName,
-        string? networkTargetName)
-    {
-        MessageSignature = messageSignature;
-        SenderUUID = senderUUID;
-        HeaderSignature = headerSignature;
-        PlainMessage = plainMessage;
-        FormattedMessage = formattedMessage;
-        Timestamp = timestamp;
-        Salt = salt;
-        UnsignedContent = unsignedContent;
-        Filter = filter;
-        ChatType = chatType;
-        NetworkName = networkName;
-        NetworkTargetName = networkTargetName;
-    }
-
     internal enum FilterType
     {
         PASS_THROUGH = 0,
@@ -59,7 +18,7 @@ internal record PlayerChatMessage : IClientBoundNetworkPacket
 
 internal class PlayerChatMessageSerializer : IPacketSerializer<PlayerChatMessage>
 {
-    public PlayerChatMessage Deserialize(IMojangBinaryReader reader)
+    public PlayerChatMessage Deserialize(IMinecraftBinaryReader reader)
     {
         byte[]? messageSignature = null;
         if (reader.ReadBool())
@@ -113,6 +72,6 @@ internal class PlayerChatMessageSerializer : IPacketSerializer<PlayerChatMessage
             networkTargetName);
     }
 
-    public void Serialize(IMojangBinaryWriter writer, PlayerChatMessage packet)
+    public void Serialize(IMinecraftBinaryWriter writer, PlayerChatMessage packet)
         => throw new NotImplementedException();
 }

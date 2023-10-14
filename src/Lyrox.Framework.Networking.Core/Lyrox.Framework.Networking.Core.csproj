@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\heinbokel\.nuget\packages\endianbitconverter\1.1.0\contentFiles\any\netcoreapp1.0\LICENSE.EndianBitConverter.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EndianBitConverter" Version="1.1.0" />
   </ItemGroup>
 

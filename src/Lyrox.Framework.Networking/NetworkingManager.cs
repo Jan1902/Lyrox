@@ -1,5 +1,4 @@
 ﻿using Lyrox.Framework.Core.Abstraction.Managers;
-using Lyrox.Framework.Core.Abstraction.Networking.Packet;
 using Lyrox.Framework.Networking.Core;
 
 namespace Lyrox.Framework.Networking;
@@ -20,7 +19,7 @@ public class NetworkingManager : INetworkingManager
         => _networkPacketManager.HandleNetworkPacket(e.PacketID, e.Data);
 
     public async Task Connect()
-        => await _networkConnection.Connect();
+        => await _networkConnection.ConnectAsync();
 
     public async Task SendPacket(IServerBoundNetworkPacket networkPacket)
         => await _networkConnection.SendPacket(networkPacket);

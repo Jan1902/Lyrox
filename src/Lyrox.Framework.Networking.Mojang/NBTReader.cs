@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Lyrox.Framework.Core.Models.NBT;
+﻿using Lyrox.Framework.Core.Models.NBT;
 using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 
 namespace Lyrox.Framework.Networking.Mojang;
@@ -23,10 +22,10 @@ public static class MojangNBTReader
         { 12, typeof(LongArrayTag) }
     };
 
-    public static NBTTag ParseNBT(IMojangBinaryReader reader)
+    public static NBTTag ParseNBT(IMinecraftBinaryReader reader)
         => ParseRecursive(reader, null);
 
-    private static NBTTag ParseRecursive(IMojangBinaryReader reader, NBTTag? parent, int? givenTypeId = null)
+    private static NBTTag ParseRecursive(IMinecraftBinaryReader reader, NBTTag? parent, int? givenTypeId = null)
     {
         var typeId = givenTypeId ?? reader.ReadByte();
         switch (typeId)
@@ -95,6 +94,6 @@ public static class MojangNBTReader
             => parent is null or CompoundTag ? reader.ReadStringWithShortPrefix() : null;
     }
 
-    public static NBTTag ReadNBTTag(this IMojangBinaryReader reader)
+    public static NBTTag ReadNBTTag(this IMinecraftBinaryReader reader)
         => ParseNBT(reader);
 }

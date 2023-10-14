@@ -5,5 +5,5 @@ namespace Lyrox.Framework.Core.Abstraction.Managers;
 public interface INetworkingManager
 {
     Task Connect();
-    Task SendPacket(IServerBoundNetworkPacket networkPacket);
+    Task SendPacket(IPacket networkPacket);
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -25,22 +24,38 @@ namespace Lyrox.Framework.CodeGeneration
                     .DescendantNodes()
                     .OfType<RecordDeclarationSyntax>());
 
+            var mappings = new List<(string PacketTypeName, (string SerializerTypeName, string Namespace) Serializer)>();
+
             foreach (var recordDecleration in recordDeclerations)
             {
                 var semanticModel = context.Compilation.GetSemanticModel(recordDecleration.SyntaxTree);
 
                 if (semanticModel.GetDeclaredSymbol(recordDecleration).GetAttributes().Any(a => a.AttributeClass.Name == AutoSerializedAttributeName))
                 {
-                    var source = GenerateClass(context.Compilation.GetSemanticModel(recordDecleration.SyntaxTree), recordDecleration);
+                    var source = GenerateClass(semanticModel, recordDecleration);
                     source = CSharpSyntaxTree.ParseText(source).GetRoot().NormalizeWhitespace().ToFullString();
 
-                    //File.WriteAllText($@"C:\Users\heinbokel\Desktop\{recordDecleration.Identifier.ValueText}{FileSuffix}", source);
                     context.AddSource($"{recordDecleration.Identifier.ValueText}{FileSuffix}", source);
+
+                    mappings.Add((recordDecleration.Identifier.ValueText, (recordDecleration.Identifier.ValueText + "_Serialization",
+                        semanticModel.GetDeclaredSymbol(recordDecleration).ContainingNamespace.ToDisplayString())));
                 }
                 else
                 {
                     var customSerializedAttribute = semanticModel.GetDeclaredSymbol(recordDecleration).GetAttributes().FirstOrDefault(a => a.AttributeClass.Name == CustomSerializedAttributeName);
+
+                    mappings.Add((recordDecleration.Identifier.ValueText, (customSerializedAttribute.AttributeClass.TypeParameters.Single().Name,
+                        semanticModel.GetDeclaredSymbol(recordDecleration).ContainingNamespace.ToDisplayString())));
                 }
+            }
+
+            if (mappings.Any())
+            {
+                var mappingSource = CodeTemplates.SerializerMappingSkeleton;
+                mappingSource = ReplacePlaceholder(mappingSource, "namespace", mappings.First().Serializer.Namespace);
+                mappingSource = ReplacePlaceholder(mappingSource, "mappingcontent", string.Join("\n", mappings.Select(m => $"{{ {m.PacketTypeName}, {m.Serializer.SerializerTypeName} }}")));
+
+                context.AddSource("SerializerMappings" + FileSuffix, mappingSource);
             }
         }
 
@@ -82,25 +97,37 @@ namespace Lyrox.Framework.CodeGeneration
                 parameterNames.Add(lowerCaseParameterName);
 
                 var isArray = false;
-                var statements = new List<StatementSyntax>();
+                var statements = new List<string>();
 
                 if (parameter.Type is ArrayTypeSyntax arrayType)
                 {
                     isArray = true;
-                    customTypeName = semanticModel.GetTypeInfo(arrayType.ElementType).Type.Name;
+                    customTypeName = arrayType.ElementType is PredefinedTypeSyntax pt ? pt.Keyword.ToString() : semanticModel.GetTypeInfo(arrayType.ElementType).Type.Name;
                 }
 
                 var typeKeyword = customTypeName ?? (parameter.Type is PredefinedTypeSyntax p ? p.Keyword.ToString() : semanticModel.GetTypeInfo(parameter.Type).Type.Name);
                 var value = GetReaderCall(typeKeyword, isLengthPrefixed ? "VarInt" : null);
 
-                if (isArray && typeKeyword == "byte")
-                    typeKeyword = "bytes";
+                if (isArray)
+                {
+                    if (typeKeyword == "byte")
+                        typeKeyword = "bytes";
+                    else
+                    {
+                        statements.Add($"var {lowerCaseParameterName} = new {typeKeyword}[{GetReaderCall("VarInt")}];");
+                        statements.Add($"for (int i = 0; i < {lowerCaseParameterName}.Length; i++)");
+                        statements.Add($"{{ {lowerCaseParameterName}[i] = {value}; }}");
+                    }
+                }
+                else
+                {
+                    statements.Add($"var {lowerCaseParameterName} = {value};");
+                }
 
-                if (isOptional)
+                if (isOptional && !isArray)
                     value = $"{GetReaderCall("bool")} ? {value} : default";
 
-                var assignment = $"var {lowerCaseParameterName} = {value};";
-                deserializeMethodContent += $"\n{assignment}";
+                deserializeMethodContent += $"\n{string.Join("\n", statements)}";
             }
 
             deserializeMethodContent += $"\nreturn new({string.Join(", ", parameterNames)});";

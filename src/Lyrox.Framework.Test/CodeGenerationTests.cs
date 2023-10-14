@@ -1,9 +1,7 @@
-﻿using FluentAssertions;
-using Lyrox.Framework.Core.Abstraction.Networking.Packet;
+﻿using Lyrox.Framework.Core.Abstraction.Networking.Packet;
 using Lyrox.Framework.Networking.Core;
 using Lyrox.Framework.Networking.Mojang.Data.Abstraction;
 using Lyrox.Framework.Networking.Mojang.Packets.ClientBound;
-using Moq;
 
 namespace Lyrox.Framework.CodeGeneration.Test;
 
@@ -17,7 +15,7 @@ public class Tests
     [Test]
     public void Test1()
     {
-        var reader = Mock.Of<IMojangBinaryReader>();
+        var reader = Mock.Of<IMinecraftBinaryReader>();
 
         var mapping = new PacketTypeMapping();
         mapping.AddMapping<KeepAliveCB>(0);

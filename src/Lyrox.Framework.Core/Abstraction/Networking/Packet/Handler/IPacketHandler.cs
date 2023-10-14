@@ -4,7 +4,7 @@ namespace Lyrox.Framework.Core.Abstraction.Networking.Packet.Handler;
 
 public interface IPacketHandler<TPacket>
     : IMessageHandler<PacketReceivedMessage<TPacket>>
-    where TPacket : IClientBoundNetworkPacket
+    where TPacket : IPacket
 {
     Task IMessageHandler<PacketReceivedMessage<TPacket>>
         .HandleMessageAsync(PacketReceivedMessage<TPacket> message)

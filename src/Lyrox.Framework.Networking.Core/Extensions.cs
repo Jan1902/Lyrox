@@ -8,7 +8,7 @@ namespace Lyrox.Framework.Networking.Core;
 public static class Extensions
 {
     public static void RegisterPacketHandler<TPacket, THandler>(this ServiceContainer serviceContainer, PacketTypeMapping packetMapping, int opCode)
-        where TPacket : IClientBoundNetworkPacket
+        where TPacket : IPacket
         where THandler : IPacketHandler<TPacket>
     {
         serviceContainer.RegisterType<IMessageHandler<PacketReceivedMessage<TPacket>>, THandler>();
